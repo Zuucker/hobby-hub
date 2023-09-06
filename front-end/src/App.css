@@ -1,0 +1,10 @@
+.main {
+  height: 400px;
+}
+h1 {
+  border: 2px solid darkslateblue;
+  border-radius: 10px;
+  height: 40%;
+  background-color: lightskyblue;
+  color: darkslateblue;
+}
