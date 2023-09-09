@@ -19,6 +19,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
         implementation 'org.json:json:20210307' 
+        implementation 'org.xerial:sqlite-jdbc:3.34.0'
 }
 
 tasks.named('test') {

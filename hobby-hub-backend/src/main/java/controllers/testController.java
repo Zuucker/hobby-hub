@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import database.DatabaseManager;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,10 @@ public class testController {
             
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message", "Hello, world!");
+        
+        DatabaseManager manager = DatabaseManager.getInstance();
+        
+        System.out.println(manager.getUsers().get(0));
 
         return jsonObject.toString();
     }
