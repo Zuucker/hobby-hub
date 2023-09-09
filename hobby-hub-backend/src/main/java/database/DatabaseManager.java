@@ -4,6 +4,9 @@
  */
 package database;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -52,18 +55,24 @@ public class DatabaseManager {
                 System.out.println(e.getMessage());
             }
             
+            String createSql = "";
             
             //create schema
             if(schemaExists){
+                String filePath = "../DB/databaseSchema.sql";
+                
+                try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        createSql+=line;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
                 try{
-                    String sql = """
-                        CREATE TABLE users (
-                        id integer UNIQUE PRIMARY KEY,
-                        username text NOT NULL
-                        );
-                    """;
                     Statement statement = connection.createStatement();
-                    statement.execute(sql);
+                    statement.execute(createSql);
                 }catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
@@ -71,9 +80,11 @@ public class DatabaseManager {
 
                 //insert initial data
                 try{
-                    String sql = "INSERT INTO users(username) VALUES(?)";
+                    String sql = "INSERT INTO users(username, email, password) VALUES(?,?,?)";
                     PreparedStatement preparedStatement = connection.prepareStatement(sql);
                     preparedStatement.setString(1, "user");
+                    preparedStatement.setString(2, "email");
+                    preparedStatement.setString(3, "password");
                     preparedStatement.executeUpdate();
                 }catch (SQLException e) {
                     System.out.println(e.getMessage());
