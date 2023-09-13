@@ -1,62 +1,62 @@
 CREATE TABLE `users` (
-  `id` int UNIQUE PRIMARY KEY,
-  `username` string NOT NULL,
-  `email` string NOT NULL,
-  `password` string NOT NULL,
-  `verified` bool DEFAULT false,
-  `jwt_token` string
+  `id` INTEGER UNIQUE PRIMARY KEY,
+  `username` STRING NOT NULL,
+  `email` STRING NOT NULL,
+  `password` STRING NOT NULL,
+  `verified` BOOL DEFAULT false,
+  `jwt_token` STRING
 );
 
 CREATE TABLE `groups` (
-  `id` int UNIQUE PRIMARY KEY,
-  `author_id` int NOT NULL,
-  `title` string NOT NULL,
-  `description` string
+  `id` INTEGER UNIQUE PRIMARY KEY,
+  `author_id` INTEGER NOT NULL,
+  `title` STRING NOT NULL,
+  `description` STRING
 );
 
 CREATE TABLE `mods` (
-  `user_id` int NOT NULL,
-  `group_id` int NOT NULL
+  `user_id` INTEGER NOT NULL,
+  `group_id` INTEGER NOT NULL
 );
 
 CREATE TABLE `posts` (
-  `id` int UNIQUE PRIMARY KEY,
-  `author_id` int NOT NULL,
-  `group_id` int NOT NULL,
-  `title` string,
-  `type` int NOT NULL,
-  `link` string,
-  `up_votes` int,
-  `down_votes` int
+  `id` INTEGER UNIQUE PRIMARY KEY,
+  `author_id` INTEGER NOT NULL,
+  `group_id` INTEGER NOT NULL,
+  `title` STRING,
+  `type` INTEGER NOT NULL,
+  `link` STRING,
+  `up_votes` INTEGER,
+  `down_votes` INTEGER
 );
 
 CREATE TABLE `types` (
-  `id` int UNIQUE PRIMARY KEY,
-  `type` string
+  `id` INTEGER UNIQUE PRIMARY KEY,
+  `type` STRING
 );
 
 CREATE TABLE `comments` (
-  `id` int UNIQUE PRIMARY KEY,
-  `author_id` int NOT NULL,
-  `post_id` int,
-  `comment_id` int,
-  `content` string NOT NULL
+  `id` INTEGER UNIQUE PRIMARY KEY,
+  `author_id` INTEGER NOT NULL,
+  `post_id` INTEGER,
+  `comment_id` INTEGER,
+  `content` STRING NOT NULL
 );
 
 CREATE TABLE `subscriptions` (
-  `user_id` int NOT NULL,
-  `group_id` int NOT NULL
+  `user_id` INTEGER NOT NULL,
+  `group_id` INTEGER NOT NULL
 );
 
 CREATE TABLE `liked_posts` (
-  `user_id` int NOT NULL,
-  `post_id` int NOT NULL
+  `user_id` INTEGER NOT NULL,
+  `post_id` INTEGER NOT NULL
 );
 
 CREATE TABLE `verifications` (
-  `id` int UNIQUE PRIMARY KEY,
-  `user_id` int NOT NULL,
-  `string` key NOT NULL
+  `id` INTEGER UNIQUE PRIMARY KEY,
+  `user_id` INTEGER NOT NULL,
+  `STRING` key NOT NULL
 );
 
 ALTER TABLE `groups` ADD FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);

@@ -11,6 +11,7 @@ public class HobbyHubBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HobbyHubBackendApplication.class, args);
+                DatabaseManager initialManager = DatabaseManager.getInstance();
                 
                 //close database connection when program exits
                 Runtime.getRuntime().addShutdownHook(new Thread() {

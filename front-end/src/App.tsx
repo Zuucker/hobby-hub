@@ -9,6 +9,25 @@ function App() {
     axiosInstance.get("/test").then((response) => {
       setMessage(response.data.message);
     });
+
+    axiosInstance
+      .post("/auth/usernameAvailability", {
+        username: "user1",
+      })
+      .then((response) => {
+        console.log("username available", response.data);
+      });
+
+    axiosInstance
+      .post("/auth/register", {
+        username: "user12",
+        password: "password12",
+        passwordConfirmation: "password12",
+        email: "email12",
+      })
+      .then((response) => {
+        console.log("adduser", response.data);
+      });
   }, []);
 
   return (

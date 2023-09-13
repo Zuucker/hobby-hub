@@ -56,7 +56,7 @@ public class DatabaseManager {
             }
             
             String createSql = "";
-            
+                        
             //create schema
             if(schemaExists){
                 String filePath = "../DB/databaseSchema.sql";
@@ -82,10 +82,14 @@ public class DatabaseManager {
                 try{
                     String sql = "INSERT INTO users(username, email, password) VALUES(?,?,?)";
                     PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                    preparedStatement.setString(1, "user");
-                    preparedStatement.setString(2, "email");
-                    preparedStatement.setString(3, "password");
-                    preparedStatement.executeUpdate();
+                    
+                    for(int i = 1; i < 11; i++){
+                        preparedStatement.setString(1, "user" + Integer.toString(i));
+                        preparedStatement.setString(2, "email" + Integer.toString(i));
+                        preparedStatement.setString(3, "password" + Integer.toString(i));
+                        preparedStatement.executeUpdate();
+                    }
+                    System.out.println("Inserted initial data");
                 }catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
@@ -113,6 +117,40 @@ public class DatabaseManager {
         }
         return null;
     }
+    
+     public List<String> getUsernames(){
+        String sql = "SELECT username FROM users";
+        try{
+            Statement statement  = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            List<String> results = new ArrayList();
+            
+            while (resultSet.next()) {
+                results.add(resultSet.getString("username"));
+            }
+            return results;
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+     
+     public boolean addUser(String username, String email, String password){
+        String sql = "INSERT INTO users(username, email, password) VALUES(?,?,?)";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, email);
+            preparedStatement.setString(3, password);
+            preparedStatement.executeUpdate();
+            
+            return true;
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+         
+        return false;
+     }
     
     public void close(){
         try{

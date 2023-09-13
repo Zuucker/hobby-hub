@@ -27,7 +27,7 @@ public class testController {
         
         DatabaseManager manager = DatabaseManager.getInstance();
         
-        System.out.println(manager.getUsers().get(0));
+        //System.out.println(manager.getUsers().get(0));
 
         return jsonObject.toString();
     }
