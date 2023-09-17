@@ -5,8 +5,11 @@
 package controllers;
 
 import httpRequestJson.HttpRequestJson;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.util.Arrays;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +23,7 @@ import services.AuthorizationService;
  *
  * @author Zuucker
  */
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
 @RequestMapping("/auth")
 @RestController
 public class AuthorizationController {
@@ -46,5 +49,15 @@ public class AuthorizationController {
                 requestJson.getPasswordConfirmation());
         
         return registered;
+    }
+    
+    @PostMapping("/login")
+    public String loginUser(@RequestBody HttpRequestJson requestJson, HttpServletResponse response){
+        
+        AuthorizationService authService = new AuthorizationService();
+        
+        String token = authService.loginUser(requestJson.getUsername(),requestJson.getPassword());
+
+        return token;
     }
 }

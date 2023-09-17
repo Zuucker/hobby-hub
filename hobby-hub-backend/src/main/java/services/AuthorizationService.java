@@ -6,6 +6,9 @@ package services;
 
 import database.DatabaseManager;
 import java.util.List;
+import jwtManager.JWTManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @author Zuucker
  */
 @Service
-public class AuthorizationService {
+public class AuthorizationService {    
     
     public boolean isUsernameFree(String username){
         
@@ -40,10 +43,29 @@ public class AuthorizationService {
         DatabaseManager manager = DatabaseManager.getInstance();
         
         //other checks should be added here like is correct username/email/password etc
+        //and send email with validation link
         if(password.equals(passwordConfirmation) && isUsernameFree(username))
             return manager.addUser(username, email, password);
         
         return false;
+    }
+    
+    public String loginUser(String username, String password){
+        
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        boolean userExists = manager.checkIfUserExists(username);
+        String usersPassword = manager.getPassword(username);
+        boolean isVerified = manager.getVerified(username);
+        
+        if(userExists && isVerified && usersPassword.equals(password)){
+            JWTManager jwtManager = new JWTManager();
+            String token = jwtManager.generateToken(username);
+
+            return "token";
+        }
+        
+        return "-1";
     }
     
 }

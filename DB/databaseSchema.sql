@@ -3,8 +3,7 @@ CREATE TABLE `users` (
   `username` STRING NOT NULL,
   `email` STRING NOT NULL,
   `password` STRING NOT NULL,
-  `verified` BOOL DEFAULT false,
-  `jwt_token` STRING
+  `verified` BOOL DEFAULT false
 );
 
 CREATE TABLE `groups` (

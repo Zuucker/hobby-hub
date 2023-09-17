@@ -26,7 +26,16 @@ function App() {
         email: "email12",
       })
       .then((response) => {
-        console.log("adduser", response.data);
+        console.log("register user", response.data);
+      });
+
+    axiosInstance
+      .post("/auth/login", {
+        username: "user1",
+        password: "password1",
+      })
+      .then((response) => {
+        console.log("login user", response.data);
       });
   }, []);
 

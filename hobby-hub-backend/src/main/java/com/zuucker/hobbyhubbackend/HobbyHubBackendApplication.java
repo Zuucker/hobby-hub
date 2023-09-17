@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "controllers")
+@ComponentScan(basePackages = {"controllers", "services", "jwtManager"})
 public class HobbyHubBackendApplication {
 
 	public static void main(String[] args) {

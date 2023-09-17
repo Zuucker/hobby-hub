@@ -80,7 +80,7 @@ public class DatabaseManager {
 
                 //insert initial data
                 try{
-                    String sql = "INSERT INTO users(username, email, password) VALUES(?,?,?)";
+                    String sql = "INSERT INTO users(username, email, password) VALUES(?, ?, ?)";
                     PreparedStatement preparedStatement = connection.prepareStatement(sql);
                     
                     for(int i = 1; i < 11; i++){
@@ -89,10 +89,23 @@ public class DatabaseManager {
                         preparedStatement.setString(3, "password" + Integer.toString(i));
                         preparedStatement.executeUpdate();
                     }
+                    
                     System.out.println("Inserted initial data");
                 }catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
+                
+                try{
+                    String sql = "UPDATE users SET verified = TRUE WHERE username='user1'";
+                    PreparedStatement pstmt = connection.prepareStatement(sql);
+
+                    pstmt.executeUpdate();
+                    System.out.println("Updated initial data");
+                }catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                
+                
             }
             
             databaseManagerInstance = new DatabaseManager();
@@ -135,23 +148,69 @@ public class DatabaseManager {
         return null;
     }
      
-     public boolean addUser(String username, String email, String password){
-        String sql = "INSERT INTO users(username, email, password) VALUES(?,?,?)";
+    public boolean addUser(String username, String email, String password){
+       String sql = "INSERT INTO users(username, email, password) VALUES(?, ?, ?)";
+       try{
+           PreparedStatement preparedStatement = connection.prepareStatement(sql);
+           preparedStatement.setString(1, username);
+           preparedStatement.setString(2, email);
+           preparedStatement.setString(3, password);
+           preparedStatement.executeUpdate();
+
+           return true;
+       }catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+
+       return false;
+    }
+    
+    public boolean getVerified(String username){
+       String sql = "SELECT verified FROM users WHERE username = ?";
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, email);
-            preparedStatement.setString(3, password);
-            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
             
-            return true;
+            return resultSet.getBoolean("verified");
         }catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-         
+        
         return false;
-     }
+    }
     
+    public boolean checkIfUserExists(String username){
+        String sql = "SELECT COUNT(*) > 0 AS 'result' FROM users WHERE username = ?";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            return resultSet.getBoolean("result");
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+    
+    public String getPassword(String username){
+        String sql = "SELECT password FROM users WHERE username = ?";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            return resultSet.getString("password");
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    
+
+
     public void close(){
         try{
             connection.close();
