@@ -5,14 +5,10 @@
 package controllers;
 
 import httpRequestJson.HttpRequestJson;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.util.Arrays;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,37 +23,55 @@ import services.AuthorizationService;
 @RequestMapping("/auth")
 @RestController
 public class AuthorizationController {
-    
+
     @PostMapping("/usernameAvailability")
-    public boolean checkUsernameAvailability(@RequestBody HttpRequestJson requestJson){
-        
+    public boolean checkUsernameAvailability(@RequestBody HttpRequestJson requestJson) {
+
         AuthorizationService authService = new AuthorizationService();
-        
+
         boolean isUsernameFree = authService.isUsernameFree(requestJson.getUsername());
-                        
+
         return isUsernameFree;
     }
-    
+
     @PostMapping("/register")
-    public boolean registerUser(@RequestBody HttpRequestJson requestJson){
-        
+    public boolean registerUser(@RequestBody HttpRequestJson requestJson) {
+
         AuthorizationService authService = new AuthorizationService();
-        
+
         boolean registered = authService.registerUser(requestJson.getUsername(),
                 requestJson.getEmail(),
                 requestJson.getPassword(),
                 requestJson.getPasswordConfirmation());
-        
+
         return registered;
     }
-    
+
     @PostMapping("/login")
-    public String loginUser(@RequestBody HttpRequestJson requestJson, HttpServletResponse response){
-        
+    public String loginUser(@RequestBody HttpRequestJson requestJson) {
+
         AuthorizationService authService = new AuthorizationService();
-        
-        String token = authService.loginUser(requestJson.getUsername(),requestJson.getPassword());
+
+        String token = authService.loginUser(requestJson.getUsername(), requestJson.getPassword());
 
         return token;
+    }
+
+    @GetMapping("/verify/{code}")
+    public boolean verify(@PathVariable String code) {
+
+        AuthorizationService authService = new AuthorizationService();
+
+        return authService.verifyUser(code);
+    }
+
+    @PostMapping("/isVerified")
+    public boolean checkIfIsVerified(@RequestBody HttpRequestJson requestJson) {
+
+        AuthorizationService authService = new AuthorizationService();
+
+        boolean isVerified = authService.checkIfUserIfVerified(requestJson.getUsername());
+
+        return isVerified;
     }
 }

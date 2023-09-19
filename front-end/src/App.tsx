@@ -20,10 +20,10 @@ function App() {
 
     axiosInstance
       .post("/auth/register", {
-        username: "user12",
-        password: "password12",
-        passwordConfirmation: "password12",
-        email: "email12",
+        username: "user15",
+        password: "password15",
+        passwordConfirmation: "password15",
+        email: "email15",
       })
       .then((response) => {
         console.log("register user", response.data);
@@ -36,6 +36,14 @@ function App() {
       })
       .then((response) => {
         console.log("login user", response.data);
+      });
+
+    axiosInstance
+      .post("/auth/isVerified", {
+        username: "user2",
+      })
+      .then((response) => {
+        console.log("is user2 verified?", response.data);
       });
   }, []);
 

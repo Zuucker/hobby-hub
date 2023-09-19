@@ -10,12 +10,15 @@ CREATE TABLE `groups` (
   `id` INTEGER UNIQUE PRIMARY KEY,
   `author_id` INTEGER NOT NULL,
   `title` STRING NOT NULL,
-  `description` STRING
+  `description` STRING,
+  FOREIGN KEY (author_id) REFERENCES `users`(id)
 );
 
 CREATE TABLE `mods` (
   `user_id` INTEGER NOT NULL,
-  `group_id` INTEGER NOT NULL
+  `group_id` INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES `users`(id),
+  FOREIGN KEY (group_id) REFERENCES `groups`(id)
 );
 
 CREATE TABLE `posts` (
@@ -26,7 +29,10 @@ CREATE TABLE `posts` (
   `type` INTEGER NOT NULL,
   `link` STRING,
   `up_votes` INTEGER,
-  `down_votes` INTEGER
+  `down_votes` INTEGER,
+  FOREIGN KEY (author_id) REFERENCES `users`(id),
+  FOREIGN KEY (group_id) REFERENCES `groups`(id),
+  FOREIGN KEY (type) REFERENCES `types`(id)
 );
 
 CREATE TABLE `types` (
@@ -39,49 +45,29 @@ CREATE TABLE `comments` (
   `author_id` INTEGER NOT NULL,
   `post_id` INTEGER,
   `comment_id` INTEGER,
-  `content` STRING NOT NULL
+  `content` STRING NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES `users`(id),
+  FOREIGN KEY (post_id) REFERENCES referenced_table(referenced_column),
+  FOREIGN KEY (comment_id) REFERENCES referenced_table(referenced_column)
 );
 
 CREATE TABLE `subscriptions` (
   `user_id` INTEGER NOT NULL,
-  `group_id` INTEGER NOT NULL
+  `group_id` INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES `users`(id),
+  FOREIGN KEY (group_id) REFERENCES `groups`(id)
 );
 
 CREATE TABLE `liked_posts` (
   `user_id` INTEGER NOT NULL,
-  `post_id` INTEGER NOT NULL
+  `post_id` INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES `users`(id),
+  FOREIGN KEY (post_id) REFERENCES `posts`(id)
 );
 
 CREATE TABLE `verifications` (
   `id` INTEGER UNIQUE PRIMARY KEY,
   `user_id` INTEGER NOT NULL,
-  `STRING` key NOT NULL
+  `code` STRING NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES `users`(id)
 );
-
-ALTER TABLE `groups` ADD FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `mods` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `mods` ADD FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`);
-
-ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `posts` ADD FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`);
-
-ALTER TABLE `posts` ADD FOREIGN KEY (`type`) REFERENCES `types` (`id`);
-
-ALTER TABLE `comments` ADD FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `comments` ADD FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
-
-ALTER TABLE `comments` ADD FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`);
-
-ALTER TABLE `subscriptions` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `subscriptions` ADD FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`);
-
-ALTER TABLE `liked_posts` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `liked_posts` ADD FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`);
-
-ALTER TABLE `verifications` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
