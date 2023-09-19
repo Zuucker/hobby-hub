@@ -9,26 +9,25 @@ package httpRequestJson;
  * @author Zuucker
  */
 public class HttpRequestJson {
-    
+
     private String username;
     private String password;
     private String passwordConfirmation;
     private String email;
-    
-    
-    public String getUsername(){
+
+    public String getUsername() {
         return this.username;
     }
-    
-    public String getPassword(){
+
+    public String getPassword() {
         return this.password;
     }
-    
-    public String getPasswordConfirmation(){
+
+    public String getPasswordConfirmation() {
         return this.passwordConfirmation;
     }
-    
-    public String getEmail(){
+
+    public String getEmail() {
         return this.email;
     }
 }

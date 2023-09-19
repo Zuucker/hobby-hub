@@ -5,7 +5,6 @@
 package controllers;
 
 import httpRequestJson.HttpRequestJson;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,8 +69,6 @@ public class AuthorizationController {
 
         AuthorizationService authService = new AuthorizationService();
 
-        boolean isVerified = authService.checkIfUserIfVerified(requestJson.getUsername());
-
-        return isVerified;
+        return authService.checkIfUserIfVerified(requestJson.getUsername());
     }
 }
