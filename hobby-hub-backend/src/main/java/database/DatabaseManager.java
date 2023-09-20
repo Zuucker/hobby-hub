@@ -4,9 +4,6 @@
  */
 package database;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -16,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import sqlFileParser.SqlFileParser;
 
 /**
  *
@@ -63,23 +61,13 @@ public class DatabaseManager {
             if (schemaExists) {
                 String filePath = "../DB/databaseSchema.sql";
 
-                try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        createSql += line;
-                    }
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
+                SqlFileParser sqlFileParser = new SqlFileParser(filePath);
+                List<String> createStatements = sqlFileParser.getStatements();
 
                 try {
-                    while (createSql.contains(";")) {
-                        int index = createSql.indexOf(";");
-                        String sql = createSql.substring(0, index + 1);
-                        createSql = createSql.replace(sql, "");
-                        System.out.println(sql);
+                    for (String sqlStatement : createStatements) {
                         Statement statement = connection.createStatement();
-                        statement.execute(sql);
+                        statement.execute(sqlStatement);
                     }
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
