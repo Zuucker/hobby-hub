@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import "./styles/Colors.css";
+import "./styles/Global.css";
 import axiosInstance from "./scripts/AxiosInstance";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    axiosInstance.get("/test").then((response) => {
-      setMessage(response.data.message);
-    });
+    axiosInstance
+      .get("/test")
+      .then((response) => {
+        if (response.status === 200) setMessage(response.data.message);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
 
     axiosInstance
       .post("/auth/usernameAvailability", {
@@ -16,6 +24,9 @@ function App() {
       })
       .then((response) => {
         console.log("username available", response.data);
+      })
+      .catch((e) => {
+        console.log(e.message);
       });
 
     axiosInstance
@@ -27,6 +38,9 @@ function App() {
       })
       .then((response) => {
         console.log("register user", response.data);
+      })
+      .catch((e) => {
+        console.log(e.message);
       });
 
     axiosInstance
@@ -36,6 +50,9 @@ function App() {
       })
       .then((response) => {
         console.log("login user", response.data);
+      })
+      .catch((e) => {
+        console.log(e.message);
       });
 
     axiosInstance
@@ -44,15 +61,21 @@ function App() {
       })
       .then((response) => {
         console.log("is user2 verified?", response.data);
+      })
+      .catch((e) => {
+        console.log(e.message);
       });
   }, []);
 
   return (
-    <div className="container main d-flex justify-content-center align-items-center">
-      <h1 className="col-4 text-center d-flex justify-content-center align-items-center">
-        {message}
-      </h1>
-    </div>
+    <>
+      <Navbar />
+      <div className="container main d-flex justify-content-center align-items-center">
+        <h1 className="col-4 text-center d-flex justify-content-center align-items-center">
+          {message}
+        </h1>
+      </div>
+    </>
   );
 }
 

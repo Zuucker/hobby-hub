@@ -1,0 +1,26 @@
+.col-1-5 {
+  width: 14.5% !important;
+}
+
+.col-0-5 {
+  width: 4% !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.btn-purple {
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  border: none;
+  color: var(--white);
+}
+
+.btn-purple:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.btn-purple:active {
+  border: none;
+}

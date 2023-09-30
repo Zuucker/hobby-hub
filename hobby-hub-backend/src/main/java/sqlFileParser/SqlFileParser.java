@@ -32,13 +32,11 @@ public class SqlFileParser {
     public List<String> getStatements() {
         List<String> statements = new ArrayList();
 
-        System.out.println(this.file);
-
         while (this.file.contains(";")) {
             int index = this.file.indexOf(";");
             String statement = this.file.substring(0, index + 1);
             this.file = this.file.replace(statement, "");
-            System.out.println(statement);
+
             statements.add(statement);
         }
 
