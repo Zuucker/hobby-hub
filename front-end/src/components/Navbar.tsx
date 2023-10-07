@@ -36,7 +36,6 @@ function App() {
     const notificationBell = document.getElementsByClassName(
       "notification-bell"
     )[0] as HTMLElement;
-    console.log(notificationBell);
     if (notificationBell)
       notificationBell.style.visibility =
         notifications.length > 0 ? "visible" : "hidden";
