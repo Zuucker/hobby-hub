@@ -41,7 +41,7 @@ public class AuthorizationController {
         boolean registered = authService.registerUser(requestJson.getUsername(),
                 requestJson.getEmail(),
                 requestJson.getPassword(),
-                requestJson.getPasswordConfirmation());
+                requestJson.getConfirmPassword());
 
         return registered;
     }

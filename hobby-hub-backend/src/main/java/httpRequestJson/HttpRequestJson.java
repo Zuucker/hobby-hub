@@ -12,7 +12,7 @@ public class HttpRequestJson {
 
     private String username;
     private String password;
-    private String passwordConfirmation;
+    private String confirmPassword;
     private String email;
 
     public String getUsername() {
@@ -23,11 +23,18 @@ public class HttpRequestJson {
         return this.password;
     }
 
-    public String getPasswordConfirmation() {
-        return this.passwordConfirmation;
+    public String getConfirmPassword() {
+        return this.confirmPassword;
     }
 
     public String getEmail() {
         return this.email;
+    }
+
+    public void print() {
+        System.out.println(this.username);
+        System.out.println(this.password);
+        System.out.println(this.confirmPassword);
+        System.out.println(this.email);
     }
 }

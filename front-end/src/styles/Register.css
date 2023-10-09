@@ -1,0 +1,52 @@
+.register-container {
+  background-color: var(--secondary-color);
+  height: 400px;
+  width: 400px;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+
+  .MuiInputBase-root {
+    padding-right: 0px;
+    height: 40px;
+  }
+
+  & span {
+    margin-top: 15px;
+    font-weight: 400;
+    font-size: 35px;
+  }
+
+  & span.error-message {
+    font-size: 15px;
+    margin-top: 5px;
+  }
+
+  & div.MuiFormControl-root {
+    margin-top: 15px;
+
+    & * {
+      z-index: 1;
+    }
+
+    & fieldset {
+      z-index: -1;
+      background-color: var(--white);
+      border: 1px solid var(--black);
+    }
+  }
+
+  & div.button-container {
+    position: absolute;
+    bottom: 10px;
+    width: 90%;
+
+    & div {
+      height: 30px;
+    }
+  }
+
+  .checkmark {
+    height: 20px;
+    visibility: hidden;
+  }
+}

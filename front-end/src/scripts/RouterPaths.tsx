@@ -1,5 +1,6 @@
 import { RouteObject } from "react-router";
 import TestPage from "../pages/TestPage";
+import RegisterPage from "../pages/RegisterPage";
 
 const paths: RouteObject[] = [
   {
@@ -9,6 +10,10 @@ const paths: RouteObject[] = [
   {
     path: "/test",
     element: <TestPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ];
 

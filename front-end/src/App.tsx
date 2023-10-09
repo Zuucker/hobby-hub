@@ -12,11 +12,6 @@ function App() {
     <>
       <Navbar />
       <RouterProvider router={router} />
-      <div className="container main d-flex justify-content-center align-items-center">
-        <h1 className="col-4 text-center d-flex justify-content-center align-items-center">
-          henlo
-        </h1>
-      </div>
     </>
   );
 }
