@@ -28,5 +28,6 @@ export enum SearchResultsType {
 
 export enum Endpoints {
   registerUser = "auth/register",
+  loginUser = "auth/login",
   checkUsernameAvailability = "auth/usernameAvailability",
 }

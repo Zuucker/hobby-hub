@@ -9,6 +9,7 @@ import java.util.List;
 import jwtManager.JWTManager;
 import keyGenerator.KeyGenerator;
 import org.springframework.stereotype.Service;
+import serviceResult.ServiceResult;
 
 /**
  *
@@ -19,6 +20,7 @@ public class AuthorizationService {
 
     public boolean isUsernameFree(String username) {
 
+        ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
 
         List<String> usernames = manager.getUsernames();
@@ -35,28 +37,32 @@ public class AuthorizationService {
         return isFree;
     }
 
-    public boolean registerUser(String username, String email, String password, String passwordConfirmation) {
+    public ServiceResult registerUser(String username, String email, String password, String passwordConfirmation) {
 
+        ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
 
         //other checks should be added here like is correct username/email/password etc
         //and send email with validation link
-        boolean status = false;
-
         if (password.equals(passwordConfirmation) && isUsernameFree(username)) {
-            status = manager.addUser(username, email, password);
+            result.status = manager.addUser(username, email, password);
+            result.value = "ok";
         }
 
         KeyGenerator keyGenerator = new KeyGenerator();
         String code = keyGenerator.generateKey(128);
 
-        status = status && manager.addVerificationCodeForUser(username, code);
+        result.status = result.status && manager.addVerificationCodeForUser(username, code);
+        if (!result.status) {
+            result.value = "not ok";
+        }
 
-        return status;
+        return result;
     }
 
-    public String loginUser(String username, String password) {
+    public ServiceResult loginUser(String username, String password) {
 
+        ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
 
         boolean userExists = manager.checkIfUserExists(username);
@@ -67,24 +73,52 @@ public class AuthorizationService {
             JWTManager jwtManager = new JWTManager();
             String token = jwtManager.generateToken(username);
 
-            return token;
+            result.value = token;
+            result.status = true;
         }
 
-        return "-1";
+        if (!userExists) {
+            result.value = "No such user exists";
+            result.status = false;
+            return result;
+        }
+
+        if (userExists && !usersPassword.equals(password)) {
+            result.value = "Incorrect password";
+            result.status = false;
+            return result;
+        }
+
+        if (!isVerified) {
+            result.value = "User is not verified";
+            result.status = false;
+            return result;
+        }
+
+        return result;
     }
 
-    public boolean verifyUser(String code) {
+    public ServiceResult verifyUser(String code) {
 
+        ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
 
-        return manager.verifyUser(code);
+        result.status = manager
+                .verifyUser(code);
+        result.value = "ok";
+
+        return result;
     }
 
-    public boolean checkIfUserIfVerified(String username) {
+    public ServiceResult checkIfUserIfVerified(String username) {
 
+        ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
 
-        return manager.getVerified(username);
+        result.status = manager.getVerified(username);
+        result.value = "ok";
+
+        return result;
     }
 
 }

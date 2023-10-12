@@ -86,7 +86,10 @@ function RegisterPage() {
       axiosInstance
         .post(Endpoints.checkUsernameAvailability, inputData)
         .then((response) => {
-          setIsUsernameFree(response.data);
+          setIsUsernameFree(response.data.status);
+        })
+        .catch(() => {
+          setMessage("Service unavailable. Try again later");
         });
     } else {
       const usernameCheckmark = document.getElementById(
@@ -112,8 +115,10 @@ function RegisterPage() {
         axiosInstance
           .post(Endpoints.registerUser, inputData)
           .then((response) => {
-            setMessage(response.data ? "Registered!" : "Try again later");
-            if (response.data) window.location.href = "/login";
+            setMessage(
+              response.data.status ? "Registered!" : "Try again later"
+            );
+            if (response.data.status) window.location.href = "/login";
           });
       })
       .catch((e) => {

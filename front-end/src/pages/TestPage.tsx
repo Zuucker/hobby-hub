@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
+import { readCookie, setCookie } from "../scripts/Cookies";
 
 const TestPage = () => {
   useEffect(() => {
@@ -60,6 +61,8 @@ const TestPage = () => {
       .catch((e) => {
         console.log(e.message);
       });
+
+    readCookie("test");
   }, []);
 
   return <div>test page</div>;

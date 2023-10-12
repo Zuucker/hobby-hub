@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import serviceResult.ServiceResult;
 import services.AuthorizationService;
 
 /**
@@ -24,51 +25,54 @@ import services.AuthorizationService;
 public class AuthorizationController {
 
     @PostMapping("/usernameAvailability")
-    public boolean checkUsernameAvailability(@RequestBody HttpRequestJson requestJson) {
+    public String checkUsernameAvailability(@RequestBody HttpRequestJson requestJson) {
 
         AuthorizationService authService = new AuthorizationService();
+        ServiceResult result = new ServiceResult();
 
-        boolean isUsernameFree = authService.isUsernameFree(requestJson.getUsername());
+        result.status = authService.isUsernameFree(requestJson.getUsername());
+        result.value = "ok";
 
-        return isUsernameFree;
+        return result.toJson();
     }
 
     @PostMapping("/register")
-    public boolean registerUser(@RequestBody HttpRequestJson requestJson) {
+    public String registerUser(@RequestBody HttpRequestJson requestJson) {
 
         AuthorizationService authService = new AuthorizationService();
 
-        boolean registered = authService.registerUser(requestJson.getUsername(),
+        ServiceResult result = authService.registerUser(requestJson.getUsername(),
                 requestJson.getEmail(),
                 requestJson.getPassword(),
                 requestJson.getConfirmPassword());
 
-        return registered;
+        return result.toJson();
     }
 
     @PostMapping("/login")
     public String loginUser(@RequestBody HttpRequestJson requestJson) {
 
         AuthorizationService authService = new AuthorizationService();
+        ServiceResult result = authService.loginUser(requestJson.getUsername(), requestJson.getPassword());
 
-        String token = authService.loginUser(requestJson.getUsername(), requestJson.getPassword());
-
-        return token;
+        return result.toJson();
     }
 
     @GetMapping("/verify/{code}")
-    public boolean verify(@PathVariable String code) {
+    public String verify(@PathVariable String code) {
 
         AuthorizationService authService = new AuthorizationService();
+        ServiceResult result = authService.verifyUser(code);
 
-        return authService.verifyUser(code);
+        return result.toJson();
     }
 
     @PostMapping("/isVerified")
-    public boolean checkIfIsVerified(@RequestBody HttpRequestJson requestJson) {
+    public String checkIfIsVerified(@RequestBody HttpRequestJson requestJson) {
 
         AuthorizationService authService = new AuthorizationService();
+        ServiceResult result = authService.checkIfUserIfVerified(requestJson.getUsername());
 
-        return authService.checkIfUserIfVerified(requestJson.getUsername());
+        return result.toJson();
     }
 }

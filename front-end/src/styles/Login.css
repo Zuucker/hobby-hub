@@ -1,6 +1,6 @@
-.register-container {
+.login-container {
   background-color: var(--secondary-color);
-  height: 25rem;
+  height: 18rem;
   width: 25rem;
   border: 1px solid var(--black);
   border-radius: 5px;
