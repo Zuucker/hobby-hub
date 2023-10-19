@@ -2,6 +2,7 @@ import { RouteObject } from "react-router";
 import TestPage from "../pages/TestPage";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
+import VerificationPage from "../pages/VerificationPage";
 
 const paths: RouteObject[] = [
   {
@@ -19,6 +20,10 @@ const paths: RouteObject[] = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/verify/:code",
+    element: <VerificationPage />,
   },
 ];
 

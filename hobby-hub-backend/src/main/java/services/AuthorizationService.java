@@ -110,6 +110,17 @@ public class AuthorizationService {
         return result;
     }
 
+    public ServiceResult getUserVerificationCode(String user) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        result.value = manager.getVerificationCode(user);
+        result.status = true;
+
+        return result;
+    }
+
     public ServiceResult checkIfUserIfVerified(String username) {
 
         ServiceResult result = new ServiceResult();

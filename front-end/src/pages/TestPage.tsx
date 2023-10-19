@@ -62,6 +62,17 @@ const TestPage = () => {
         console.log(e.message);
       });
 
+    axiosInstance
+      .post("/auth/verify", {
+        code: window.location.href.split("/").pop(),
+      })
+      .then((response) => {
+        console.log("verify", response.data);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+
     readCookie("test");
   }, []);
 

@@ -176,6 +176,22 @@ public class DatabaseManager {
         return false;
     }
 
+    public String getVerificationCode(String username) {
+
+        String sql = "SELECT code FROM verifications WHERE user_id=(SELECT id FROM users WHERE username=?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            return resultSet.getString("code");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return "-1";
+    }
+
     public boolean getVerified(String username) {
         String sql = "SELECT verified FROM users WHERE username = ?";
         try {
@@ -223,7 +239,7 @@ public class DatabaseManager {
 
         boolean status = false;
 
-        String sql = "UPDATE users SET verified = false WHERE id=(SELECT user_id FROM verifications WHERE code=?)";
+        String sql = "UPDATE users SET verified = true WHERE id=(SELECT user_id FROM verifications WHERE code=?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, code);

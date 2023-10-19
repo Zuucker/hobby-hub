@@ -23,7 +23,10 @@ function LoginPage() {
       axiosInstance.post(Endpoints.loginUser, inputData).then((response) => {
         if (response.data.status) {
           setMessage("Logged in successfully");
-          setCookie("jwt", response.data.value);
+          setCookie("jwtToken", response.data.value);
+          setTimeout(() => {
+            window.location.href = "/test";
+          }, 100);
         } else setMessage(response.data.value);
       });
     else {

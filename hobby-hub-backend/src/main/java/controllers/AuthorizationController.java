@@ -4,10 +4,9 @@
  */
 package controllers;
 
+import emailSender.EmailSender;
 import httpRequestJson.HttpRequestJson;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +45,17 @@ public class AuthorizationController {
                 requestJson.getPassword(),
                 requestJson.getConfirmPassword());
 
+        if (result.status) {
+
+            ServiceResult verificationResult = authService.getUserVerificationCode(requestJson.getUsername());
+            String code = verificationResult.value;
+            String verificationUrl = "localhost:3000/verify/" + code;
+
+            EmailSender sender = new EmailSender();
+            sender.sendEmail(requestJson.getEmail(), "Hobby Hub registration!", "yout just registered!" + "<a href="
+                    + verificationUrl + ">Verify Link</a>" + "Click to verify!");
+        }
+
         return result.toJson();
     }
 
@@ -58,11 +68,15 @@ public class AuthorizationController {
         return result.toJson();
     }
 
-    @GetMapping("/verify/{code}")
-    public String verify(@PathVariable String code) {
+    @PostMapping("/verify")
+    public String verify(@RequestBody HttpRequestJson requestJson) {
 
         AuthorizationService authService = new AuthorizationService();
-        ServiceResult result = authService.verifyUser(code);
+        ServiceResult result = authService.checkIfUserIfVerified(requestJson.getUsername());
+
+        if (!result.status) {
+            result = authService.verifyUser(requestJson.getCode());
+        }
 
         return result.toJson();
     }
