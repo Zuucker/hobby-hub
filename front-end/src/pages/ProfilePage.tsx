@@ -211,6 +211,7 @@ function ProfilePage() {
                   value={inputData.password}
                   disabled={!isEditing}
                   placeholder="Password"
+                  type="password"
                   onChange={handleChange}
                 />
               </div>
@@ -220,6 +221,7 @@ function ProfilePage() {
                   value={inputData.newPassword}
                   disabled={!isEditing}
                   placeholder="Confirm Password"
+                  type="password"
                   onChange={handleChange}
                 />
               </div>
