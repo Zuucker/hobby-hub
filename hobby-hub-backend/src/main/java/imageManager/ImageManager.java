@@ -24,10 +24,6 @@ public class ImageManager {
 
     public void saveBase64toDisk(String image, int id) {
         try {
-            //String preparedImg = image.substring(image.indexOf(",") + 1, image.length() - 1);
-            //System.out.println(preparedImg);
-
-            //byte[] imageBytes = Base64.getDecoder().decode(image);
             String base64Image = image.split(",")[1];
             byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
 
