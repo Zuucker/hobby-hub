@@ -349,6 +349,23 @@ public class DatabaseManager {
         return status;
     }
 
+    public String getUsername(int id) {
+        String sql = "SELECT username FROM users WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            String result = resultSet.getString("username");
+            resultSet.close();
+
+            return result;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return "-1";
+    }
+
     public void close() {
         try {
             connection.close();

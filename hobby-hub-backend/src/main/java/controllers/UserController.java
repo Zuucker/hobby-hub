@@ -45,4 +45,14 @@ public class UserController {
 
         return result.toJson();
     }
+
+    @PostMapping("/getUsernameFromJwt")
+    public String getUsernameFromJwt(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+
+        ServiceResult result = userService.getUsernameFromJwt(requestJson.getJwtToken());
+
+        return result.toJson();
+    }
 }

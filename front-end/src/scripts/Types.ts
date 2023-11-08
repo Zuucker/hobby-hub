@@ -34,4 +34,5 @@ export enum Endpoints {
 
   getUserData = "user/data",
   editUser = "user/edit",
+  getUsernameFromJwt = "user/getUsernameFromJwt",
 }

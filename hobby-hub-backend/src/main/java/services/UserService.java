@@ -47,7 +47,7 @@ public class UserService {
 
         JWTManager jwtManager = new JWTManager();
         boolean validated = jwtManager.validatetoken(jwtToken, userData.getId());
-        
+
         if (validated) {
             result.status = manager.editUser(userData.getId(), userData.getUsername(), userData.getBio());
         }
@@ -57,6 +57,22 @@ public class UserService {
         }
 
         result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
+
+    public ServiceResult getUsernameFromJwt(String token) {
+
+        ServiceResult result = new ServiceResult();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(token));
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        result.value = manager.getUsername(userId);
+
+        result.status = true;
 
         return result;
     }

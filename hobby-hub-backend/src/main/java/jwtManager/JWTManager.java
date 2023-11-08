@@ -52,7 +52,7 @@ public class JWTManager {
         return claims.getExpiration();
     }
 
-    private String getSubject(String token) {
+    public String getSubject(String token) {
         Claims claims = Jwts.parser().setSigningKey(jwtKey).parseClaimsJws(token).getBody();
 
         return claims.getSubject();

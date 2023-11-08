@@ -20,7 +20,7 @@ type ProfileData = {
 
 function ProfilePage() {
   const [displayPosts, setDisplayPosts] = useState<boolean>(true);
-  const [isForeignProfile, setIsForeignProfile] = useState<boolean>(true);
+  const [isForeignProfile, setIsForeignProfile] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [posts, setPosts] = useState<boolean[]>([true]); //change type
@@ -48,6 +48,10 @@ function ProfilePage() {
 
   useEffect(() => {
     const username = window.location.pathname.split("/").pop();
+
+    axiosInstance.post(Endpoints.getUsernameFromJwt).then((response) => {
+      setIsForeignProfile(response.data.value === username);
+    });
 
     axiosInstance
       .post(Endpoints.getUserData, { username: username })
