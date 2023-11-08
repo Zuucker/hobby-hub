@@ -31,4 +31,7 @@ export enum Endpoints {
   loginUser = "auth/login",
   checkUsernameAvailability = "auth/usernameAvailability",
   verifyUser = "auth/verify",
+
+  getUserData = "user/data",
+  editUser = "user/edit",
 }

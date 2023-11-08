@@ -3,6 +3,7 @@ import TestPage from "../pages/TestPage";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import VerificationPage from "../pages/VerificationPage";
+import ProfilePage from "../pages/ProfilePage";
 
 const paths: RouteObject[] = [
   {
@@ -24,6 +25,10 @@ const paths: RouteObject[] = [
   {
     path: "/verify/:code",
     element: <VerificationPage />,
+  },
+  {
+    path: "/profile/:user",
+    element: <ProfilePage />,
   },
 ];
 

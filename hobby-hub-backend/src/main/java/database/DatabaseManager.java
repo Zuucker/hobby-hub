@@ -11,8 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import models.User;
 import sqlFileParser.SqlFileParser;
 
 /**
@@ -51,6 +53,7 @@ public class DatabaseManager {
                 DatabaseMetaData databaseMetaData = connection.getMetaData();
                 ResultSet resultSet = databaseMetaData.getTables(null, null, null, new String[]{"TABLE"});
                 schemaExists = !resultSet.next();
+                resultSet.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -75,13 +78,15 @@ public class DatabaseManager {
 
                 //insert initial data
                 try {
-                    String sql = "INSERT INTO users(username, email, password) VALUES(?, ?, ?)";
+                    String sql = "INSERT INTO users(username, email, password, register_date) VALUES(?, ?, ?, ?)";
                     PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                    LocalDate currentDate = LocalDate.now();
 
                     for (int i = 1; i < 11; i++) {
                         preparedStatement.setString(1, "user" + Integer.toString(i));
                         preparedStatement.setString(2, "email" + Integer.toString(i));
                         preparedStatement.setString(3, "password" + Integer.toString(i));
+                        preparedStatement.setString(4, currentDate.toString());
                         preparedStatement.executeUpdate();
                     }
 
@@ -118,6 +123,7 @@ public class DatabaseManager {
             while (resultSet.next()) {
                 results.add(resultSet.getString("username"));
             }
+            resultSet.close();
             return results;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -143,12 +149,15 @@ public class DatabaseManager {
     }
 
     public boolean addUser(String username, String email, String password) {
-        String sql = "INSERT INTO users(username, email, password) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO users(username, email, password, register_date, bio) VALUES(?, ?, ?, ?, ?)";
+        LocalDate currentDate = LocalDate.now();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, email);
             preparedStatement.setString(3, password);
+            preparedStatement.setString(4, currentDate.toString());
+            preparedStatement.setString(5, username + "'s profile");
             preparedStatement.executeUpdate();
 
             return true;
@@ -183,8 +192,10 @@ public class DatabaseManager {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+            String result = resultSet.getString("code");
+            resultSet.close();
 
-            return resultSet.getString("code");
+            return result;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -198,8 +209,10 @@ public class DatabaseManager {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.getBoolean("verified");
+            resultSet.close();
 
-            return resultSet.getBoolean("verified");
+            return result;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -213,8 +226,10 @@ public class DatabaseManager {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.getBoolean("result");
+            resultSet.close();
 
-            return resultSet.getBoolean("result");
+            return result;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -227,8 +242,10 @@ public class DatabaseManager {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+            String result = resultSet.getString("password");
+            resultSet.close();
 
-            return resultSet.getString("password");
+            return result;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -258,6 +275,74 @@ public class DatabaseManager {
 
         } catch (SQLException e) {
             status = false;
+            System.out.println(e.getMessage());
+        }
+
+        return status;
+    }
+
+    public User getUser(String username) {
+
+        if (!this.checkIfUserExists(username)) {
+            return new User().username("nie działa XD");
+        }
+
+        String sql = "SELECT * FROM users WHERE username = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            User user = new User()
+                    .id(resultSet.getInt("id"))
+                    .username(resultSet.getString("username"))
+                    .email(resultSet.getString("email"))
+                    .password(resultSet.getString("password"))
+                    .isVerified(resultSet.getBoolean("verified"))
+                    .registerDate(LocalDate.parse(resultSet.getString("register_date")))
+                    .bio(resultSet.getString("bio"));
+
+            resultSet.close();
+
+            return user;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return new User();
+    }
+
+    public int getUserId(String username) {
+
+        String sql = "SELECT id FROM users WHERE username=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int result = resultSet.getInt("id");
+            resultSet.close();
+
+            return result;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return -1;
+    }
+
+    public boolean editUser(int id, String newUsername, String newBio) {
+
+        boolean status = false;
+
+        String sql = "Update users set username = ?, bio = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, newUsername);
+            preparedStatement.setString(2, newBio);
+            preparedStatement.setInt(3, id);
+            preparedStatement.executeUpdate();
+
+            status = true;
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 

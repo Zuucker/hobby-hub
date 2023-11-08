@@ -14,11 +14,13 @@ public class ServiceResult {
 
     public boolean status;
     public String value;
+    public JSONObject json;
 
     public String toJson() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status", this.status);
         jsonObject.put("value", this.value);
+        jsonObject.put("data", this.json);
 
         return jsonObject.toString();
     }

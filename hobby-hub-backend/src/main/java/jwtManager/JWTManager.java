@@ -31,13 +31,13 @@ public class JWTManager {
         jwtTimeToExpire = Long.valueOf(time);
     }
 
-    public String generateToken(String username) {
+    public String generateToken(Integer id) {
 
         Date presentTime = new Date();
         Date expiryTime = new Date(presentTime.getTime() + jwtTimeToExpire);
 
         String token = Jwts.builder()
-                .setSubject(username)
+                .setSubject(id.toString())
                 .setIssuedAt(presentTime)
                 .setExpiration(expiryTime)
                 .signWith(SignatureAlgorithm.HS256, jwtKey)
@@ -58,11 +58,11 @@ public class JWTManager {
         return claims.getSubject();
     }
 
-    public boolean validatetoken(String token, String username) {
+    public boolean validatetoken(String token, int id) {
 
         Date exiprationDateFromToken = getExpirationDate(token);
 
-        return (exiprationDateFromToken.after(new Date()) && getSubject(token).equals(username));
+        return (exiprationDateFromToken.after(new Date()) && Integer.parseInt(getSubject(token)) == id);
     }
 
 }

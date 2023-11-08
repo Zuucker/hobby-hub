@@ -5,6 +5,7 @@
 package services;
 
 import database.DatabaseManager;
+import imageManager.ImageManager;
 import java.util.List;
 import jwtManager.JWTManager;
 import keyGenerator.KeyGenerator;
@@ -46,6 +47,13 @@ public class AuthorizationService {
         //and send email with validation link
         if (password.equals(passwordConfirmation) && isUsernameFree(username)) {
             result.status = manager.addUser(username, email, password);
+
+            ImageManager imageManager = new ImageManager();
+            String defaultAvatar = imageManager.readImagetoBase64(-1);
+
+            int userId = manager.getUserId(username);
+
+            imageManager.saveBase64toDisk(defaultAvatar, userId);
             result.value = "ok";
         }
 
@@ -68,10 +76,11 @@ public class AuthorizationService {
         boolean userExists = manager.checkIfUserExists(username);
         String usersPassword = manager.getPassword(username);
         boolean isVerified = manager.getVerified(username);
+        int userId = manager.getUserId(username);
 
         if (userExists && isVerified && usersPassword.equals(password)) {
             JWTManager jwtManager = new JWTManager();
-            String token = jwtManager.generateToken(username);
+            String token = jwtManager.generateToken(userId);
 
             result.value = token;
             result.status = true;

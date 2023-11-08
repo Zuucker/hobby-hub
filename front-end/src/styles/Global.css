@@ -28,3 +28,16 @@
 .invisible {
   visibility: hidden;
 }
+
+.blurred {
+  filter: blur(2px);
+  filter: grayscale(4px);
+}
+
+.light-background {
+  background-color: var(--light-grey);
+}
+
+.disabled {
+  display: none;
+}

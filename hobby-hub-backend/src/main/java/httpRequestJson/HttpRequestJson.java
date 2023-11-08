@@ -16,6 +16,9 @@ public class HttpRequestJson {
     private String email;
     private String code;
     private String jwtToken;
+    private String profilePic;
+    private String bio;
+    private String id;
 
     public String getUsername() {
         return this.username;
@@ -41,6 +44,18 @@ public class HttpRequestJson {
         return this.jwtToken;
     }
 
+    public String getProfilePic() {
+        return this.profilePic;
+    }
+
+    public String getBio() {
+        return this.bio;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
     public void print() {
         System.out.println(this.username);
         System.out.println(this.password);
@@ -48,5 +63,8 @@ public class HttpRequestJson {
         System.out.println(this.email);
         System.out.println(this.code);
         System.out.println(this.jwtToken);
+        System.out.println("image long :(");
+        System.out.println(this.bio);
+        System.out.println(this.id);
     }
 }

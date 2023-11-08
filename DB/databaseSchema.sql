@@ -3,7 +3,9 @@ CREATE TABLE `users` (
   `username` STRING NOT NULL,
   `email` STRING NOT NULL,
   `password` STRING NOT NULL,
-  `verified` BOOL DEFAULT false
+  `verified` BOOL DEFAULT false,
+  `register_date` STRING NOT NULL,
+  `bio` STRING
 );
 
 CREATE TABLE `groups` (
@@ -69,5 +71,12 @@ CREATE TABLE `verifications` (
   `id` INTEGER UNIQUE PRIMARY KEY,
   `user_id` INTEGER NOT NULL,
   `code` STRING NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES `users`(id)
+);
+
+CREATE TABLE `notifications` (
+  `id` INTEGER UNIQUE PRIMARY KEY,
+  `user_id` INTEGER NOT NULL,
+  `content` STRING NOT NULL,
   FOREIGN KEY (user_id) REFERENCES `users`(id)
 );
