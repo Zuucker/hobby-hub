@@ -50,6 +50,7 @@ function SearchBar() {
         groupName: "group",
         profilePicture: "profile_pic.jpg",
         postTitle: "post",
+        url: "link",
       };
       const arr = [result, result, result, result, result];
       setSearchResults(arr);

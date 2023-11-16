@@ -3,6 +3,7 @@ export type SearchResult = {
   groupName?: string;
   postTitle?: string;
   profilePicture?: string;
+  url: string;
 };
 
 export type Notification = {
@@ -35,4 +36,8 @@ export enum Endpoints {
   getUserData = "user/data",
   editUser = "user/edit",
   getUsernameFromJwt = "user/getUsernameFromJwt",
+  getUserGroups = "user/getUserGroups",
+
+  addGroup = "group/add",
+  subscribeToGroup = "group/subscribe",
 }

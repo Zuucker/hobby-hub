@@ -5,16 +5,13 @@
 package controllers;
 
 import httpRequestJson.HttpRequestJson;
-import imageManager.ImageManager;
 import models.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import serviceResult.ServiceResult;
-import services.AuthorizationService;
 import services.UserService;
 
 /**
@@ -52,6 +49,16 @@ public class UserController {
         UserService userService = new UserService();
 
         ServiceResult result = userService.getUsernameFromJwt(requestJson.getJwtToken());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/getUserGroups")
+    public String getUserGroups(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+
+        ServiceResult result = userService.getUserGroups(requestJson.getJwtToken());
 
         return result.toJson();
     }

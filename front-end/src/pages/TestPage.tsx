@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
 import { readCookie, setCookie } from "../scripts/Cookies";
+import { Endpoints } from "../scripts/Types";
 
 const TestPage = () => {
   useEffect(() => {
@@ -75,6 +76,42 @@ const TestPage = () => {
 
     readCookie("test");
   }, []);
+
+  axiosInstance
+    .post(Endpoints.addGroup, {
+      groupOwnerId: 1,
+      groupName: "testTreeGroup",
+      groupDescription: "trees are nicee",
+    })
+    .then((response) => {
+      console.log("group adding", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  axiosInstance
+    .post(Endpoints.subscribeToGroup, {
+      id: 1,
+      groupId: 4,
+    })
+    .then((response) => {
+      console.log("group subs", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  axiosInstance
+    .post(Endpoints.getUserGroups, {
+      id: 1,
+    })
+    .then((response) => {
+      console.log("user groups", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
 
   return <div>test page</div>;
 };

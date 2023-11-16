@@ -8,13 +8,18 @@ import SearchBar from "./SearchBar";
 import SectionMenu from "./SectionMenu";
 import ProfileMenu from "./ProfileMenu";
 import { Notification, NotificationType } from "../scripts/Types";
+import { readCookie } from "../scripts/Cookies";
 
-function App() {
+function Navbar() {
   const [isSectionMenuVisible, setIsSectionMenuVisible] = useState(false);
   const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const isLoggedIn = true; //read from cookie
+  const [username, setUsername] = useState<string>("Sad Cat");
+  const [profilePicture, setProfilePicture] =
+    useState<string>("profile_pic.jpg");
+
+  const isLoggedIn = readCookie("jwtToken") ? true : false;
 
   const toggleProfileMenuVisibility = () => {
     setIsProfileMenuVisible(!isProfileMenuVisible);
@@ -90,8 +95,8 @@ function App() {
         </div>
 
         <ProfileMenuButton
-          username="test"
-          profilePicture="profile_pic.jpg"
+          username={username}
+          profilePicture={profilePicture}
           callback={toggleProfileMenuVisibility}
         />
       </div>
@@ -117,4 +122,4 @@ function App() {
   );
 }
 
-export default App;
+export default Navbar;

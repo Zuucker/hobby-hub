@@ -8,7 +8,10 @@ type SearchResultProps = SearchResult & {
 };
 
 function SearchResultComponnent(props: SearchResultProps) {
-  const url = "user/" + props.username;
+  var url;
+  if (props.type === SearchResultsType.user) url = "user/" + props.url;
+  if (props.type === SearchResultsType.group) url = "group/" + props.url;
+  if (props.type === SearchResultsType.post) url = "post/" + props.url;
 
   return (
     <a href={url}>

@@ -3,8 +3,9 @@ import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import GroupSearchIcon from "./GroupSearchIcon";
 import SearchResultComponnent from "./SearchResultComponnent";
-import { SearchResult, SearchResultsType } from "../scripts/Types";
+import { Endpoints, SearchResult, SearchResultsType } from "../scripts/Types";
 import { v4 as uuidv4 } from "uuid";
+import axiosInstance from "../scripts/AxiosInstance";
 
 interface SectionMenuProps {
   isLoggedIn: boolean;
@@ -17,8 +18,13 @@ function SectionMenu(props: SectionMenuProps) {
   useEffect(() => {
     const group: SearchResult = {
       groupName: "group",
+      url: "coolTrees",
     };
     setGroups([group, group, group, group]);
+
+    axiosInstance.post(Endpoints.getUserGroups).then((response) => {
+      console.log(response);
+    });
   }, []);
 
   const searchGroups = () => {
@@ -59,7 +65,7 @@ function SectionMenu(props: SectionMenuProps) {
       </div>
       <div className=" d-flex justify-content-center">
         <div className="group-button-container">
-          <a href={"Xd"}>
+          <a href={"/search/" + groupSearchQuery}>
             <button className="col-12 btn-purple">See more groups</button>
           </a>
         </div>

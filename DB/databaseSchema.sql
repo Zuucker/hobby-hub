@@ -10,10 +10,10 @@ CREATE TABLE `users` (
 
 CREATE TABLE `groups` (
   `id` INTEGER UNIQUE PRIMARY KEY,
-  `author_id` INTEGER NOT NULL,
-  `title` STRING NOT NULL,
+  `owner_id` INTEGER NOT NULL,
+  `name` STRING NOT NULL,
   `description` STRING,
-  FOREIGN KEY (author_id) REFERENCES `users`(id)
+  FOREIGN KEY (owner_id) REFERENCES `users`(id)
 );
 
 CREATE TABLE `mods` (
@@ -53,7 +53,7 @@ CREATE TABLE `comments` (
   FOREIGN KEY (comment_id) REFERENCES referenced_table(referenced_column)
 );
 
-CREATE TABLE `subscriptions` (
+CREATE TABLE `group_subscriptions` (
   `user_id` INTEGER NOT NULL,
   `group_id` INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES `users`(id),

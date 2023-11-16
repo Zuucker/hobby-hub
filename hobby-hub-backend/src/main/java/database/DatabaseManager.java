@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import models.Group;
 import models.User;
 import sqlFileParser.SqlFileParser;
 
@@ -101,6 +102,20 @@ public class DatabaseManager {
 
                     pstmt.executeUpdate();
                     System.out.println("Updated initial data");
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                String sql = "INSERT INTO groups(owner_id, name, description) VALUES(?, ?, ?)";
+                try {
+                    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                    for (int i = 1; i < 11; i++) {
+                        preparedStatement.setInt(1, 1);
+                        preparedStatement.setString(2, "group_name" + Integer.toString(i));
+                        preparedStatement.setString(3, "description" + Integer.toString(i));
+                        preparedStatement.executeUpdate();
+                    }
+
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
@@ -364,6 +379,92 @@ public class DatabaseManager {
         }
 
         return "-1";
+    }
+
+    public boolean addGroup(String name, String description, int ownerId) {
+        String sql = "INSERT INTO groups(owner_id, name, description) VALUES(?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, ownerId);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, description);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
+    public boolean subscribeToGroup(int userId, int groupId) {
+        String sql = "INSERT INTO group_subscriptions(user_id, group_id) VALUES(?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, groupId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
+    public List<Group> getUserGroups(int id) {
+        String sql = "SELECT * FROM groups WHERE id in (SELECT group_id FROM group_subscriptions WHERE user_id = ?) ORDER BY name";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Group> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Group(rs.getInt("id"), rs.getInt("owner_id"), rs.getString("name"), rs.getString("description")));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public List<String> getGroupNames() {
+        String sql = "SELECT name FROM groups";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            List<String> results = new ArrayList();
+
+            while (resultSet.next()) {
+                results.add(resultSet.getString("name"));
+            }
+            return results;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean checkIfSubscribed(int userId, int groupId) {
+        String sql = "SELECT COUNT(*) > 0 AS 'result' FROM group_subscriptions WHERE user_id = ? and group_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.getBoolean("result");
+            resultSet.close();
+
+            return result;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 
     public void close() {

@@ -19,6 +19,10 @@ public class HttpRequestJson {
     private String profilePic;
     private String bio;
     private String id;
+    private String groupName;
+    private String groupDescription;
+    private String groupOwnerId;
+    private String groupId;
 
     public String getUsername() {
         return this.username;
@@ -54,6 +58,22 @@ public class HttpRequestJson {
 
     public String getId() {
         return this.id;
+    }
+
+    public String getGroupName() {
+        return this.groupName;
+    }
+
+    public String getGroupDescription() {
+        return this.groupDescription;
+    }
+
+    public int getGroupOwnerId() {
+        return Integer.parseInt(this.groupOwnerId);
+    }
+
+    public int getGroupId() {
+        return Integer.parseInt(this.groupId);
     }
 
     public void print() {
