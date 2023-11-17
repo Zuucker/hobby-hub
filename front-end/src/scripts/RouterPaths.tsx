@@ -6,6 +6,7 @@ import VerificationPage from "../pages/VerificationPage";
 import ProfilePage from "../pages/ProfilePage";
 import { readCookie } from "./Cookies";
 import RedirectPage from "../pages/RedirectPage";
+import Logout from "../pages/Logout";
 
 let paths: RouteObject[] = [];
 
@@ -16,6 +17,10 @@ if (isLoggedIn) {
     {
       path: "/",
       element: <div>main page</div>,
+    },
+    {
+      path: "/logout",
+      element: <Logout />,
     },
     {
       path: "/test",
