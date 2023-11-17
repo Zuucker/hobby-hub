@@ -44,10 +44,20 @@
     }
   }
 
+  & div.MuiFormControl-root {
+    & * {
+      z-index: 1;
+    }
+
+    & fieldset {
+      z-index: -1;
+      background-color: var(--white);
+    }
+  }
+
   .MuiFormControl-root {
     height: 100%;
     .MuiInputBase-root {
-      background-color: white;
       border-radius: 6px;
       width: 80%;
       height: 60%;

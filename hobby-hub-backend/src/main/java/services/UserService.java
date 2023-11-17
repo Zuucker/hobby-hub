@@ -42,6 +42,33 @@ public class UserService {
         return result;
     }
 
+    public ServiceResult getUserData2(String jwToken) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+        ImageManager imageManager = new ImageManager();
+
+        JWTManager jwtManager = new JWTManager();
+        int userId = Integer.parseInt(jwtManager.getSubject(jwToken));
+
+        boolean validated = jwtManager.validatetoken(jwToken, userId);
+
+        if (validated) {
+            User user = manager.getUser(userId);
+
+            result.json = user.toJson();
+            result.status = user.getUsername() != null;
+
+            String avatarImg = imageManager.readImagetoBase64(user.getId());
+            if (avatarImg != "-1") {
+                result.json.append("profilePic", avatarImg);
+            } else {
+                result.status = false;
+            }
+        }
+        return result;
+    }
+
     public ServiceResult editUserData(User userData, String jwtToken, String newImg) {
 
         ServiceResult result = new ServiceResult();
@@ -80,22 +107,6 @@ public class UserService {
         return result;
     }
 
-    public ServiceResult addGroup(String name, String description, String token) {
-
-        ServiceResult result = new ServiceResult();
-        JWTManager jwtManager = new JWTManager();
-
-        int userId = Integer.parseInt(jwtManager.getSubject(token));
-
-        DatabaseManager manager = DatabaseManager.getInstance();
-
-        result.status = manager.addGroup(name, description, userId);
-
-        result.value = result.status ? "ok" : "nieok";
-
-        return result;
-    }
-
     public ServiceResult getUserGroups(String token) {
 
         ServiceResult result = new ServiceResult();
@@ -111,7 +122,7 @@ public class UserService {
         for (int i = 0;
                 i < groups.size();
                 i++) {
-            newJson.put(String.valueOf(i), groups.get(i).toJson());
+            newJson.append("groups", groups.get(i).toJson());
         }
 
         result.json = newJson;

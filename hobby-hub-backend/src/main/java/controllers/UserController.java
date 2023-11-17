@@ -32,6 +32,15 @@ public class UserController {
         return result.toJson();
     }
 
+    @PostMapping("/data2")
+    public String getUserData2(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+        ServiceResult result = userService.getUserData2(requestJson.getJwtToken());
+
+        return result.toJson();
+    }
+
     @PostMapping("/edit")
     public String editUserData(@RequestBody HttpRequestJson requestJson) {
 

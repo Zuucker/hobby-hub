@@ -7,8 +7,9 @@ import ProfileMenuButton from "./ProfileMenuButton";
 import SearchBar from "./SearchBar";
 import SectionMenu from "./SectionMenu";
 import ProfileMenu from "./ProfileMenu";
-import { Notification, NotificationType } from "../scripts/Types";
+import { Endpoints, Notification, NotificationType } from "../scripts/Types";
 import { readCookie } from "../scripts/Cookies";
+import axiosInstance from "../scripts/AxiosInstance";
 
 function Navbar() {
   const [isSectionMenuVisible, setIsSectionMenuVisible] = useState(false);
@@ -19,7 +20,9 @@ function Navbar() {
   const [profilePicture, setProfilePicture] =
     useState<string>("profile_pic.jpg");
 
-  const isLoggedIn = readCookie("jwtToken") ? true : false;
+  const [isLoggedIn, setIsLoggedIm] = useState<boolean>(
+    readCookie("jwtToken") ? true : false
+  );
 
   const toggleProfileMenuVisibility = () => {
     setIsProfileMenuVisible(!isProfileMenuVisible);
@@ -47,6 +50,19 @@ function Navbar() {
   }, [notifications]);
 
   useEffect(() => {
+    if (isLoggedIn) {
+      axiosInstance.post(Endpoints.getUserDataFromJwt).then((response) => {
+        const data = response.data.data;
+        if (data.username) setUsername(data.username);
+        if (data.profilePic) setProfilePicture(data.profilePic);
+      });
+
+      //NOTIFICATIONS
+      // axiosInstance.post(Endpoints.getNotifications).then((response) => {
+      //   const data = response.data.data;
+      // });
+    }
+
     const notification: Notification = {
       type: NotificationType.comment_reply,
       url: "/post/1",
@@ -114,6 +130,7 @@ function Navbar() {
             <ProfileMenu
               isLoggedIn={isLoggedIn}
               notifications={notifications}
+              username={username}
             />
           </div>
         )}

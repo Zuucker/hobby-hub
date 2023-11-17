@@ -14,21 +14,39 @@ interface SectionMenuProps {
 function SectionMenu(props: SectionMenuProps) {
   const [groupSearchQuery, setGroupSearchQuery] = useState<string>("");
   const [groups, setGroups] = useState<SearchResult[]>([]);
+  const [groupsToDisplay, setGroupsToDisplay] = useState<SearchResult[]>([]);
 
   useEffect(() => {
-    const group: SearchResult = {
-      groupName: "group",
-      url: "coolTrees",
-    };
-    setGroups([group, group, group, group]);
+    if (props.isLoggedIn) {
+      axiosInstance.post(Endpoints.getUserGroups).then((response) => {
+        const responseGroups = response.data.data.groups;
 
-    axiosInstance.post(Endpoints.getUserGroups).then((response) => {
-      console.log(response);
-    });
+        const grs: SearchResult[] = [];
+        responseGroups.forEach((gr: any) => {
+          const group: SearchResult = {
+            groupName: gr.name.substring(0, 15),
+            url: gr.name,
+          };
+          grs.push(group);
+        });
+
+        setGroups(grs);
+      });
+    }
   }, []);
+
+  useEffect(() => {
+    if (groups.length > 0) {
+      setGroupsToDisplay(groups);
+    }
+  }, [groups]);
 
   const searchGroups = () => {
     console.log("searchgroups");
+    const grs = groups.filter((gr) => {
+      if (gr.groupName?.includes(groupSearchQuery)) return gr;
+    });
+    setGroupsToDisplay(grs);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +72,7 @@ function SectionMenu(props: SectionMenuProps) {
         </span>
       )}
       <div className="group-search-results">
-        {groups.map((g) => (
+        {groupsToDisplay.map((g) => (
           <SearchResultComponnent
             type={SearchResultsType.group}
             {...g}

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
-import org.springframework.util.Base64Utils;
 
 /**
  *
@@ -24,7 +23,12 @@ public class ImageManager {
 
     public void saveBase64toDisk(String image, int id) {
         try {
-            String base64Image = image.split(",")[1];
+            String base64Image;
+            if (image.contains(",")) {
+                base64Image = image.split(",")[1];
+            } else {
+                base64Image = image;
+            }
             byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
 
             FileOutputStream fileOutPutStream = new FileOutputStream(savePath + String.valueOf(id) + ".jpg");
@@ -42,6 +46,11 @@ public class ImageManager {
             byte[] imageBytes = Files.readAllBytes(Path.of(savePath + String.valueOf(id) + ".jpg"));
 
             String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+            if (!base64Image.contains("base64")) {
+                String newImg = "data:image/png;base64," + base64Image;
+                base64Image = newImg;
+            }
 
             return base64Image;
 

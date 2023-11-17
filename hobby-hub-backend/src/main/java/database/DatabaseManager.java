@@ -106,6 +106,16 @@ public class DatabaseManager {
                     System.out.println(e.getMessage());
                 }
 
+                try {
+                    String sql = "UPDATE users SET verified = TRUE WHERE username='user2'";
+                    PreparedStatement pstmt = connection.prepareStatement(sql);
+
+                    pstmt.executeUpdate();
+                    System.out.println("Updated initial data");
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+
                 String sql = "INSERT INTO groups(owner_id, name, description) VALUES(?, ?, ?)";
                 try {
                     PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -306,6 +316,32 @@ public class DatabaseManager {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            User user = new User()
+                    .id(resultSet.getInt("id"))
+                    .username(resultSet.getString("username"))
+                    .email(resultSet.getString("email"))
+                    .password(resultSet.getString("password"))
+                    .isVerified(resultSet.getBoolean("verified"))
+                    .registerDate(LocalDate.parse(resultSet.getString("register_date")))
+                    .bio(resultSet.getString("bio"));
+
+            resultSet.close();
+
+            return user;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return new User();
+    }
+
+    public User getUser(int userId) {
+
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             User user = new User()

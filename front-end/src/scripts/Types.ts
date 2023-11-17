@@ -34,6 +34,7 @@ export enum Endpoints {
   verifyUser = "auth/verify",
 
   getUserData = "user/data",
+  getUserDataFromJwt = "user/data2",
   editUser = "user/edit",
   getUsernameFromJwt = "user/getUsernameFromJwt",
   getUserGroups = "user/getUserGroups",

@@ -93,7 +93,7 @@ const TestPage = () => {
   axiosInstance
     .post(Endpoints.subscribeToGroup, {
       id: 1,
-      groupId: 4,
+      groupId: 3,
     })
     .then((response) => {
       console.log("group subs", response.data);
