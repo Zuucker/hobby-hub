@@ -79,9 +79,8 @@ const TestPage = () => {
 
   axiosInstance
     .post(Endpoints.addGroup, {
-      groupOwnerId: 1,
-      groupName: "testTreeGroup",
-      groupDescription: "trees are nicee",
+      groupName: "betterTrees",
+      groupDescription: "trees are niceeer",
     })
     .then((response) => {
       console.log("group adding", response.data);

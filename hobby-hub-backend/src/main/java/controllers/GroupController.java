@@ -27,7 +27,7 @@ public class GroupController {
 
         GroupService userService = new GroupService();
 
-        ServiceResult result = userService.addGroup(requestJson.getGroupName(), requestJson.getGroupDescription(), requestJson.getGroupOwnerId());
+        ServiceResult result = userService.addGroup(requestJson.getGroupName(), requestJson.getGroupDescription(), requestJson.getJwtToken());
 
         return result.toJson();
     }
@@ -38,6 +38,16 @@ public class GroupController {
         GroupService userService = new GroupService();
 
         ServiceResult result = userService.subcribeToGroup(Integer.parseInt(requestJson.getId()), requestJson.getGroupId());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/isNameFree")
+    public String checkIfNameIsFree(@RequestBody HttpRequestJson requestJson) {
+
+        GroupService userService = new GroupService();
+
+        ServiceResult result = userService.isNameFree(requestJson.getGroupName());
 
         return result.toJson();
     }

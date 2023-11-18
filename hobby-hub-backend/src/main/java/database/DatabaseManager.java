@@ -451,10 +451,11 @@ public class DatabaseManager {
     }
 
     public List<Group> getUserGroups(int id) {
-        String sql = "SELECT * FROM groups WHERE id in (SELECT group_id FROM group_subscriptions WHERE user_id = ?) ORDER BY name";
+        String sql = "SELECT * FROM groups WHERE id in (SELECT group_id FROM group_subscriptions WHERE user_id = ?) OR owner_id = ? ORDER BY name";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, id);
             ResultSet rs = preparedStatement.executeQuery();
             List<Group> results = new ArrayList();
 

@@ -41,4 +41,5 @@ export enum Endpoints {
 
   addGroup = "group/add",
   subscribeToGroup = "group/subscribe",
+  checkGroupNameAvailability = "group/isNameFree",
 }

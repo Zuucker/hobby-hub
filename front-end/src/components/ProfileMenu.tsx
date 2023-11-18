@@ -35,7 +35,7 @@ function ProfileMenu(props: ProfileMenuProps) {
             <button
               className="btn-purple col-12"
               onClick={() => {
-                window.location.href = "/group?create";
+                window.location.href = "/createGroup";
               }}>
               Create a new Group
             </button>

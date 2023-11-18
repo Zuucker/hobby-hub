@@ -41,6 +41,11 @@ function SectionMenu(props: SectionMenuProps) {
     }
   }, [groups]);
 
+  useEffect(() => {
+    if (groupsToDisplay.length > 9)
+      setGroupsToDisplay(groupsToDisplay.slice(0, 9));
+  }, [groupsToDisplay]);
+
   const searchGroups = () => {
     console.log("searchgroups");
     const grs = groups.filter((gr) => {

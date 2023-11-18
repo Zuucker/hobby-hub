@@ -21,7 +21,6 @@ public class HttpRequestJson {
     private String id;
     private String groupName;
     private String groupDescription;
-    private String groupOwnerId;
     private String groupId;
 
     public String getUsername() {
@@ -66,10 +65,6 @@ public class HttpRequestJson {
 
     public String getGroupDescription() {
         return this.groupDescription;
-    }
-
-    public int getGroupOwnerId() {
-        return Integer.parseInt(this.groupOwnerId);
     }
 
     public int getGroupId() {

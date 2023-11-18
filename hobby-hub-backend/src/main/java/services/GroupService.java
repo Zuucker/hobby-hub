@@ -6,6 +6,7 @@ package services;
 
 import database.DatabaseManager;
 import java.util.List;
+import jwtManager.JWTManager;
 import org.springframework.stereotype.Service;
 import serviceResult.ServiceResult;
 
@@ -16,15 +17,22 @@ import serviceResult.ServiceResult;
 @Service
 public class GroupService {
 
-    public ServiceResult addGroup(String name, String description, int ownerId) {
+    public ServiceResult addGroup(String name, String description, String jwtToken) {
 
         ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        if (description == null) {
+            description = "";
+        }
 
         List<String> groups = manager.getGroupNames();
 
         if (!groups.contains(name)) {
-            result.status = manager.addGroup(name, description, ownerId);
+            result.status = manager.addGroup(name, description, userId);
         }
 
         result.value = result.status ? "ok" : "nieok";
@@ -41,6 +49,27 @@ public class GroupService {
 
         if (!isSubscribed) {
             result.status = manager.subscribeToGroup(userId, groupId);
+        }
+
+        result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
+
+    public ServiceResult isNameFree(String name) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        List<String> groupNames = manager.getGroupNames();
+
+        result.status = true;
+
+        for (int i = 0; i < groupNames.size(); i++) {
+            if (groupNames.get(i).equals(name)) {
+                result.status = false;
+                break;
+            }
         }
 
         result.value = result.status ? "ok" : "nieok";

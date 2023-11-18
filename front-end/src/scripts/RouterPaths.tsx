@@ -7,6 +7,7 @@ import ProfilePage from "../pages/ProfilePage";
 import { readCookie } from "./Cookies";
 import RedirectPage from "../pages/RedirectPage";
 import Logout from "../pages/Logout";
+import GroupCreationPage from "../pages/GroupCreationPage";
 
 let paths: RouteObject[] = [];
 
@@ -29,6 +30,10 @@ if (isLoggedIn) {
     {
       path: "/profile/:user",
       element: <ProfilePage />,
+    },
+    {
+      path: "/createGroup",
+      element: <GroupCreationPage />,
     },
     {
       path: "*",
