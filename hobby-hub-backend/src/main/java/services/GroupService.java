@@ -7,6 +7,7 @@ package services;
 import database.DatabaseManager;
 import java.util.List;
 import jwtManager.JWTManager;
+import models.Group;
 import org.springframework.stereotype.Service;
 import serviceResult.ServiceResult;
 
@@ -70,6 +71,67 @@ public class GroupService {
                 result.status = false;
                 break;
             }
+        }
+
+        result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
+
+    public ServiceResult getGroupData(String name) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        Group group = manager.getGroupData(name);
+
+        result.json = group.toJson();
+
+        result.json.put("owner", manager.getUsername(group.getOwnerId()));
+
+        result.status = true;
+        result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
+
+    public ServiceResult editGroup(int id, String name, String description, String jwtToken) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        if (description == null) {
+            description = "";
+        }
+
+        Group group = manager.getGroupData(id);
+
+        if (userId == group.getOwnerId()) {
+            result.status = manager.editGroup(id, name, description);
+        }
+
+        result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
+
+    public ServiceResult leaveGroup(int id, String jwtToken) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        Group group = manager.getGroupData(id);
+
+        if (userId == group.getOwnerId()) {
+            result.status = manager.removeGroup(id);
+        } else {
+            result.status = manager.removeGroupSubscription(id, userId);
         }
 
         result.value = result.status ? "ok" : "nieok";

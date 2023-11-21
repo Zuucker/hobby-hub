@@ -45,9 +45,37 @@ public class GroupController {
     @PostMapping("/isNameFree")
     public String checkIfNameIsFree(@RequestBody HttpRequestJson requestJson) {
 
-        GroupService userService = new GroupService();
+        GroupService groupService = new GroupService();
 
-        ServiceResult result = userService.isNameFree(requestJson.getGroupName());
+        ServiceResult result = groupService.isNameFree(requestJson.getGroupName());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/data")
+    public String getGroupData(@RequestBody HttpRequestJson requestJson) {
+
+        GroupService groupService = new GroupService();
+
+        ServiceResult result = groupService.getGroupData(requestJson.getGroupName());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/edit")
+    public String editGroup(@RequestBody HttpRequestJson requestJson) {
+
+        GroupService groupService = new GroupService();
+        ServiceResult result = groupService.editGroup(requestJson.getGroupId(), requestJson.getGroupName(), requestJson.getGroupDescription(), requestJson.getJwtToken());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/leave")
+    public String leaveGroup(@RequestBody HttpRequestJson requestJson) {
+
+        GroupService groupService = new GroupService();
+        ServiceResult result = groupService.leaveGroup(requestJson.getGroupId(), requestJson.getJwtToken());
 
         return result.toJson();
     }

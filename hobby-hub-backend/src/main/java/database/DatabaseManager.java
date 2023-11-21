@@ -504,6 +504,115 @@ public class DatabaseManager {
         return false;
     }
 
+    public Group getGroupData(String groupName) {
+
+        List<String> groups = this.getGroupNames();
+
+        if (!groups.contains(groupName)) {
+            return new Group("no such group");
+        }
+
+        String sql = "SELECT * FROM groups WHERE name = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, groupName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            Group group = new Group(
+                    resultSet.getInt("id"),
+                    resultSet.getInt("owner_id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("description"));
+
+            resultSet.close();
+
+            return group;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return new Group();
+    }
+
+    public Group getGroupData(int id) {
+
+        String sql = "SELECT * FROM groups WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            Group group = new Group(
+                    resultSet.getInt("id"),
+                    resultSet.getInt("owner_id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("description"));
+
+            resultSet.close();
+
+            return group;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return new Group();
+    }
+
+    public boolean editGroup(int id, String name, String description) {
+
+        boolean status = false;
+
+        String sql = "Update groups set name = ?, description = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, description);
+            preparedStatement.setInt(3, id);
+            preparedStatement.executeUpdate();
+
+            status = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return status;
+    }
+
+    public boolean removeGroup(int id) {
+
+        boolean status = false;
+
+        String sql = "DELETE FROM groups WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+
+            status = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return status;
+    }
+
+    public boolean removeGroupSubscription(int id, int userId) {
+
+        boolean status = false;
+
+        String sql = "DELETE FROM group_subscriptions WHERE user_id = ? and group_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+
+            status = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return status;
+    }
+
     public void close() {
         try {
             connection.close();

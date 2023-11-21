@@ -14,6 +14,7 @@ public class Group {
 
     private int id;
     private int ownerId;
+    private String owner;
     private String name;
     private String description;
 
@@ -22,6 +23,17 @@ public class Group {
         this.ownerId = ownerId;
         this.name = name;
         this.description = description;
+    }
+
+    public Group(String name) {
+        this.name = name;
+    }
+
+    public Group() {
+    }
+
+    public void setOwner(String name) {
+        this.owner = name;
     }
 
     public int getId() {
@@ -44,6 +56,7 @@ public class Group {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", this.id);
         jsonObject.put("ownerId", this.ownerId);
+        jsonObject.put("owner", this.owner);
         jsonObject.put("name", this.name);
         jsonObject.put("description", this.description);
 

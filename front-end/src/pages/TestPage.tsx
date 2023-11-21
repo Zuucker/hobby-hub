@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
-import { readCookie, setCookie } from "../scripts/Cookies";
+import { readCookie } from "../scripts/Cookies";
 import { Endpoints } from "../scripts/Types";
 
 const TestPage = () => {
@@ -91,7 +91,7 @@ const TestPage = () => {
 
   axiosInstance
     .post(Endpoints.subscribeToGroup, {
-      id: 1,
+      id: 2,
       groupId: 3,
     })
     .then((response) => {

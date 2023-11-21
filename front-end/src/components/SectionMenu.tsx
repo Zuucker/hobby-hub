@@ -21,6 +21,8 @@ function SectionMenu(props: SectionMenuProps) {
       axiosInstance.post(Endpoints.getUserGroups).then((response) => {
         const responseGroups = response.data.data.groups;
 
+        if (!responseGroups) return;
+
         const grs: SearchResult[] = [];
         responseGroups.forEach((gr: any) => {
           const group: SearchResult = {
@@ -47,7 +49,6 @@ function SectionMenu(props: SectionMenuProps) {
   }, [groupsToDisplay]);
 
   const searchGroups = () => {
-    console.log("searchgroups");
     const grs = groups.filter((gr) => {
       if (gr.groupName?.includes(groupSearchQuery)) return gr;
     });

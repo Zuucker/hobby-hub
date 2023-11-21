@@ -28,7 +28,7 @@ const checkmarkIcon = () => {
 const errorMessageTranslator = (message: string) => {
   if (message === "") return message;
 
-  const keyWords = [{ old: /\groupName\b/i, new: "Group Name" }];
+  const keyWords = [{ old: /groupName\b/i, new: "Group Name" }];
 
   for (let i = 0; i < keyWords.length; i++) {
     message = message.replace(keyWords[i].old, keyWords[i].new);

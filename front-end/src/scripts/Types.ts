@@ -42,4 +42,7 @@ export enum Endpoints {
   addGroup = "group/add",
   subscribeToGroup = "group/subscribe",
   checkGroupNameAvailability = "group/isNameFree",
+  getGroupData = "group/data",
+  editGroup = "group/edit",
+  leaveGroup = "group/leave",
 }
