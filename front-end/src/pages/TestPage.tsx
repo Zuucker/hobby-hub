@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
 import { readCookie } from "../scripts/Cookies";
 import { Endpoints } from "../scripts/Types";
@@ -112,7 +112,16 @@ const TestPage = () => {
       console.log(e.message);
     });
 
-  return <div>test page</div>;
+  return (
+    <div>
+      test page
+      <img src="media/posts/image/xd1.jpg" alt="post"></img>
+      <video controls>
+        <source src="media/posts/video/xd1.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  );
 };
 
 export default TestPage;

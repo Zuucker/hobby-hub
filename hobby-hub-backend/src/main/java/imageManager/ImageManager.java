@@ -16,7 +16,8 @@ import java.util.Base64;
  */
 public class ImageManager {
 
-    private final String savePath = "D:\\Repos\\hobby-hub\\DB\\images\\";
+    private final String savePath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\avatars\\";
+    private final String shortPath = "media/avatars/";
 
     public ImageManager() {
     }
@@ -58,5 +59,9 @@ public class ImageManager {
             System.out.println(e.getMessage());
         }
         return "-1";
+    }
+
+    public String readPath(int id) {
+        return this.shortPath + String.valueOf(id) + ".jpg";
     }
 }

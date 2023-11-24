@@ -65,7 +65,7 @@ function ProfilePage() {
         );
 
         recievedData.age = age;
-        recievedData.profilePic = response.data.data.profilePic;
+        recievedData.profilePic = "../" + response.data.data.profilePic;
 
         setUserData(recievedData);
         setInputData(recievedData);

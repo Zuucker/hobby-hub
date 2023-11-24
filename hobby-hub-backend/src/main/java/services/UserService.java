@@ -32,7 +32,8 @@ public class UserService {
         result.json = user.toJson();
         result.status = user.getUsername() != null;
 
-        String avatarImg = imageManager.readImagetoBase64(user.getId());
+        String avatarImg = imageManager.readPath(user.getId());
+
         if (avatarImg != "-1") {
             result.json.append("profilePic", avatarImg);
         } else {
@@ -59,7 +60,7 @@ public class UserService {
             result.json = user.toJson();
             result.status = user.getUsername() != null;
 
-            String avatarImg = imageManager.readImagetoBase64(user.getId());
+            String avatarImg = imageManager.readPath(user.getId());
             if (avatarImg != "-1") {
                 result.json.append("profilePic", avatarImg);
             } else {

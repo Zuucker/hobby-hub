@@ -54,7 +54,7 @@ function Navbar() {
       axiosInstance.post(Endpoints.getUserDataFromJwt).then((response) => {
         const data = response.data.data;
         if (data.username) setUsername(data.username);
-        if (data.profilePic) setProfilePicture(data.profilePic);
+        if (data.profilePic) setProfilePicture("../" + data.profilePic);
       });
 
       //NOTIFICATIONS

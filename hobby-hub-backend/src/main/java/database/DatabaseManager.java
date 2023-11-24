@@ -151,7 +151,7 @@ public class DatabaseManager {
             resultSet.close();
             return results;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return null;
     }
@@ -168,7 +168,7 @@ public class DatabaseManager {
             }
             return results;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return null;
     }
@@ -187,7 +187,7 @@ public class DatabaseManager {
 
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return false;
@@ -204,7 +204,7 @@ public class DatabaseManager {
 
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return false;
@@ -222,7 +222,7 @@ public class DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return "-1";
@@ -239,7 +239,7 @@ public class DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return false;
@@ -256,7 +256,7 @@ public class DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return false;
     }
@@ -272,7 +272,7 @@ public class DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return null;
     }
@@ -289,7 +289,7 @@ public class DatabaseManager {
 
             status = true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         sql = "DELETE FROM verifications WHERE code=?";
@@ -300,7 +300,7 @@ public class DatabaseManager {
 
         } catch (SQLException e) {
             status = false;
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return status;
@@ -331,7 +331,7 @@ public class DatabaseManager {
 
             return user;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return new User();
     }
@@ -357,7 +357,7 @@ public class DatabaseManager {
 
             return user;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return new User();
     }
@@ -374,7 +374,7 @@ public class DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return -1;
@@ -394,7 +394,7 @@ public class DatabaseManager {
 
             status = true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return status;
@@ -411,7 +411,7 @@ public class DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return "-1";
@@ -428,7 +428,7 @@ public class DatabaseManager {
 
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return false;
@@ -444,7 +444,7 @@ public class DatabaseManager {
 
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return false;
@@ -465,7 +465,7 @@ public class DatabaseManager {
 
             return results;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return null;
     }
@@ -482,7 +482,7 @@ public class DatabaseManager {
             }
             return results;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return null;
     }
@@ -499,7 +499,7 @@ public class DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return false;
     }
@@ -528,7 +528,7 @@ public class DatabaseManager {
 
             return group;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return new Group();
     }
@@ -551,7 +551,7 @@ public class DatabaseManager {
 
             return group;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
         return new Group();
     }
@@ -570,7 +570,7 @@ public class DatabaseManager {
 
             status = true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return status;
@@ -588,7 +588,7 @@ public class DatabaseManager {
 
             status = true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return status;
@@ -607,10 +607,16 @@ public class DatabaseManager {
 
             status = true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            printError(e);
         }
 
         return status;
+    }
+
+    private void printError(Exception e) {
+        if (e.getMessage() != "ResultSet closed") {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void close() {
