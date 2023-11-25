@@ -28,18 +28,13 @@ CREATE TABLE `posts` (
   `author_id` INTEGER NOT NULL,
   `group_id` INTEGER NOT NULL,
   `title` STRING,
-  `type` INTEGER NOT NULL,
+  `type` STRING NOT NULL,
   `link` STRING,
   `up_votes` INTEGER,
   `down_votes` INTEGER,
+  `date` STRING NOT NULL,
   FOREIGN KEY (author_id) REFERENCES `users`(id) ON DELETE CASCADE,
-  FOREIGN KEY (group_id) REFERENCES `groups`(id) ON DELETE CASCADE,
-  FOREIGN KEY (type) REFERENCES `types`(id) ON DELETE CASCADE
-);
-
-CREATE TABLE `types` (
-  `id` INTEGER UNIQUE PRIMARY KEY,
-  `type` STRING
+  FOREIGN KEY (group_id) REFERENCES `groups`(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `comments` (
@@ -61,6 +56,13 @@ CREATE TABLE `group_subscriptions` (
 );
 
 CREATE TABLE `liked_posts` (
+  `user_id` INTEGER NOT NULL,
+  `post_id` INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE,
+  FOREIGN KEY (post_id) REFERENCES `posts`(id) ON DELETE CASCADE
+);
+
+CREATE TABLE `disliked_posts` (
   `user_id` INTEGER NOT NULL,
   `post_id` INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE,

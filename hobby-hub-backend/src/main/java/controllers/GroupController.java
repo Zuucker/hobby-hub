@@ -79,4 +79,13 @@ public class GroupController {
 
         return result.toJson();
     }
+
+    @PostMapping("/posts")
+    public String getGroupPosts(@RequestBody HttpRequestJson requestJson) {
+
+        GroupService groupService = new GroupService();
+        ServiceResult result = groupService.getGroupPosts(requestJson.getGroupId());
+
+        return result.toJson();
+    }
 }

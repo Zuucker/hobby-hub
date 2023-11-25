@@ -71,4 +71,13 @@ public class UserController {
 
         return result.toJson();
     }
+
+    @PostMapping("/posts")
+    public String getUserPosts(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+        ServiceResult result = userService.getUserPosts(requestJson.getJwtToken());
+
+        return result.toJson();
+    }
 }

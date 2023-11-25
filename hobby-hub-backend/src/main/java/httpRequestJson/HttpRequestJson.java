@@ -22,6 +22,11 @@ public class HttpRequestJson {
     private String groupName;
     private String groupDescription;
     private String groupId;
+    private String postAuthorId;
+    private String postTitle;
+    private String postType;
+    private String postLink;
+    private String postId;
 
     public String getUsername() {
         return this.username;
@@ -69,6 +74,26 @@ public class HttpRequestJson {
 
     public int getGroupId() {
         return Integer.parseInt(this.groupId);
+    }
+
+    public String getPostTitle() {
+        return this.postTitle;
+    }
+
+    public String getPostType() {
+        return this.postType;
+    }
+
+    public String getPostLink() {
+        return this.postLink;
+    }
+
+    public int getPostAuthorId() {
+        return Integer.parseInt(this.postAuthorId);
+    }
+
+    public int getPostId() {
+        return Integer.parseInt(this.postId);
     }
 
     public void print() {

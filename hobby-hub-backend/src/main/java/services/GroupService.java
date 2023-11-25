@@ -8,6 +8,8 @@ import database.DatabaseManager;
 import java.util.List;
 import jwtManager.JWTManager;
 import models.Group;
+import models.Post;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import serviceResult.ServiceResult;
 
@@ -135,6 +137,26 @@ public class GroupService {
         }
 
         result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
+
+    public ServiceResult getGroupPosts(int groupId) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        List<Post> posts = manager.getGroupPosts(groupId);
+
+        JSONObject newJson = new JSONObject();
+        for (int i = 0;
+                i < posts.size();
+                i++) {
+            newJson.append("posts", posts.get(i).toJson());
+        }
+
+        result.json = newJson;
+        result.status = true;
 
         return result;
     }

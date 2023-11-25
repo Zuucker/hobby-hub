@@ -12,9 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import models.Group;
+import models.Post;
 import models.User;
 import sqlFileParser.SqlFileParser;
 
@@ -125,11 +128,9 @@ public class DatabaseManager {
                         preparedStatement.setString(3, "description" + Integer.toString(i));
                         preparedStatement.executeUpdate();
                     }
-
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
-
             }
 
             databaseManagerInstance = new DatabaseManager();
@@ -611,6 +612,210 @@ public class DatabaseManager {
         }
 
         return status;
+    }
+
+    public boolean addPost(Post post) {
+        String sql = "INSERT INTO posts(author_id, group_id, title, type, link, up_votes, down_votes, date) values (?, ?, ?, ?, ?, ?, ?, ?)";
+        LocalDateTime currentDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        String formattedTime = currentDate.format(formatter);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, post.getAuthorId());
+            preparedStatement.setInt(2, post.getGroupId());
+            preparedStatement.setString(3, post.getTitle());
+            preparedStatement.setString(4, post.getType());
+            preparedStatement.setString(5, post.getLink());
+            preparedStatement.setInt(6, post.getUpVotes());
+            preparedStatement.setInt(7, post.getDownVotes());
+            preparedStatement.setString(8, formattedTime);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean isLikedByUser(int postId, int userId) {
+        String sql = "SELECT COUNT(*) > 0 AS 'result' FROM liked_posts WHERE user_id = ? AND post_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.getBoolean("result");
+            resultSet.close();
+
+            return result;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean isDislikedByUser(int postId, int userId) {
+        String sql = "SELECT COUNT(*) > 0 AS 'result' FROM disliked_posts WHERE user_id = ? AND post_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.getBoolean("result");
+            resultSet.close();
+
+            return result;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean likePost(int userId, int postId) {
+        String sql = "INSERT INTO liked_posts(user_id, post_id) VALUES(?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            preparedStatement.executeUpdate();
+
+            sql = "Update posts set up_votes = up_votes + 1 WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, postId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean dislikePost(int userId, int postId) {
+        String sql = "INSERT INTO disliked_posts(user_id, post_id) VALUES(?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            preparedStatement.executeUpdate();
+
+            sql = "Update posts set down_votes = down_votes + 1 WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, postId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public List<Post> getGroupPosts(int id) {
+        String sql = "SELECT * FROM 'posts' WHERE group_id = ? ORDER BY date";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Post> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Post(
+                        rs.getInt("id"),
+                        rs.getInt("author_id"),
+                        rs.getInt("group_id"),
+                        rs.getString("title"),
+                        rs.getString("type"),
+                        rs.getString("link"),
+                        rs.getInt("up_votes"),
+                        rs.getInt("down_votes")
+                ));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
+    public List<Post> getUserPosts(int id) {
+        String sql = "SELECT * FROM 'posts' WHERE author_id = ? ORDER BY date";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Post> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Post(
+                        rs.getInt("id"),
+                        rs.getInt("author_id"),
+                        rs.getInt("group_id"),
+                        rs.getString("title"),
+                        rs.getString("type"),
+                        rs.getString("link"),
+                        rs.getInt("up_votes"),
+                        rs.getInt("down_votes")
+                ));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
+    public Post getPost(int id) {
+        String sql = "SELECT * FROM 'posts' WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            return new Post(
+                    rs.getInt("id"),
+                    rs.getInt("author_id"),
+                    rs.getInt("group_id"),
+                    rs.getString("title"),
+                    rs.getString("type"),
+                    rs.getString("link"),
+                    rs.getInt("up_votes"),
+                    rs.getInt("down_votes")
+            );
+
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return null;
+    }
+
+    public boolean addNotifcation(int userId, String content) {
+        String sql = "INSERT INTO notifications(user_id, content) VALUES (?, ?)";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(2, content);
+
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
     }
 
     private void printError(Exception e) {

@@ -38,6 +38,7 @@ export enum Endpoints {
   editUser = "user/edit",
   getUsernameFromJwt = "user/getUsernameFromJwt",
   getUserGroups = "user/getUserGroups",
+  getUserPosts = "user/posts",
 
   addGroup = "group/add",
   subscribeToGroup = "group/subscribe",
@@ -45,4 +46,9 @@ export enum Endpoints {
   getGroupData = "group/data",
   editGroup = "group/edit",
   leaveGroup = "group/leave",
+  getGroupPosts = "group/posts",
+
+  addPost = "post/add",
+  likePost = "post/like",
+  dislikePost = "post/dislike",
 }

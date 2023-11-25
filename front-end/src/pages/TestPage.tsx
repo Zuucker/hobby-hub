@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
 import { readCookie } from "../scripts/Cookies";
 import { Endpoints } from "../scripts/Types";
@@ -107,6 +107,65 @@ const TestPage = () => {
     })
     .then((response) => {
       console.log("user groups", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  axiosInstance
+    .post(Endpoints.addPost, {
+      postAuthorId: 1,
+      groupId: 2,
+      postTitle: "XD test XD",
+      postType: "image", //image, video, text
+      postLink: "linkxd",
+    })
+    .then((response) => {
+      console.log("adding post", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  axiosInstance
+    .post(Endpoints.likePost, {
+      postId: 2,
+    })
+    .then((response) => {
+      console.log("post liking", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  axiosInstance
+    .post(Endpoints.dislikePost, {
+      postId: 1,
+    })
+    .then((response) => {
+      console.log("post disliking", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  axiosInstance
+    .post(Endpoints.getGroupPosts, {
+      groupId: 2,
+    })
+    .then((response) => {
+      console.log("group posts", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  axiosInstance
+    .post(Endpoints.getUserPosts, {
+      groupId: 2,
+    })
+    .then((response) => {
+      console.log("user posts", response.data);
     })
     .catch((e) => {
       console.log(e.message);
