@@ -48,6 +48,7 @@ public class EmailSender {
         prop.put("mail.smtp.port", servicePort);
         prop.put("mail.smtp.auth", serviceAuth);
         prop.put("mail.smtp.starttls.enable", serviceTls);
+        prop.put("mail.smtp.starttls.enable", "true");
 
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
@@ -61,10 +62,19 @@ public class EmailSender {
             message.setFrom(new InternetAddress(serviceEmail));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse("kamigie504@student.polsl.pl")
+                    InternetAddress.parse(to)
             );
+
             message.setSubject(subject);
-            message.setText(messageText);
+
+            Multipart multipart = new MimeMultipart();
+            MimeBodyPart htmlPart = new MimeBodyPart();
+
+            htmlPart.setContent(messageText, "text/html");
+
+            multipart.addBodyPart(htmlPart);
+
+            message.setContent(multipart);
 
             Transport.send(message);
 

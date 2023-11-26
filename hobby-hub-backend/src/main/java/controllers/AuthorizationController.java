@@ -52,8 +52,8 @@ public class AuthorizationController {
             String verificationUrl = "localhost:3000/verify/" + code;
 
             EmailSender sender = new EmailSender();
-            sender.sendEmail(requestJson.getEmail(), "Hobby Hub registration!", "yout just registered!" + "<a href="
-                    + verificationUrl + ">Verify Link</a>" + "Click to verify!");
+            sender.sendEmail(requestJson.getEmail(), "Hobby Hub registration!", "You just registered! \n<p>" + "<a href='"
+                    + verificationUrl + "'>Verify Link</a></p>" + "\n<p>" + verificationUrl + "</p> Click to verify!");
         }
 
         return result.toJson();
