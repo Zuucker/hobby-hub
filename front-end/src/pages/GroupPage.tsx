@@ -3,10 +3,11 @@ import EmptyPage from "../components/EmptyPageComponnent";
 import { useEffect, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axiosInstance from "../scripts/AxiosInstance";
-import { Endpoints } from "../scripts/Types";
+import { Endpoints, Post } from "../scripts/Types";
 import { TextField } from "@mui/material";
 import Popup from "reactjs-popup";
 import EditGroupComponent from "../components/EditGroupComponent";
+import PostContainer from "../components/PostContainer";
 
 type GroupData = {
   name: string;
@@ -26,6 +27,7 @@ function GroupPage() {
   });
 
   const [isEditingGroup, setIsEditingGroup] = useState<boolean>(false);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     const optionsDiv = document.getElementsByClassName(
@@ -87,6 +89,37 @@ function GroupPage() {
           ownerId: responseData.ownerId,
         };
 
+        axiosInstance
+          .post(Endpoints.getGroupPosts, {
+            groupId: responseData.id,
+          })
+          .then((response) => {
+            const postsData: Post[] = [];
+            const responseData = response.data.data.posts;
+            console.log(responseData);
+
+            responseData.forEach((p: Post) => {
+              postsData.push({
+                id: p.id,
+                authorId: p.authorId,
+                author: p.author,
+                groupId: p.groupId,
+                group: p.group,
+                title: p.title,
+                link: "../media/posts/image/" + p.id + ".jpg",
+                type: p.type,
+                upVotes: p.upVotes,
+                downVotes: p.downVotes,
+                isUpVoted: p.isUpVoted,
+                isDownVoted: p.isDownVoted,
+              });
+            });
+
+            console.log(postsData);
+
+            setPosts(postsData);
+          });
+
         setGroupData(grData);
       });
   }, []);
@@ -134,43 +167,7 @@ function GroupPage() {
         </div>
 
         <div className="group-content row">
-          ehehe
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
-          <br /> posts here
+          <PostContainer posts={posts} />
         </div>
       </div>
     </EmptyPage>

@@ -74,4 +74,38 @@ public class PostService {
 
         return result;
     }
+
+    public ServiceResult unLikePost(int postId, String jwtToken) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        if (manager.isLikedByUser(postId, userId)) {
+            result.status = manager.unLikePost(userId, postId);
+        }
+
+        result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
+
+    public ServiceResult unDislikePost(int postId, String jwtToken) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        if (manager.isDislikedByUser(postId, userId)) {
+            result.status = manager.unDislikePost(userId, postId);
+        }
+
+        result.value = result.status ? "ok" : "nieok";
+
+        return result;
+    }
 }

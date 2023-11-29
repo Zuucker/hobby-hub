@@ -1,0 +1,79 @@
+.post-container {
+  margin: 10px;
+}
+
+.post {
+  border: 1px solid var(--black);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: var(--secondary-color);
+
+  & > div > .post-author {
+    font-size: 0.8rem;
+  }
+
+  & > div > .post-title {
+    font-size: 1.5rem;
+    margin-bottom: 0px;
+    position: relative;
+    top: -8px;
+  }
+
+  > :nth-child(2) {
+    margin-top: -5px;
+    margin-bottom: -10px;
+  }
+}
+
+.content {
+  & > img {
+    width: -webkit-fill-available;
+    margin: 10px 15px 5px 15px;
+  }
+
+  & > video {
+    width: -webkit-fill-available;
+    margin: 10px 15px 5px 15px;
+  }
+
+  & > .MuiFormControl-root {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: -webkit-fill-available;
+    & > .MuiInputBase-root {
+      background-color: var(--white);
+    }
+  }
+}
+
+.post-toolbar {
+  background-color: var(--black);
+  border-radius: 0px 0px 10px 10px;
+
+  & > div > .post-toolbar-comment {
+    background-color: var(--white);
+    margin: 2px;
+    height: 30px;
+    & > .MuiInputBase-root {
+      height: 30px;
+      & > input {
+        margin-left: 10px;
+      }
+      & > img {
+        height: 25px;
+        margin-right: 10px;
+      }
+    }
+  }
+  & > div > img.dots.pointer {
+    width: 6px;
+  }
+}
+
+img.up-voted {
+  background-color: red !important;
+}
+
+img.down-voted {
+  background-color: green !important;
+}

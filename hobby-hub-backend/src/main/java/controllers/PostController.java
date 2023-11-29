@@ -53,4 +53,24 @@ public class PostController {
 
         return result.toJson();
     }
+
+    @PostMapping("/unLike")
+    public String unLikePost(@RequestBody HttpRequestJson requestJson) {
+
+        PostService postService = new PostService();
+
+        ServiceResult result = postService.unLikePost(requestJson.getPostId(), requestJson.getJwtToken());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/unDislike")
+    public String unDislikePost(@RequestBody HttpRequestJson requestJson) {
+
+        PostService postService = new PostService();
+
+        ServiceResult result = postService.unDislikePost(requestJson.getPostId(), requestJson.getJwtToken());
+
+        return result.toJson();
+    }
 }

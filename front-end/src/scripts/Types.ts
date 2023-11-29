@@ -27,6 +27,21 @@ export enum SearchResultsType {
   user,
 }
 
+export type Post = {
+  id: number;
+  title: string;
+  authorId: number;
+  author?: string;
+  groupId: number;
+  group?: string;
+  type: string;
+  link: string;
+  upVotes: number;
+  downVotes: number;
+  isUpVoted: boolean;
+  isDownVoted: boolean;
+};
+
 export enum Endpoints {
   registerUser = "auth/register",
   loginUser = "auth/login",
@@ -51,4 +66,6 @@ export enum Endpoints {
   addPost = "post/add",
   likePost = "post/like",
   dislikePost = "post/dislike",
+  unLikePost = "post/unLike",
+  unDislikePost = "post/unDislike",
 }

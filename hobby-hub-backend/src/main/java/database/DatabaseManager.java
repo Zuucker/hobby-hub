@@ -719,8 +719,56 @@ public class DatabaseManager {
         return false;
     }
 
+    public boolean unLikePost(int userId, int postId) {
+        String sql = "DELETE FROM liked_posts WHERE user_id = ? AND post_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            preparedStatement.executeUpdate();
+
+            sql = "Update posts set up_votes = up_votes - 1 WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, postId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean unDislikePost(int userId, int postId) {
+        String sql = "DELETE FROM disliked_posts WHERE user_id = ? AND post_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            preparedStatement.executeUpdate();
+
+            sql = "Update posts set down_votes = up_votes - 1 WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, postId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
     public List<Post> getGroupPosts(int id) {
-        String sql = "SELECT * FROM 'posts' WHERE group_id = ? ORDER BY date";
+        String sql = "SELECT p.*, u.username AS 'author', g.name AS 'group',"
+                + " CASE WHEN l.user_id IS NOT NULL THEN TRUE ELSE FALSE END as up_voted,"
+                + " CASE WHEN d.user_id IS NOT NULL THEN TRUE ELSE FALSE END as down_voted FROM 'posts' p JOIN 'users' u"
+                + " ON p.author_id = u.id JOIN 'groups' g ON g.id = p.group_id left join liked_posts as l on l.post_id = p.id"
+                + " left join disliked_posts d on d.post_id = p.id WHERE group_id = ? ORDER BY date";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -731,12 +779,16 @@ public class DatabaseManager {
                 results.add(new Post(
                         rs.getInt("id"),
                         rs.getInt("author_id"),
+                        rs.getString("author"),
                         rs.getInt("group_id"),
+                        rs.getString("group"),
                         rs.getString("title"),
                         rs.getString("type"),
                         rs.getString("link"),
                         rs.getInt("up_votes"),
-                        rs.getInt("down_votes")
+                        rs.getInt("down_votes"),
+                        rs.getBoolean("up_voted"),
+                        rs.getBoolean("down_voted")
                 ));
             }
 
@@ -748,7 +800,11 @@ public class DatabaseManager {
     }
 
     public List<Post> getUserPosts(int id) {
-        String sql = "SELECT * FROM 'posts' WHERE author_id = ? ORDER BY date";
+        String sql = "SELECT p.*, u.username AS 'author', g.name AS 'group',"
+                + " CASE WHEN l.user_id IS NOT NULL THEN TRUE ELSE FALSE END as up_voted,"
+                + " CASE WHEN d.user_id IS NOT NULL THEN TRUE ELSE FALSE END as down_voted FROM 'posts' p JOIN 'users' u"
+                + " ON p.author_id = u.id JOIN 'groups' g ON g.id = p.group_id left join liked_posts as l on l.post_id = p.id"
+                + " left join disliked_posts d on d.post_id = p.id WHERE author_id = ? ORDER BY date";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -759,12 +815,16 @@ public class DatabaseManager {
                 results.add(new Post(
                         rs.getInt("id"),
                         rs.getInt("author_id"),
+                        rs.getString("author"),
                         rs.getInt("group_id"),
+                        rs.getString("group"),
                         rs.getString("title"),
                         rs.getString("type"),
                         rs.getString("link"),
                         rs.getInt("up_votes"),
-                        rs.getInt("down_votes")
+                        rs.getInt("down_votes"),
+                        rs.getBoolean("up_voted"),
+                        rs.getBoolean("down_voted")
                 ));
             }
 
@@ -776,7 +836,11 @@ public class DatabaseManager {
     }
 
     public Post getPost(int id) {
-        String sql = "SELECT * FROM 'posts' WHERE id = ?";
+        String sql = "SELECT p.*, u.username AS 'author', g.name AS 'group',"
+                + " CASE WHEN l.user_id IS NOT NULL THEN TRUE ELSE FALSE END as up_voted,"
+                + " CASE WHEN d.user_id IS NOT NULL THEN TRUE ELSE FALSE END as down_voted FROM 'posts' p JOIN 'users' u"
+                + " ON p.author_id = u.id JOIN 'groups' g ON g.id = p.group_id left join liked_posts as l on l.post_id = p.id"
+                + " left join disliked_posts d on d.post_id = p.id WHERE p.id = ? ORDER BY date";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -785,12 +849,16 @@ public class DatabaseManager {
             return new Post(
                     rs.getInt("id"),
                     rs.getInt("author_id"),
+                    rs.getString("author"),
                     rs.getInt("group_id"),
+                    rs.getString("group"),
                     rs.getString("title"),
                     rs.getString("type"),
                     rs.getString("link"),
                     rs.getInt("up_votes"),
-                    rs.getInt("down_votes")
+                    rs.getInt("down_votes"),
+                    rs.getBoolean("up_voted"),
+                    rs.getBoolean("down_voted")
             );
 
         } catch (SQLException e) {
