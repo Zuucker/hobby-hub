@@ -8,14 +8,9 @@ function PostComponent(props: Post) {
 
   useEffect(() => {
     if (props.type === "text") {
-      //   axiosInstance.get(props.link).then((response) => {
-      //     console.log(response);
-      //     setPostText(response.data);
-      //   });
       fetch("../media/posts/text/xd1.txt")
         .then((response) => response.text())
         .then((data) => {
-          // Handle the text file data as needed
           setPostText(data);
         })
         .catch((error) => {

@@ -96,28 +96,26 @@ function GroupPage() {
           .then((response) => {
             const postsData: Post[] = [];
             const responseData = response.data.data.posts;
-            console.log(responseData);
-
-            responseData.forEach((p: Post) => {
-              postsData.push({
-                id: p.id,
-                authorId: p.authorId,
-                author: p.author,
-                groupId: p.groupId,
-                group: p.group,
-                title: p.title,
-                link: "../media/posts/image/" + p.id + ".jpg",
-                type: p.type,
-                upVotes: p.upVotes,
-                downVotes: p.downVotes,
-                isUpVoted: p.isUpVoted,
-                isDownVoted: p.isDownVoted,
+            if (responseData && responseData.length > 0) {
+              responseData.forEach((p: Post) => {
+                postsData.push({
+                  id: p.id,
+                  authorId: p.authorId,
+                  author: p.author,
+                  groupId: p.groupId,
+                  group: p.group,
+                  title: p.title,
+                  link: "../media/posts/image/" + p.id + ".jpg",
+                  type: p.type,
+                  upVotes: p.upVotes,
+                  downVotes: p.downVotes,
+                  isUpVoted: p.isUpVoted,
+                  isDownVoted: p.isDownVoted,
+                });
               });
-            });
 
-            console.log(postsData);
-
-            setPosts(postsData);
+              setPosts(postsData);
+            }
           });
 
         setGroupData(grData);

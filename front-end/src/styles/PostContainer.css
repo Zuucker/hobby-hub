@@ -69,11 +69,3 @@
     width: 6px;
   }
 }
-
-img.up-voted {
-  background-color: red !important;
-}
-
-img.down-voted {
-  background-color: green !important;
-}
