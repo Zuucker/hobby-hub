@@ -3,19 +3,11 @@ import EmptyPage from "../components/EmptyPageComponnent";
 import { useEffect, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axiosInstance from "../scripts/AxiosInstance";
-import { Endpoints, Post } from "../scripts/Types";
+import { Endpoints, GroupData, Post } from "../scripts/Types";
 import { TextField } from "@mui/material";
 import Popup from "reactjs-popup";
 import EditGroupComponent from "../components/EditGroupComponent";
 import PostContainer from "../components/PostContainer";
-
-type GroupData = {
-  name: string;
-  description: string;
-  ownerName: string;
-  id: number;
-  ownerId: number;
-};
 
 function GroupPage() {
   const [groupData, setGroupData] = useState<GroupData>({

@@ -42,6 +42,14 @@ export type Post = {
   isDownVoted: boolean;
 };
 
+export type GroupData = {
+  name: string;
+  description: string;
+  ownerName: string;
+  id: number;
+  ownerId: number;
+};
+
 export enum Endpoints {
   registerUser = "auth/register",
   loginUser = "auth/login",

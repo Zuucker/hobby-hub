@@ -25,6 +25,14 @@ public class Group {
         this.description = description;
     }
 
+    public Group(int id, int ownerId, String name, String description, String ownerName) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.description = description;
+        this.owner = ownerName;
+    }
+
     public Group(String name) {
         this.name = name;
     }

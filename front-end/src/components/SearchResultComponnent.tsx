@@ -8,13 +8,10 @@ type SearchResultProps = SearchResult & {
 };
 
 function SearchResultComponnent(props: SearchResultProps) {
-  console.log(props);
   var url;
   if (props.type === SearchResultsType.user) url = "user/" + props.url;
   if (props.type === SearchResultsType.group) url = "group/" + props.url;
   if (props.type === SearchResultsType.post) url = "post/" + props.url;
-
-  console.log(url);
 
   return (
     <a href={"http://localhost:3000/" + url}>

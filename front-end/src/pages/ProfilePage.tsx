@@ -3,10 +3,12 @@ import EmptyPage from "../components/EmptyPageComponnent";
 import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
-import { Endpoints } from "../scripts/Types";
+import { Endpoints, GroupData, Post } from "../scripts/Types";
 import CancelIcon from "../icons/CancelIcon.svg";
 import EditIcon from "../icons/EditIcon.svg";
 import SaveIcon from "../icons/checkMark.svg";
+import PostContainer from "../components/PostContainer";
+import GroupContainer from "../components/GroupContainer";
 
 type ProfileData = {
   username: string;
@@ -23,8 +25,8 @@ function ProfilePage() {
   const [isForeignProfile, setIsForeignProfile] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const [posts, setPosts] = useState<boolean[]>([true]); //change type
-  const [groups, setGroups] = useState<boolean[]>([true]); //change type
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [groups, setGroups] = useState<GroupData[]>([]);
 
   const [userData, setUserData] = useState<ProfileData>({
     username: "",
@@ -71,7 +73,48 @@ function ProfilePage() {
         setInputData(recievedData);
       });
 
-    //fetch groups and posts
+    axiosInstance.post(Endpoints.getUserPosts).then((response) => {
+      const postsData: Post[] = [];
+      const responseData = response.data.data.posts;
+      if (responseData && responseData.length > 0) {
+        responseData.forEach((p: Post) => {
+          postsData.push({
+            id: p.id,
+            authorId: p.authorId,
+            author: p.author,
+            groupId: p.groupId,
+            group: p.group,
+            title: p.title,
+            link: "../media/posts/image/" + p.id + ".jpg",
+            type: p.type,
+            upVotes: p.upVotes,
+            downVotes: p.downVotes,
+            isUpVoted: p.isUpVoted,
+            isDownVoted: p.isDownVoted,
+          });
+        });
+
+        setPosts(postsData);
+      }
+    });
+
+    axiosInstance.post(Endpoints.getUserGroups).then((response) => {
+      const groupData: GroupData[] = [];
+      const responseData = response.data.data.groups;
+      if (responseData && responseData.length > 0) {
+        responseData.forEach((g: any) => {
+          groupData.push({
+            id: g.id,
+            name: g.name,
+            description: g.description,
+            ownerId: g.ownerId,
+            ownerName: g.owner,
+          });
+        });
+      }
+
+      setGroups(groupData);
+    });
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,9 +158,7 @@ function ProfilePage() {
   };
 
   const sendData = () => {
-    axiosInstance.post(Endpoints.editUser, inputData).then((response) => {
-      console.log(response.data);
-    });
+    axiosInstance.post(Endpoints.editUser, inputData).then((response) => {});
   };
 
   return (
@@ -252,7 +293,7 @@ function ProfilePage() {
               onClick={() => {
                 setDisplayPosts(true);
               }}>
-              Posts
+              <div className="group-content row">Posts</div>
             </div>
           </div>
           <div className="col-6 d-flex justify-content-center">
@@ -269,13 +310,11 @@ function ProfilePage() {
             </div>
           </div>
         </div>
-        {displayPosts //come back to this and add posts and groups once they are in the db
-          ? posts.length > 0 //also place this in a container
-            ? "posts"
-            : "no posts"
-          : groups.length > 0
-          ? "groups"
-          : "no groups"}
+        {displayPosts ? (
+          <PostContainer posts={posts} />
+        ) : (
+          <GroupContainer groups={groups} />
+        )}
       </div>
     </EmptyPage>
   );

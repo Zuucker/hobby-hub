@@ -22,15 +22,23 @@ function PostComponent(props: Post) {
   return (
     <div className="post">
       <div className="col d-flex justify-content-end">
-        <div className="post-author">{props.author}</div>
+        <div className="post-author">
+          <a href={"http://localhost:3000/profile/" + props.author}>
+            {props.author}
+          </a>
+        </div>
       </div>
       <div className="col d-flex justify-content-between">
         <div className="post-title">{props.title}</div>
-        <div className="">{props.group}</div>
+        <div className="">
+          <a href={"http://localhost:3000/group/" + props.group}>
+            {props.group}
+          </a>
+        </div>
       </div>
       {props.type === "image" && (
         <div className="content">
-          <img src={props.link}></img>
+          <img src={props.link} alt="post"></img>
         </div>
       )}
 
