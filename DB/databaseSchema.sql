@@ -43,9 +43,8 @@ CREATE TABLE `comments` (
   `post_id` INTEGER,
   `comment_id` INTEGER,
   `content` STRING NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES `users`(id),
-  FOREIGN KEY (post_id) REFERENCES referenced_table(referenced_column) ON DELETE CASCADE,
-  FOREIGN KEY (comment_id) REFERENCES referenced_table(referenced_column) ON DELETE CASCADE
+  `points` INTEGER,
+  FOREIGN KEY (author_id) REFERENCES `users`(id)
 );
 
 CREATE TABLE `group_subscriptions` (
@@ -67,6 +66,14 @@ CREATE TABLE `disliked_posts` (
   `post_id` INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE,
   FOREIGN KEY (post_id) REFERENCES `posts`(id) ON DELETE CASCADE
+);
+
+CREATE TABLE `liked_comments` (
+  `user_id` INTEGER NOT NULL,
+  `comment_id` INTEGER NOT NULL,
+  `upvoted` BOOL NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE,
+  FOREIGN KEY (comment_id) REFERENCES `comments`(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `verifications` (

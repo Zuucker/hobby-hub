@@ -27,6 +27,9 @@ public class HttpRequestJson {
     private String postType;
     private String postLink;
     private String postId;
+    private String commentId;
+    private String content;
+    private String isCommentLiked;
 
     public String getUsername() {
         return this.username;
@@ -93,7 +96,19 @@ public class HttpRequestJson {
     }
 
     public int getPostId() {
-        return Integer.parseInt(this.postId);
+        return Integer.parseInt(this.postId == null ? "-1" : this.postId);
+    }
+
+    public int getCommentId() {
+        return Integer.parseInt(this.commentId == null ? "-1" : this.commentId);
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public boolean getIsCommentLiked() {
+        return Boolean.parseBoolean(this.isCommentLiked);
     }
 
     public void print() {

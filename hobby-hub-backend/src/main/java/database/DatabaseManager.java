@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import models.Comment;
 import models.Group;
 import models.Post;
 import models.User;
@@ -885,6 +886,176 @@ public class DatabaseManager {
         }
 
         return false;
+    }
+
+    public boolean addCommentToPost(int authorId, int postId, String content) {
+        String sql = "INSERT INTO comments(author_id, post_id, content, points) VALUES (?, ?, ?, 0)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, authorId);
+            preparedStatement.setInt(2, postId);
+            preparedStatement.setString(3, content);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean addsubcomment(int authorId, int commentId, String content) {
+        String sql = "INSERT INTO comments(author_id, comment_id, content, points) VALUES (?, ?, ?, 0)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, authorId);
+            preparedStatement.setInt(2, commentId);
+            preparedStatement.setString(3, content);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public Comment getComment(int id) {
+        String sql = "SELECT c.*, u.username FROM comments c join users u on u.id = c.author_id where c.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            return new Comment(
+                    rs.getInt("id"),
+                    rs.getInt("author_id"),
+                    rs.getString("username"),
+                    rs.getInt("post_id"),
+                    rs.getInt("comment_id"),
+                    rs.getString("content"),
+                    rs.getInt("points")
+            );
+
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return null;
+    }
+
+    public boolean hasInteractedWithCommentPoint(int commentId, int userId) {
+        String sql = "SELECT COUNT(*) > 0 AS 'result' FROM liked_comments WHERE user_id = ? AND comment_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, commentId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.getBoolean("result");
+            resultSet.close();
+
+            return result;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean getInteractionType(int userId, int commnetId) {
+        String sql = "SELECT upvoted FROM liked_comments where user_id = ? AND comment_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, commnetId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            return rs.getBoolean("upvoted");
+
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean interactWithCommentPoint(int userId, int commentId, boolean up) {
+        String sql = "INSERT INTO liked_comments(user_id, comment_id, upvoted) VALUES(?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, commentId);
+            preparedStatement.setBoolean(3, up);
+            preparedStatement.executeUpdate();
+
+            sql = "Update comments set points = points " + (up ? "+ 1 " : "- 1 ") + "WHERE id = ?";
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, commentId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean updateInteractionWithCommnet(int commentId, int userId, boolean up) {
+        String sql = "Update comments set points = points " + (up ? "+ 1 " : "- 1 ") + "WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, commentId);
+            preparedStatement.executeUpdate();
+
+            sql = "Update liked_comments SET upvoted = ? WHERE user_id = ? AND comment_id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setBoolean(1, up);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, commentId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public List<Comment> getPostcomments(int postId, int userId) {
+        String sql = "SELECT c.*, CASE WHEN l.user_id IS NOT NULL AND l.user_id = ? AND l.comment_id IS NOT NULL THEN TRUE ELSE FALSE END"
+                + " as interacted, l.upvoted, u.username from comments c left join liked_comments l on c.id = l.comment_id"
+                + " AND c.author_id = l.user_id join users u on u.id = c.author_id where c.post_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Comment> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Comment(
+                        rs.getInt("id"),
+                        rs.getInt("author_id"),
+                        rs.getString("username"),
+                        rs.getInt("post_id"),
+                        rs.getInt("comment_id"),
+                        rs.getString("content"),
+                        rs.getInt("points"),
+                        rs.getBoolean("interacted"),
+                        rs.getBoolean("upvoted")
+                ));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
     }
 
     private void printError(Exception e) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import serviceResult.ServiceResult;
+import services.GroupService;
 import services.PostService;
 
 /**
@@ -70,6 +71,42 @@ public class PostController {
         PostService postService = new PostService();
 
         ServiceResult result = postService.unDislikePost(requestJson.getPostId(), requestJson.getJwtToken());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/addComment")
+    public String addComment(@RequestBody HttpRequestJson requestJson) {
+
+        PostService postService = new PostService();
+        ServiceResult result = new ServiceResult();
+
+        if (requestJson.getCommentId() != -1) {
+            result = postService.addSubcomment(requestJson.getCommentId(), requestJson.getContent(), requestJson.getJwtToken());
+        }
+
+        if (requestJson.getPostId() != -1) {
+            result = postService.addCommentToPost(requestJson.getPostId(), requestJson.getContent(), requestJson.getJwtToken());
+        }
+
+        return result.toJson();
+    }
+
+    @PostMapping("/interactWithCommentPoint")
+    public String interactWithCommentPoint(@RequestBody HttpRequestJson requestJson) {
+
+        PostService postService = new PostService();
+
+        ServiceResult result = postService.interactWithCommentPoint(requestJson.getCommentId(), requestJson.getJwtToken(), requestJson.getIsCommentLiked());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/comments")
+    public String getGroupPosts(@RequestBody HttpRequestJson requestJson) {
+
+        PostService postService = new PostService();
+        ServiceResult result = postService.getPostComments(requestJson.getPostId(), requestJson.getJwtToken());
 
         return result.toJson();
     }

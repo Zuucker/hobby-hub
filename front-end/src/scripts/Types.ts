@@ -76,4 +76,7 @@ export enum Endpoints {
   dislikePost = "post/dislike",
   unLikePost = "post/unLike",
   unDislikePost = "post/unDislike",
+  addComment = "post/addComment",
+  interactWithComment = "post/interactWithCommentPoint",
+  getPostComments = "post/comments",
 }
