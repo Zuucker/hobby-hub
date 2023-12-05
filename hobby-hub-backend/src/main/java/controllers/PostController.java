@@ -110,4 +110,13 @@ public class PostController {
 
         return result.toJson();
     }
+
+    @PostMapping("/data")
+    public String getPostData(@RequestBody HttpRequestJson requestJson) {
+
+        PostService postService = new PostService();
+        ServiceResult result = postService.getPostData(requestJson.getPostId());
+
+        return result.toJson();
+    }
 }

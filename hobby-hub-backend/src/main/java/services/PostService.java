@@ -9,6 +9,7 @@ import java.util.List;
 import jwtManager.JWTManager;
 import models.Comment;
 import models.Post;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import serviceResult.ServiceResult;
 
@@ -191,10 +192,72 @@ public class PostService {
         for (int i = 0;
                 i < comments.size();
                 i++) {
-            newJson.append("comments", comments.get(i).toJson());
+
+            JSONObject commentJson = comments.get(i).toJson();
+            JSONObject subcommentsJson = getSubComments(userId, comments.get(i).getId());
+            if (subcommentsJson != null && !subcommentsJson.isEmpty()) {
+
+                for (String key : subcommentsJson.keySet()) {
+                    commentJson.put(key, subcommentsJson.get(key));
+                }
+            }
+
+            newJson.append("comments", commentJson);
+
         }
 
         result.json = newJson;
+        result.status = true;
+
+        return result;
+    }
+
+    private JSONObject getSubComments(int userId, int commentId) {
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+        List<Comment> subComments = manager.getSubcomments(commentId, userId);
+
+        if (subComments.isEmpty()) {
+            return null;
+        }
+
+        JSONObject json = new JSONObject();
+
+        for (int j = 0;
+                j < subComments.size();
+                j++) {
+
+            JSONObject commenJson = subComments.get(j).toJson();
+            JSONObject subCommentsJson = getSubComments(userId, subComments.get(j).getId());
+            if (subCommentsJson != null && !subCommentsJson.isEmpty()) {
+                for (String key : subCommentsJson.keySet()) {
+                    commenJson.put(key, subCommentsJson.get(key));
+                }
+            }
+
+            json.append("subcomments", commenJson);
+
+        }
+
+        return json;
+    }
+
+    public ServiceResult getPostData(int postId) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        Post post = manager.getPost(postId);
+
+        if (post != null) {
+
+            JSONObject newJson = new JSONObject();
+
+            newJson.put("post", post.toJson());
+
+            result.json = newJson;
+        }
+
         result.status = true;
 
         return result;

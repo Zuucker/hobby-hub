@@ -42,6 +42,16 @@ export type Post = {
   isDownVoted: boolean;
 };
 
+export type Comment = {
+  id: number;
+  authorId: number;
+  author: string;
+  postId: number;
+  content: string;
+  points: number;
+  interacted: boolean;
+};
+
 export type GroupData = {
   name: string;
   description: string;
@@ -79,4 +89,5 @@ export enum Endpoints {
   addComment = "post/addComment",
   interactWithComment = "post/interactWithCommentPoint",
   getPostComments = "post/comments",
+  getPostData = "post/data",
 }

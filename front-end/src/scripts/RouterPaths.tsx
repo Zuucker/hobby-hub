@@ -9,6 +9,7 @@ import RedirectPage from "../pages/RedirectPage";
 import Logout from "../pages/Logout";
 import GroupCreationPage from "../pages/GroupCreationPage";
 import GroupPage from "../pages/GroupPage";
+import PostPage from "../pages/PostPage";
 
 let paths: RouteObject[] = [];
 
@@ -39,6 +40,10 @@ if (isLoggedIn) {
     {
       path: "/group/:group",
       element: <GroupPage />,
+    },
+    {
+      path: "/post/:post",
+      element: <PostPage />,
     },
     {
       path: "*",

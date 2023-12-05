@@ -173,8 +173,8 @@ const TestPage = () => {
 
   // axiosInstance
   //   .post(Endpoints.addComment, {
-  //     commentId: 3,
-  //     content: "XD XDSDASDsa",
+  //     commentId: 10,
+  //     content: "test 2",
   //   })
   //   .then((response) => {
   //     console.log("add subcomment", response.data);
@@ -182,10 +182,11 @@ const TestPage = () => {
   //   .catch((e) => {
   //     console.log(e.message);
   //   });
+
   // axiosInstance
   //   .post(Endpoints.addComment, {
-  //     postId: 4,
-  //     content: "XD XDlelSDASDsa",
+  //     postId: 1,
+  //     content: "post comment test",
   //   })
   //   .then((response) => {
   //     console.log("add post comment", response.data);
@@ -206,16 +207,16 @@ const TestPage = () => {
   //     console.log(e.message);
   //   });
 
-  axiosInstance
-    .post(Endpoints.getPostComments, {
-      postId: 1,
-    })
-    .then((response) => {
-      console.log("post Comments", response.data.data.comments);
-    })
-    .catch((e) => {
-      console.log(e.message);
-    });
+  // axiosInstance
+  //   .post(Endpoints.getPostComments, {
+  //     postId: 1,
+  //   })
+  //   .then((response) => {
+  //     console.log("post Comments", response.data.data.comments);
+  //   })
+  //   .catch((e) => {
+  //     console.log(e.message);
+  //   });
 
   return (
     <div>

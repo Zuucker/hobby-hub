@@ -1058,6 +1058,38 @@ public class DatabaseManager {
         return null;
     }
 
+    public List<Comment> getSubcomments(int commentId, int userId) {
+        String sql = "SELECT c.*, u.username, CASE WHEN l.user_id IS NOT NULL AND l.user_id = ? AND l.comment_id IS NOT NULL "
+                + "THEN TRUE ELSE FALSE END AS interacted, l.upvoted FROM comments c join users u on u.id = c.author_id "
+                + "left join liked_comments l on c.id = l.comment_id WHERE c.comment_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, commentId);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Comment> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Comment(
+                        rs.getInt("id"),
+                        rs.getInt("author_id"),
+                        rs.getString("username"),
+                        rs.getInt("post_id"),
+                        rs.getInt("comment_id"),
+                        rs.getString("content"),
+                        rs.getInt("points"),
+                        rs.getBoolean("interacted"),
+                        rs.getBoolean("upvoted")
+                ));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
     private void printError(Exception e) {
         if (e.getMessage() != "ResultSet closed") {
             System.out.println(e.getMessage());
