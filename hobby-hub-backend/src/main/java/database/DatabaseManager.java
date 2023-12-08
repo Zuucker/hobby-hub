@@ -1005,7 +1005,7 @@ public class DatabaseManager {
     }
 
     public boolean updateInteractionWithCommnet(int commentId, int userId, boolean up) {
-        String sql = "Update comments set points = points " + (up ? "+ 1 " : "- 1 ") + "WHERE id = ?";
+        String sql = "Update comments set points = points " + (up ? "+ 2 " : "- 2 ") + "WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, commentId);
@@ -1016,6 +1016,27 @@ public class DatabaseManager {
             preparedStatement.setBoolean(1, up);
             preparedStatement.setInt(2, userId);
             preparedStatement.setInt(3, commentId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean removeInteraction(int commentId, int userId, boolean up) {
+        String sql = "Update comments set points = points " + (up ? "- 1 " : "+ 1 ") + "WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, commentId);
+            preparedStatement.executeUpdate();
+
+            sql = "DELETE FROM liked_comments WHERE user_id = ? AND comment_id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, commentId);
             preparedStatement.executeUpdate();
 
             return true;

@@ -17,7 +17,10 @@ function PostComponent(props: Post) {
           console.error("Error fetching text file:", error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const shouldDisplaylink = !window.location.href.includes("post");
 
   return (
     <div className="post">
@@ -36,19 +39,46 @@ function PostComponent(props: Post) {
           </a>
         </div>
       </div>
-      {props.type === "image" && (
+
+      {props.type === "image" && shouldDisplaylink && (
+        <a href={"http://localhost:3000/post/" + props.id}>
+          <div className="content">
+            <img src={props.link} alt="post"></img>
+          </div>
+        </a>
+      )}
+      {props.type === "image" && !shouldDisplaylink && (
         <div className="content">
           <img src={props.link} alt="post"></img>
         </div>
       )}
 
-      {props.type === "text" && (
+      {props.type === "text" && shouldDisplaylink && (
+        <a href={"http://localhost:3000/post/" + props.id}>
+          <div className="content col">
+            <TextField value={postText} disabled multiline />
+          </div>
+        </a>
+      )}
+
+      {props.type === "text" && !shouldDisplaylink && (
         <div className="content col">
           <TextField value={postText} disabled multiline />
         </div>
       )}
 
-      {props.type === "video" && (
+      {props.type === "video" && shouldDisplaylink && (
+        <a href={"http://localhost:3000/post/" + props.id}>
+          <div className="content">
+            <video controls>
+              <source src={props.link} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </a>
+      )}
+
+      {props.type === "video" && !shouldDisplaylink && (
         <div className="content">
           <video controls>
             <source src={props.link} type="video/mp4" />

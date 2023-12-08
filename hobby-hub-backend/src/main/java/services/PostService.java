@@ -154,12 +154,15 @@ public class PostService {
 
         if (!manager.hasInteractedWithCommentPoint(commentId, userId)) {
             result.status = manager.interactWithCommentPoint(userId, commentId, up);
+            //System.out.println("dodaje " + up);
         } else {
             boolean upvoted = manager.getInteractionType(userId, commentId);
             if (upvoted != up) {
                 result.status = manager.updateInteractionWithCommnet(commentId, userId, up);
+                //System.out.println("update " + up);
             } else {
-                result.status = true;
+                result.status = manager.removeInteraction(commentId, userId, up);
+                //System.out.println("remove " + up);
             }
         }
 

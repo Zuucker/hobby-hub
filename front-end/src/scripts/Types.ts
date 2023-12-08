@@ -50,6 +50,8 @@ export type Comment = {
   content: string;
   points: number;
   interacted: boolean;
+  upvoted: boolean;
+  subcomments?: Comment[];
 };
 
 export type GroupData = {

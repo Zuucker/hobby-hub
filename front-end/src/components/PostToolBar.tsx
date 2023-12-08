@@ -5,7 +5,7 @@ import UpClicked from "../icons/UpClicked.svg";
 import Down from "../icons/Down.svg";
 import DownClicked from "../icons/DownClicked.svg";
 import Dots from "../icons/Dots.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
 import { Endpoints } from "../scripts/Types";
 
@@ -22,6 +22,14 @@ function PostToolBar(props: PostToolbarProps) {
   const [downVotes, setDownVotes] = useState<number>(props.downVotes);
   const [upVoted, setUpVoted] = useState<boolean>(props.isUpVoted);
   const [downVoted, setDownVoted] = useState<boolean>(props.isDownVoted);
+  const [comment, setComment] = useState<string>("");
+
+  useEffect(() => {
+    setUpVotes(props.upVotes);
+    setDownVotes(props.downVotes);
+    setUpVoted(props.isUpVoted);
+    setDownVoted(props.isDownVoted);
+  }, [props]);
 
   const upVote = () => {
     if (!upVoted) {
@@ -64,19 +72,37 @@ function PostToolBar(props: PostToolbarProps) {
     }
   };
 
+  const addComment = () => {
+    if (comment && comment.length > 0) {
+      axiosInstance
+        .post(Endpoints.addComment, {
+          postId: props.id,
+          content: comment,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            window.location.reload();
+          }
+        });
+      setComment("");
+    }
+  };
+
   return (
     <div className="post-toolbar col d-flex justify-content-between">
       <div className="d-flex">
         <div
           className="pointer d-flex justify-content-center align-items-center"
           onClick={upVote}>
-          <img src={!upVoted ? Up : UpClicked}></img>
+          <img src={!upVoted ? Up : UpClicked} alt="Upvote comment"></img>
           {upVotes}
         </div>
         <div
           className="pointer d-flex justify-content-center align-items-center"
           onClick={downVote}>
-          <img src={!downVoted ? Down : DownClicked}></img>
+          <img
+            src={!downVoted ? Down : DownClicked}
+            alt="Downvote comment"></img>
           {downVotes}
         </div>
       </div>
@@ -86,14 +112,17 @@ function PostToolBar(props: PostToolbarProps) {
           variant="standard"
           size="small"
           placeholder="Comment..."
+          value={comment}
+          onChange={(e) => {
+            setComment(e.target.value);
+          }}
           InputProps={{
             endAdornment: (
               <img
                 src={CommentIcon}
                 className="pointer"
-                onClick={() => {
-                  console.log("add comment");
-                }}
+                onClick={addComment}
+                alt="add Comment"
               />
             ),
           }}
@@ -106,6 +135,7 @@ function PostToolBar(props: PostToolbarProps) {
           onClick={() => {
             console.log("clicked options");
           }}
+          alt="Comment options"
         />
       </div>
     </div>

@@ -197,8 +197,8 @@ const TestPage = () => {
 
   // axiosInstance
   //   .post(Endpoints.interactWithComment, {
-  //     commentId: 2,
-  //     isCommentLiked: true,
+  //     commentId: 8,
+  //     isCommentLiked: false,
   //   })
   //   .then((response) => {
   //     console.log("interacting with comment points", response.data);

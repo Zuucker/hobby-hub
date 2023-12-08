@@ -1,0 +1,38 @@
+.comment {
+  border-bottom: 1px solid var(--black);
+
+  & > .username {
+    font-size: 1.6rem;
+    margin-left: 15px;
+  }
+
+  & > .content {
+    font-size: 1.2rem;
+    margin-left: 15px;
+  }
+
+  & > .comment-toolbar {
+    background-color: var(--white);
+    padding: 5px;
+    max-width: 450px;
+    & > div > .points {
+      margin: 0px 10px 0px 10px;
+    }
+    & .sub-comment-toolbar {
+      width: 400px;
+    }
+    & > .comment-toolbar-options {
+      width: 6px;
+    }
+  }
+}
+
+.comment-hide-button {
+  width: 10px;
+  border-left: 2px solid var(--scrollbar-thumb);
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.comment-wrapper {
+  margin-bottom: 15px;
+}

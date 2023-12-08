@@ -1,9 +1,11 @@
 import "../styles/Post.css";
 import { useEffect, useState } from "react";
 import EmptyPage from "../components/EmptyPageComponnent";
-import { Endpoints, Post } from "../scripts/Types";
+import { Comment, Endpoints, Post } from "../scripts/Types";
 import axiosInstance from "../scripts/AxiosInstance";
 import PostComponent from "../components/PostComponent";
+import CommentComponent from "../components/CommentComponent";
+import { v4 as uuidv4 } from "uuid";
 
 function PostPage() {
   const [post, setPost] = useState<Post>({
@@ -36,8 +38,6 @@ function PostPage() {
             link: "../media/posts/image/" + responseData.id + ".jpg",
           };
 
-          console.log(postData);
-
           setPost(postData);
         }
       })
@@ -46,8 +46,6 @@ function PostPage() {
           .post(Endpoints.getPostComments, { postId: postId })
           .then((response) => {
             const responseData = response.data.data.comments;
-
-            console.log(responseData);
 
             setComments(responseData);
           });
@@ -58,7 +56,11 @@ function PostPage() {
     <EmptyPage>
       <div className="post-container container-fluid">
         <PostComponent {...post} />
-        <div className="comment-section">comment section XD</div>
+        <div className="comment-section d-collumn justify-content-center align-items-center">
+          {comments.map((c: Comment) => (
+            <CommentComponent key={uuidv4()} {...c} />
+          ))}
+        </div>
       </div>
     </EmptyPage>
   );
