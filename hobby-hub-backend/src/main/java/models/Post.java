@@ -27,7 +27,6 @@ public class Post {
     private boolean isDownVoted;
 
     public Post(HttpRequestJson request) {
-        this.authorId = request.getPostAuthorId();
         this.groupId = request.getGroupId();
         this.title = request.getPostTitle();
         this.type = request.getPostType();

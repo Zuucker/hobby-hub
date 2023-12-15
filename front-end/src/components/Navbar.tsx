@@ -10,6 +10,7 @@ import ProfileMenu from "./ProfileMenu";
 import { Endpoints, Notification, NotificationType } from "../scripts/Types";
 import { readCookie } from "../scripts/Cookies";
 import axiosInstance from "../scripts/AxiosInstance";
+import addIcon from "../icons/AddIcon.svg";
 
 function Navbar() {
   const [isSectionMenuVisible, setIsSectionMenuVisible] = useState(false);
@@ -109,6 +110,16 @@ function Navbar() {
         <div className="search-bar col d-flex justify-content-center">
           <SearchBar />
         </div>
+
+        {isLoggedIn && (
+          <div
+            className="add-post-button d-flex align-items-center"
+            onClick={() => {
+              window.location.href = "http://localhost:3000/add";
+            }}>
+            <img src={addIcon} alt="add post" className=" pointer"></img>
+          </div>
+        )}
 
         <ProfileMenuButton
           username={username}

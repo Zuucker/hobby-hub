@@ -29,6 +29,9 @@ public class HttpRequestJson {
     private String postId;
     private String commentId;
     private String content;
+    private String textContent;
+    private String imageContent;
+    private String videoContent;
     private String isCommentLiked;
 
     public String getUsername() {
@@ -103,12 +106,24 @@ public class HttpRequestJson {
         return Integer.parseInt(this.commentId == null ? "-1" : this.commentId);
     }
 
-    public String getContent() {
-        return this.content;
+    public String getTextContent() {
+        return this.textContent;
+    }
+
+    public String getVideoContent() {
+        return this.videoContent;
+    }
+
+    public String getImageContent() {
+        return this.imageContent;
     }
 
     public boolean getIsCommentLiked() {
         return Boolean.parseBoolean(this.isCommentLiked);
+    }
+
+    public String getContent() {
+        return this.content;
     }
 
     public void print() {

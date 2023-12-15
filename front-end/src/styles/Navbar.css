@@ -20,6 +20,16 @@
     width: 80%;
   }
 
+  .add-post-button {
+    height: 100%;
+    margin-right: 10px;
+    & img {
+      height: 100%;
+      transform: scale(0.8);
+      aspect-ratio: 1;
+    }
+  }
+
   .search-bar {
     .search-bar-container {
       height: inherit;

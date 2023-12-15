@@ -5,13 +5,22 @@
 package services;
 
 import database.DatabaseManager;
+import httpRequestJson.HttpRequestJson;
+import imageManager.ImageManager;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import jwtManager.JWTManager;
 import models.Comment;
 import models.Post;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import serviceResult.ServiceResult;
+import java.util.Base64;
 
 /**
  *
@@ -19,17 +28,75 @@ import serviceResult.ServiceResult;
  */
 public class PostService {
 
-    public ServiceResult addPost(Post post, String jwtToken) {
+    public ServiceResult addPost(Post post, String jwtToken, HttpRequestJson json) {
 
         ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
         JWTManager jwtManager = new JWTManager();
+        ImageManager imageManager = new ImageManager();
 
         int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
 
         post.setAuthorId(userId);
 
-        result.status = manager.addPost(post);
+        String postType = post.getType();
+
+        result.value = String.valueOf(manager.addPost(post));
+
+        if (result.value != "-1") {
+
+            switch (postType) {
+                case "text" -> {
+                    String filePath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\posts\\text\\";
+
+                    try {
+                        FileWriter fileWriter = new FileWriter(filePath + result.value + ".txt");
+
+                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                        bufferedWriter.write(json.getTextContent());
+
+                        bufferedWriter.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        result.status = false;
+                    }
+                }
+
+                case "image" -> {
+                    imageManager.saveBase64toDisk(json.getImageContent(), "posts\\image\\" + result.value);
+                }
+
+                case "video" -> {
+                    String filePath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\posts\\video\\";
+
+                    String[] parts = json.getVideoContent().split(",");
+                    if (parts.length != 2) {
+                        break;
+                    }
+
+                    String base64Content = parts[1];
+
+                    byte[] videoBytes = Base64.getDecoder().decode(base64Content);
+
+                    try {
+                        Path path = Paths.get(filePath + result.value + ".mp4");
+                        Files.write(path, videoBytes);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        result.status = false;
+                    }
+                }
+
+                default -> {
+                    System.out.println("wrong type of post");
+                }
+            }
+        } else {
+            result.status = false;
+        }
 
         result.value = result.status ? "ok" : "nieok";
 

@@ -1,0 +1,53 @@
+.btn-purple {
+  height: 40px;
+}
+
+.add-post-container {
+  background-color: var(--secondary-color);
+  min-height: 25rem;
+  width: 25rem;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+
+  .MuiInputBase-root {
+    padding-right: 0px;
+    height: 40px;
+  }
+
+  & span {
+    margin-top: 15px;
+    font-weight: 400;
+    font-size: 35px;
+  }
+
+  & span.error-message {
+    font-size: 15px;
+    margin-top: 5px;
+  }
+
+  & div.MuiFormControl-root {
+    margin-top: 15px;
+
+    & * {
+      z-index: 1;
+    }
+
+    & fieldset {
+      z-index: -1;
+      background-color: var(--white);
+      border: 1px solid var(--black);
+    }
+  }
+
+  & div.button-container {
+    margin-top: 10px;
+  }
+  & div.button-container:last-child {
+    margin-bottom: 10px;
+  }
+
+  .checkmark {
+    height: 20px;
+    visibility: hidden;
+  }
+}

@@ -8,7 +8,7 @@ function PostComponent(props: Post) {
 
   useEffect(() => {
     if (props.type === "text") {
-      fetch("../media/posts/text/xd1.txt")
+      fetch("../media/posts/text/" + props.id + ".txt")
         .then((response) => response.text())
         .then((data) => {
           setPostText(data);

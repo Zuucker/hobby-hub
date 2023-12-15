@@ -17,6 +17,7 @@ import java.util.Base64;
 public class ImageManager {
 
     private final String savePath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\avatars\\";
+    private final String mediaPath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\";
     private final String shortPath = "media/avatars/";
 
     public ImageManager() {
@@ -33,6 +34,26 @@ public class ImageManager {
             byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
 
             FileOutputStream fileOutPutStream = new FileOutputStream(savePath + String.valueOf(id) + ".jpg");
+
+            fileOutPutStream.write(imageBytes);
+            fileOutPutStream.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void saveBase64toDisk(String image, String name) {
+        try {
+            String base64Image;
+            if (image.contains(",")) {
+                base64Image = image.split(",")[1];
+            } else {
+                base64Image = image;
+            }
+            byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+
+            FileOutputStream fileOutPutStream = new FileOutputStream(mediaPath + name + ".jpg");
 
             fileOutPutStream.write(imageBytes);
             fileOutPutStream.close();

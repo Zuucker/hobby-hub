@@ -10,6 +10,7 @@ import Logout from "../pages/Logout";
 import GroupCreationPage from "../pages/GroupCreationPage";
 import GroupPage from "../pages/GroupPage";
 import PostPage from "../pages/PostPage";
+import PostCreationPage from "../pages/PostCreationPage";
 
 let paths: RouteObject[] = [];
 
@@ -44,6 +45,10 @@ if (isLoggedIn) {
     {
       path: "/post/:post",
       element: <PostPage />,
+    },
+    {
+      path: "/add",
+      element: <PostCreationPage />,
     },
     {
       path: "*",

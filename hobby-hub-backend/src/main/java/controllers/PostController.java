@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import serviceResult.ServiceResult;
-import services.GroupService;
 import services.PostService;
 
 /**
@@ -30,7 +29,7 @@ public class PostController {
         PostService postService = new PostService();
         Post post = new Post(requestJson);
 
-        ServiceResult result = postService.addPost(post, requestJson.getJwtToken());
+        ServiceResult result = postService.addPost(post, requestJson.getJwtToken(), requestJson);
 
         return result.toJson();
     }

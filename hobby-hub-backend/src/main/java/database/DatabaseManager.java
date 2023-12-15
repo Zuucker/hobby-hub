@@ -616,11 +616,14 @@ public class DatabaseManager {
         return status;
     }
 
-    public boolean addPost(Post post) {
+    public int addPost(Post post) {
         String sql = "INSERT INTO posts(author_id, group_id, title, type, link, up_votes, down_votes, date) values (?, ?, ?, ?, ?, ?, ?, ?)";
         LocalDateTime currentDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         String formattedTime = currentDate.format(formatter);
+
+        boolean status = false;
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, post.getAuthorId());
@@ -633,12 +636,25 @@ public class DatabaseManager {
             preparedStatement.setString(8, formattedTime);
             preparedStatement.executeUpdate();
 
-            return true;
+            status = true;
         } catch (SQLException e) {
             printError(e);
         }
 
-        return false;
+        if (status) {
+            sql = "SELECT id FROM posts WHERE author_id = ? AND group_id = ? AND date = ?";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, post.getAuthorId());
+                preparedStatement.setInt(2, post.getGroupId());
+                preparedStatement.setString(3, formattedTime);
+                ResultSet rs = preparedStatement.executeQuery();
+                return rs.getInt("id");
+            } catch (SQLException e) {
+                printError(e);
+            }
+        }
+        return -1;
     }
 
     public boolean isLikedByUser(int postId, int userId) {

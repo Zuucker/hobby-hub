@@ -97,7 +97,10 @@ function GroupPage() {
                   groupId: p.groupId,
                   group: p.group,
                   title: p.title,
-                  link: "../media/posts/image/" + p.id + ".jpg",
+                  link:
+                    p.type === "image"
+                      ? "../media/posts/image/" + p.id + ".jpg"
+                      : "../media/posts/video/" + p.id + ".mp4",
                   type: p.type,
                   upVotes: p.upVotes,
                   downVotes: p.downVotes,
