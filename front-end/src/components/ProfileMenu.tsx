@@ -51,7 +51,7 @@ function ProfileMenu(props: ProfileMenuProps) {
       )}
       {!props.isLoggedIn && (
         <>
-          <div className="foreign-profile-menu bg-warning">
+          <div className="foreign-profile-menu">
             <div className="profile-buttons col">
               <button
                 className="btn-purple col-12"

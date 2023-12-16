@@ -154,4 +154,26 @@ public class UserService {
 
         return result;
     }
+
+    public ServiceResult getAllUserPosts(String jwtToken) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+        JWTManager jwtManager = new JWTManager();
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        List<Post> posts = manager.getAllUserPosts(userId);
+
+        JSONObject newJson = new JSONObject();
+        for (int i = 0;
+                i < posts.size();
+                i++) {
+            newJson.append("posts", posts.get(i).toJson());
+        }
+
+        result.json = newJson;
+        result.status = true;
+
+        return result;
+    }
 }

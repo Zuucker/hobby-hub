@@ -12,6 +12,7 @@ function PostContainer(props: PostContainerProps) {
     <div className="col">
       <div className="post-container d-collumn align-items-center">
         {props.posts &&
+          props.posts.length > 0 &&
           props.posts.map((a) => <PostComponent key={uuidv4()} {...a} />)}
         {(!props.posts || !props.posts.length || props.posts.length === 0) && (
           <div className="d-flex justify-content-center align-items-center">

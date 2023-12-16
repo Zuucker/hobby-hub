@@ -3,10 +3,10 @@
 }
 
 .post {
-  border: 1px solid var(--black);
+  box-shadow: 2px 2px 6px var(--black);
   border-radius: 10px;
   margin-bottom: 20px;
-  background-color: var(--secondary-color);
+  background-color: var(--second-light-background-color);
 
   & > div > .post-author {
     font-size: 0.8rem;
@@ -47,7 +47,7 @@
 }
 
 .post-toolbar {
-  background-color: var(--black);
+  /* background-color: var(--secondary-color); */
   border-radius: 0px 0px 10px 10px;
 
   & > div > .post-toolbar-comment {

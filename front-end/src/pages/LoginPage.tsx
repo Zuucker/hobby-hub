@@ -25,7 +25,7 @@ function LoginPage() {
           setMessage("Logged in successfully");
           setCookie("jwtToken", response.data.value);
           setTimeout(() => {
-            window.location.href = "/test";
+            window.location.href = "/";
           }, 100);
         } else setMessage(response.data.value);
       });

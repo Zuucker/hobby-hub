@@ -80,4 +80,13 @@ public class UserController {
 
         return result.toJson();
     }
+
+    @PostMapping("/feed")
+    public String getFeed(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+        ServiceResult result = userService.getAllUserPosts(requestJson.getJwtToken());
+
+        return result.toJson();
+    }
 }

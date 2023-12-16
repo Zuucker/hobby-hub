@@ -3,8 +3,8 @@
   position: sticky;
   top: 0px;
   z-index: 10;
-  border: 2px solid var(--primary-color);
-  background-color: var(--light-background-purple);
+  background-color: var(--light-background-color);
+  box-shadow: 0 0px 8px var(--black);
 
   .section-menu-button {
     width: fit-content;
@@ -16,7 +16,7 @@
   }
 
   .logo {
-    height: 4rem;
+    height: 3.8rem;
     width: 80%;
   }
 

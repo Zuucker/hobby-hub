@@ -11,6 +11,7 @@ import GroupCreationPage from "../pages/GroupCreationPage";
 import GroupPage from "../pages/GroupPage";
 import PostPage from "../pages/PostPage";
 import PostCreationPage from "../pages/PostCreationPage";
+import MainPage from "../pages/MainPage";
 
 let paths: RouteObject[] = [];
 
@@ -20,7 +21,7 @@ if (isLoggedIn) {
   paths = [
     {
       path: "/",
-      element: <div>main page</div>,
+      element: <MainPage />,
     },
     {
       path: "/logout",

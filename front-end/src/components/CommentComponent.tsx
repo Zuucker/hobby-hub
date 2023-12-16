@@ -26,6 +26,7 @@ function CommentComponent(props: Comment) {
           />
           <div className="sub-comment" style={{ marginLeft: "20px" }}>
             {props.subcomments &&
+              props.subcomments.length > 0 &&
               props.subcomments.map((c: Comment) => (
                 <CommentComponent key={uuidv4()} {...c} />
               ))}

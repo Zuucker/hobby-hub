@@ -57,9 +57,15 @@ function PostPage() {
       <div className="post-container container-fluid">
         <PostComponent {...post} />
         <div className="comment-section d-collumn justify-content-center align-items-center">
-          {comments.map((c: Comment) => (
-            <CommentComponent key={uuidv4()} {...c} />
-          ))}
+          {comments &&
+            comments.length > 0 &&
+            comments.map((c: Comment) => (
+              <CommentComponent key={uuidv4()} {...c} />
+            ))}
+
+          {(!comments || comments.length === 0) && (
+            <div>There are no comments yet</div>
+          )}
         </div>
       </div>
     </EmptyPage>

@@ -74,6 +74,7 @@ export enum Endpoints {
   getUsernameFromJwt = "user/getUsernameFromJwt",
   getUserGroups = "user/getUserGroups",
   getUserPosts = "user/posts",
+  getUserFeed = "user/feed",
 
   addGroup = "group/add",
   subscribeToGroup = "group/subscribe",

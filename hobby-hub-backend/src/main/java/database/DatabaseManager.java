@@ -853,6 +853,47 @@ public class DatabaseManager {
         return null;
     }
 
+    public List<Post> getAllUserPosts(int id) {
+        String sql = "SELECT p.*, u.username AS 'author', g.name AS 'group',"
+                + " CASE WHEN l.user_id IS NOT NULL THEN TRUE ELSE FALSE END as up_voted,"
+                + " CASE WHEN d.user_id IS NOT NULL THEN TRUE ELSE FALSE END as down_voted"
+                + " FROM 'posts' p JOIN 'users' u ON p.author_id = u.id JOIN 'groups' g ON g.id = p.group_id "
+                + " LEFT JOIN liked_posts AS l ON l.post_id = p.id LEFT JOIN disliked_posts d ON d.post_id = p.id WHERE group_id "
+                + " IN (SELECT g.id FROM groups g WHERE g.id "
+                + " IN (SELECT group_id FROM group_subscriptions WHERE user_id = ?)"
+                + " OR owner_id = ? ORDER BY name)"
+                + " ORDER BY date";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Post> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Post(
+                        rs.getInt("id"),
+                        rs.getInt("author_id"),
+                        rs.getString("author"),
+                        rs.getInt("group_id"),
+                        rs.getString("group"),
+                        rs.getString("title"),
+                        rs.getString("type"),
+                        rs.getString("link"),
+                        rs.getInt("up_votes"),
+                        rs.getInt("down_votes"),
+                        rs.getBoolean("up_voted"),
+                        rs.getBoolean("down_voted")
+                ));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
     public Post getPost(int id) {
         String sql = "SELECT p.*, u.username AS 'author', g.name AS 'group',"
                 + " CASE WHEN l.user_id IS NOT NULL THEN TRUE ELSE FALSE END as up_voted,"

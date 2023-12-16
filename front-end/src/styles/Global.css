@@ -41,3 +41,6 @@
 .disabled {
   display: none;
 }
+body {
+  background-color: var(--light-background-color);
+}

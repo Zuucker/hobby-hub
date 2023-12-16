@@ -7,13 +7,14 @@
   .section-menu {
     margin-right: auto;
     height: 100%;
-    background-color: var(--light-background-purple);
-    border: 2px solid var(--primary-color);
+    background-color: var(--light-background-color);
     border-top: 0px;
+    box-shadow: 0 4px 8px var(--black);
   }
 
   .profile-menu {
     margin-left: auto;
-    background-color: var(--light-background-purple);
+    background-color: var(--light-background-color);
+    box-shadow: 0 0px 8px var(--black);
   }
 }

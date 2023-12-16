@@ -1,6 +1,6 @@
 .group-container {
   margin-bottom: auto;
-  background-color: var(--light-background-purple);
+  background-color: var(--light-background-color);
 
   & .group-toolbar {
     background-color: white !important;

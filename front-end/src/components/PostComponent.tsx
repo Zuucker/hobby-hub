@@ -18,7 +18,7 @@ function PostComponent(props: Post) {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props]);
 
   const shouldDisplaylink = !window.location.href.includes("post");
 
@@ -56,7 +56,7 @@ function PostComponent(props: Post) {
       {props.type === "text" && shouldDisplaylink && (
         <a href={"http://localhost:3000/post/" + props.id}>
           <div className="content col">
-            <TextField value={postText} disabled multiline />
+            <TextField value={postText} size="small" disabled multiline />
           </div>
         </a>
       )}
