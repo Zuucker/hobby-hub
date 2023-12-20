@@ -21,6 +21,7 @@
 
 #Frontend files
 /front-end/.gitignore
+/front-end/public/media/*
 
 #Bakckend files
 /hobby-hub-backend/.gitignore

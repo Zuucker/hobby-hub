@@ -81,53 +81,15 @@ public class DatabaseManager {
                     System.out.println(e.getMessage());
                 }
 
-                //insert initial data
-                try {
-                    String sql = "INSERT INTO users(username, email, password, register_date) VALUES(?, ?, ?, ?)";
-                    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                    LocalDate currentDate = LocalDate.now();
+                filePath = "../DB/exampleData.txt";
 
-                    for (int i = 1; i < 11; i++) {
-                        preparedStatement.setString(1, "user" + Integer.toString(i));
-                        preparedStatement.setString(2, "email" + Integer.toString(i));
-                        preparedStatement.setString(3, "password" + Integer.toString(i));
-                        preparedStatement.setString(4, currentDate.toString());
-                        preparedStatement.executeUpdate();
-                    }
-
-                    System.out.println("Inserted initial data");
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
+                sqlFileParser = new SqlFileParser(filePath);
+                List<String> insertStatements = sqlFileParser.getStatements();
 
                 try {
-                    String sql = "UPDATE users SET verified = TRUE WHERE username='user1'";
-                    PreparedStatement pstmt = connection.prepareStatement(sql);
-
-                    pstmt.executeUpdate();
-                    System.out.println("Updated initial data");
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                try {
-                    String sql = "UPDATE users SET verified = TRUE WHERE username='user2'";
-                    PreparedStatement pstmt = connection.prepareStatement(sql);
-
-                    pstmt.executeUpdate();
-                    System.out.println("Updated initial data");
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                String sql = "INSERT INTO groups(owner_id, name, description) VALUES(?, ?, ?)";
-                try {
-                    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                    for (int i = 1; i < 11; i++) {
-                        preparedStatement.setInt(1, 1);
-                        preparedStatement.setString(2, "group_name" + Integer.toString(i));
-                        preparedStatement.setString(3, "description" + Integer.toString(i));
-                        preparedStatement.executeUpdate();
+                    for (String sqlStatement : insertStatements) {
+                        Statement statement = connection.createStatement();
+                        statement.execute(sqlStatement);
                     }
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());

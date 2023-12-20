@@ -155,6 +155,7 @@ function GroupPage() {
               value={groupData.description}
               disabled
               size="small"
+              multiline
             />
           </div>
         </div>

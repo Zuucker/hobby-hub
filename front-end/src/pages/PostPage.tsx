@@ -35,7 +35,10 @@ function PostPage() {
         if (responseData) {
           const postData = {
             ...responseData,
-            link: "../media/posts/image/" + responseData.id + ".jpg",
+            link:
+              responseData.type === "image"
+                ? "../media/posts/image/" + responseData.id + ".jpg"
+                : "../media/posts/video/" + responseData.id + ".mp4",
           };
 
           setPost(postData);
