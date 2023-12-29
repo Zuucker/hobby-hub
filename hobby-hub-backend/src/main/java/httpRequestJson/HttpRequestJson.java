@@ -33,6 +33,10 @@ public class HttpRequestJson {
     private String imageContent;
     private String videoContent;
     private String isCommentLiked;
+    private String titleQuery;
+    private String groupsQuery;
+    private String usersQuery;
+    private String sortBy;
 
     public String getUsername() {
         return this.username;
@@ -124,6 +128,22 @@ public class HttpRequestJson {
 
     public String getContent() {
         return this.content;
+    }
+
+    public String getTitleQuery() {
+        return this.titleQuery;
+    }
+
+    public String getGroupsQuery() {
+        return this.groupsQuery;
+    }
+
+    public String getUsersQuery() {
+        return this.usersQuery;
+    }
+
+    public String getSortBy() {
+        return this.sortBy;
     }
 
     public void print() {

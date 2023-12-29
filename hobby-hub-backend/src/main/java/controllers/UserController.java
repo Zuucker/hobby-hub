@@ -72,6 +72,16 @@ public class UserController {
         return result.toJson();
     }
 
+    @PostMapping("/hasJoinedGroup")
+    public String joinedGroup(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+
+        ServiceResult result = userService.hasJoinedGroup(requestJson.getJwtToken(), requestJson.getGroupId());
+
+        return result.toJson();
+    }
+
     @PostMapping("/posts")
     public String getUserPosts(@RequestBody HttpRequestJson requestJson) {
 

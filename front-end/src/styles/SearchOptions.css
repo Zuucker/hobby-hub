@@ -1,0 +1,13 @@
+.modal-content {
+  background-color: var(--second-light-background-color);
+  & span {
+    margin: 10px 0px 20px 0px;
+  }
+  & div {
+    margin-bottom: 10px;
+
+    & > .MuiFormControl-root > .MuiInputBase-root {
+      background-color: var(--light-background-color);
+    }
+  }
+}

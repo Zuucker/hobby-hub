@@ -3,6 +3,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 interface searchMenuProps {
   searchFunction: () => void;
+  toggleOptions: (arg: boolean) => void;
 }
 
 function SearchMenuComponent(props: searchMenuProps) {
@@ -13,7 +14,7 @@ function SearchMenuComponent(props: searchMenuProps) {
       <MoreVertIcon
         className="dots pointer"
         onClick={() => {
-          console.log("clicked 1");
+          props.toggleOptions(true);
         }}
       />
     </>

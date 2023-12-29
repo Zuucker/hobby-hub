@@ -28,6 +28,7 @@ function SectionMenu(props: SectionMenuProps) {
           const group: SearchResult = {
             groupName: gr.name.substring(0, 15),
             url: gr.name,
+            type: SearchResultsType.group,
           };
           grs.push(group);
         });
@@ -79,12 +80,7 @@ function SectionMenu(props: SectionMenuProps) {
       )}
       <div className="group-search-results">
         {groupsToDisplay.map((g) => (
-          <SearchResultComponnent
-            type={SearchResultsType.group}
-            {...g}
-            variant="small"
-            key={uuidv4()}
-          />
+          <SearchResultComponnent {...g} variant="small" key={uuidv4()} />
         ))}
       </div>
       <div className=" d-flex justify-content-center">

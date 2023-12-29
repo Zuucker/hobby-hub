@@ -12,6 +12,7 @@ import GroupPage from "../pages/GroupPage";
 import PostPage from "../pages/PostPage";
 import PostCreationPage from "../pages/PostCreationPage";
 import MainPage from "../pages/MainPage";
+import SearchPage from "../pages/SearchPage";
 
 let paths: RouteObject[] = [];
 
@@ -50,6 +51,14 @@ if (isLoggedIn) {
     {
       path: "/add",
       element: <PostCreationPage />,
+    },
+    {
+      path: "/search/:query",
+      element: <SearchPage />,
+    },
+    {
+      path: "/search/",
+      element: <SearchPage />,
     },
     {
       path: "*",

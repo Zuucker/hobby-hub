@@ -37,7 +37,7 @@ public class GroupController {
 
         GroupService userService = new GroupService();
 
-        ServiceResult result = userService.subcribeToGroup(Integer.parseInt(requestJson.getId()), requestJson.getGroupId());
+        ServiceResult result = userService.subcribeToGroup(requestJson.getJwtToken(), requestJson.getGroupId());
 
         return result.toJson();
     }

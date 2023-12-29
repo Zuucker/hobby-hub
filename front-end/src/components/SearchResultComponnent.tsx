@@ -8,13 +8,17 @@ type SearchResultProps = SearchResult & {
 };
 
 function SearchResultComponnent(props: SearchResultProps) {
-  var url;
-  if (props.type === SearchResultsType.user) url = "user/" + props.url;
-  if (props.type === SearchResultsType.group) url = "group/" + props.url;
-  if (props.type === SearchResultsType.post) url = "post/" + props.url;
+  const shortTitle =
+    props.postTitle?.slice(0, 30) +
+    (props.postTitle && props.postTitle.length > 30 ? "..." : "");
+
+  const newUrl =
+    props.type === SearchResultsType.group && !props.url.includes("group")
+      ? "group/" + props.url
+      : props.url;
 
   return (
-    <a href={"http://localhost:3000/" + url}>
+    <a href={"http://localhost:3000/" + newUrl}>
       <div className="search-result row d-flex align-items-center">
         {props.type === SearchResultsType.user && (
           <>
@@ -44,7 +48,7 @@ function SearchResultComponnent(props: SearchResultProps) {
 
         {props.type === SearchResultsType.post && (
           <>
-            <div className="col-6">{props.postTitle}</div>
+            <div className="col-6">{shortTitle}</div>
             <div className="col-6 d-flex justify-content-end">
               <div>{props.groupName}</div>
             </div>

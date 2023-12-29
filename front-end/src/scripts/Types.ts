@@ -4,6 +4,8 @@ export type SearchResult = {
   postTitle?: string;
   profilePicture?: string;
   url: string;
+  type: SearchResultsType;
+  postId?: number;
 };
 
 export type Notification = {
@@ -22,9 +24,9 @@ export enum NotificationType {
 }
 
 export enum SearchResultsType {
-  post,
-  group,
-  user,
+  post = "post",
+  group = "group",
+  user = "user",
 }
 
 export type Post = {
@@ -62,6 +64,16 @@ export type GroupData = {
   ownerId: number;
 };
 
+export enum SearchTypeEnum {
+  U,
+  G,
+  P,
+  UG,
+  UGP,
+  UP,
+  GP,
+}
+
 export enum Endpoints {
   registerUser = "auth/register",
   loginUser = "auth/login",
@@ -75,6 +87,7 @@ export enum Endpoints {
   getUserGroups = "user/getUserGroups",
   getUserPosts = "user/posts",
   getUserFeed = "user/feed",
+  hasJoinedGroup = "user/hasJoinedGroup",
 
   addGroup = "group/add",
   subscribeToGroup = "group/subscribe",
@@ -93,4 +106,6 @@ export enum Endpoints {
   interactWithComment = "post/interactWithCommentPoint",
   getPostComments = "post/comments",
   getPostData = "post/data",
+
+  search = "search/data",
 }

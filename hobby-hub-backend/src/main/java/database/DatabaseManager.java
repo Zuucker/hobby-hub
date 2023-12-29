@@ -19,6 +19,7 @@ import java.util.List;
 import models.Comment;
 import models.Group;
 import models.Post;
+import models.SearchResult;
 import models.User;
 import sqlFileParser.SqlFileParser;
 
@@ -1121,6 +1122,72 @@ public class DatabaseManager {
                         rs.getBoolean("interacted"),
                         rs.getBoolean("upvoted")
                 ));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
+    public List<SearchResult> searchPostsResults(String title, String orderBy) {
+        String sql = "SELECT * FROM posts JOIN groups ON posts.group_id = groups.id WHERE posts.title LIKE ? ORDER BY posts.title " + orderBy;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, ("%" + title + "%"));
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<SearchResult> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new SearchResult().withPost(rs.getString("title"), rs.getString("name"), rs.getInt("id")));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
+    public List<SearchResult> searchGroupsResults(String name, String orderBy) {
+        String sql = "SELECT * FROM groups WHERE name LIKE ? ORDER BY groups.name " + orderBy;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, ("%" + name + "%"));
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<SearchResult> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new SearchResult().withGroup(rs.getString("name")));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
+    public List<SearchResult> searchUsersResults(String username, String orderBy) {
+        String sql = "SELECT * FROM users WHERE username LIKE ? ORDER BY users.username " + orderBy;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, ("%" + username + "%"));
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<SearchResult> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new SearchResult().withUser(rs.getString("username"), rs.getInt("id")));
             }
 
             return results;

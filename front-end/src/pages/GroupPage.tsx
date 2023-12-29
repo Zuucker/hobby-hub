@@ -9,6 +9,8 @@ import Popup from "reactjs-popup";
 import EditGroupComponent from "../components/EditGroupComponent";
 import PostContainer from "../components/PostContainer";
 
+const URLParse = require("url-parse");
+
 function GroupPage() {
   const [groupData, setGroupData] = useState<GroupData>({
     name: "",
@@ -20,6 +22,7 @@ function GroupPage() {
 
   const [isEditingGroup, setIsEditingGroup] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [hasJoinedGroup, setHasJoinedGroup] = useState<boolean>(false);
 
   useEffect(() => {
     const optionsDiv = document.getElementsByClassName(
@@ -29,7 +32,7 @@ function GroupPage() {
     const groupName = window.location.href.split("/").pop()?.toString()!;
 
     const grData = groupData;
-    grData.name = groupName;
+    grData.name = decodeURI(groupName);
 
     setGroupData(grData);
 
@@ -48,7 +51,8 @@ function GroupPage() {
     const contentContaineRight = contentContainer.getBoundingClientRect().right;
     const optionsButtonwidth = optionsButton.getBoundingClientRect().width;
 
-    optionsButton.style.left = contentContaineRight - optionsButtonwidth + "px";
+    optionsButton.style.left =
+      contentContaineRight - optionsButtonwidth + 20 + "px";
 
     window.addEventListener("resize", () => {
       const optionsButton = document.getElementsByClassName(
@@ -64,12 +68,12 @@ function GroupPage() {
       const optionsButtonwidth = optionsButton.getBoundingClientRect().width;
 
       optionsButton.style.left =
-        contentContaineRight - optionsButtonwidth + "px";
+        contentContaineRight - optionsButtonwidth + 10 + "px";
     });
 
     axiosInstance
       .post(Endpoints.getGroupData, {
-        groupName: groupName,
+        groupName: decodeURI(groupName),
       })
       .then((response) => {
         const responseData = response.data.data;
@@ -111,21 +115,50 @@ function GroupPage() {
 
               setPosts(postsData);
             }
+          })
+          .then(() => {
+            axiosInstance
+              .post(Endpoints.hasJoinedGroup, { groupId: grData.id })
+              .then((response) => {
+                console.log(response.data.status);
+                setHasJoinedGroup(response.data.status);
+              });
           });
 
         setGroupData(grData);
       });
   }, []);
 
+  const joinGroup = () => {
+    axiosInstance
+      .post(Endpoints.subscribeToGroup, {
+        groupId: groupData.id,
+      })
+      .then(() => {
+        window.location.reload();
+      });
+  };
+
   return (
     <EmptyPage>
       <div
         className="pointer options"
         onClick={() => {
-          setIsEditingGroup(true);
+          console.log(hasJoinedGroup);
+          if (!hasJoinedGroup) {
+            joinGroup();
+          } else {
+            setIsEditingGroup(true);
+          }
         }}>
-        <MoreVertIcon />
+        {hasJoinedGroup && (
+          <div>
+            <MoreVertIcon />
+          </div>
+        )}
+        {!hasJoinedGroup && <button className="btn-purple mt-2">Join</button>}
       </div>
+
       <div className="group-container container-fluid">
         <div className="group-toolbar options">
           <Popup

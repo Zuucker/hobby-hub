@@ -43,10 +43,14 @@ public class GroupService {
         return result;
     }
 
-    public ServiceResult subcribeToGroup(int userId, int groupId) {
+    public ServiceResult subcribeToGroup(String jwtToken, int groupId) {
 
         ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
+
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
 
         boolean isSubscribed = manager.checkIfSubscribed(userId, groupId);
 

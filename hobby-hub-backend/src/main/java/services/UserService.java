@@ -176,4 +176,20 @@ public class UserService {
 
         return result;
     }
+
+    public ServiceResult hasJoinedGroup(String token, int groupId) {
+
+        ServiceResult result = new ServiceResult();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(token));
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        result.status = manager.checkIfSubscribed(userId, groupId);
+
+        result.value = "ok";
+
+        return result;
+    }
 }

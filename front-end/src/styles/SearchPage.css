@@ -1,0 +1,36 @@
+.main-container {
+  background-color: var(--second-light-background-color);
+  box-shadow: 0 0px 8px var(--black);
+  .main-content {
+    & .search-container {
+      margin-top: 15px;
+      margin-bottom: 15px;
+
+      .MuiFormControl-root {
+        .MuiInputBase-root {
+          border-radius: 6px;
+          background-color: var(--white);
+
+          .mg-glass,
+          .dots {
+            color: var(--primary-color);
+          }
+        }
+
+        .MuiFormLabel-root {
+          display: none;
+        }
+      }
+    }
+
+    .search-bar-results-container {
+      & .search-bar-results {
+        & div > a > div.search-result {
+          background-color: var(--light-background-color) !important;
+          border-radius: 5px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ import axiosInstance from "../scripts/AxiosInstance";
 import { Endpoints } from "../scripts/Types";
 import { TextField } from "@mui/material";
 
-type GroupData = {
+type GroupDataProps = {
   name: string;
   description: string;
   ownerName: string;
@@ -11,11 +11,11 @@ type GroupData = {
   ownerId: number;
 };
 
-function EditGroupComponent(props: GroupData) {
+function EditGroupComponent(props: GroupDataProps) {
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isLeaving, setIsLeaving] = useState<boolean>(false);
-  const [newData, setNewData] = useState<GroupData>({
+  const [newData, setNewData] = useState<GroupDataProps>({
     id: props.id,
     name: props.name,
     description: props.description,
