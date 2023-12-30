@@ -164,4 +164,24 @@ public class GroupService {
 
         return result;
     }
+
+    public ServiceResult getTopGroups() {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        List<Group> groups = manager.getTopGroups();
+
+        JSONObject newJson = new JSONObject();
+        for (int i = 0;
+                i < groups.size();
+                i++) {
+            newJson.append("groups", groups.get(i).toJson());
+        }
+
+        result.json = newJson;
+        result.status = true;
+
+        return result;
+    }
 }

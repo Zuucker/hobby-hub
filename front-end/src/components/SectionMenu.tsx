@@ -35,6 +35,24 @@ function SectionMenu(props: SectionMenuProps) {
 
         setGroups(grs);
       });
+    } else {
+      axiosInstance.post(Endpoints.getTopGroups).then((response) => {
+        const responseGroups = response.data.data.groups;
+
+        if (!responseGroups) return;
+
+        const grs: SearchResult[] = [];
+        responseGroups.forEach((gr: any) => {
+          const group: SearchResult = {
+            groupName: gr.name.substring(0, 15),
+            url: gr.name,
+            type: SearchResultsType.group,
+          };
+          grs.push(group);
+        });
+
+        setGroups(grs);
+      });
     }
   }, []);
 

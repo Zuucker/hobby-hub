@@ -453,6 +453,23 @@ public class DatabaseManager {
         return null;
     }
 
+    public List<Group> getTopGroups() {
+        String sql = "SELECT g.*, u.username FROM groups g join users u on u.id = g.owner_id ORDER BY name ASC";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            List<Group> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Group(rs.getInt("id"), rs.getInt("owner_id"), rs.getString("name"), rs.getString("description"), rs.getString("username")));
+            }
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
     public boolean checkIfSubscribed(int userId, int groupId) {
         String sql = "SELECT COUNT(*) > 0 AS 'result' FROM group_subscriptions WHERE user_id = ? and group_id = ?";
         try {

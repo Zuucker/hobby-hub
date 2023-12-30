@@ -96,6 +96,7 @@ export enum Endpoints {
   editGroup = "group/edit",
   leaveGroup = "group/leave",
   getGroupPosts = "group/posts",
+  getTopGroups = "group/top",
 
   addPost = "post/add",
   likePost = "post/like",

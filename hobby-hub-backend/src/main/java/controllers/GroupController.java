@@ -88,4 +88,13 @@ public class GroupController {
 
         return result.toJson();
     }
+
+    @PostMapping("/top")
+    public String getTopGroups(@RequestBody HttpRequestJson requestJson) {
+
+        GroupService groupService = new GroupService();
+        ServiceResult result = groupService.getTopGroups();
+
+        return result.toJson();
+    }
 }
