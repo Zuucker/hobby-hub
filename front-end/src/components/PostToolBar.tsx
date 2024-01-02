@@ -80,7 +80,10 @@ function PostToolBar(props: PostToolbarProps) {
           content: comment,
         })
         .then((response) => {
-          if (response.status === 200) {
+          if (
+            response.status === 200 &&
+            window.location.href.includes("post")
+          ) {
             window.location.reload();
           }
         });

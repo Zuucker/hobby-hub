@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import jwtManager.JWTManager;
@@ -21,6 +22,8 @@ import models.Post;
 import org.json.JSONObject;
 import serviceResult.ServiceResult;
 import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -121,8 +124,7 @@ public class PostService {
             int likes = post.getUpVotes();
 
             if (likes == 10 || likes == 100 || likes == 1000 || likes == 10000) {
-                String notificationContent = "Congrats your post reached " + String.valueOf(likes);
-                result.status = manager.addNotifcation(post.getAuthorId(), notificationContent);
+                result.status = manager.addNotification(1, "Your post reached ", null, null, likes, post.getId(), null, post.getAuthorId());
             }
         }
         result.value = result.status ? "ok" : "nieok";
@@ -191,6 +193,20 @@ public class PostService {
 
         result.status = manager.addCommentToPost(userId, postId, content);
 
+        if (result.status && content.contains("@")) {
+
+            Pattern pattern = Pattern.compile("@[a-zA-Z0-9_]+");
+            Matcher matcher = pattern.matcher(content);
+
+            while (matcher.find()) {
+                String tag = matcher.group();
+
+                int ownerId = manager.getUser(tag.replace("@", "")).getId();
+
+                manager.addNotification(2, "mentioned you!", null, null, null, postId, userId, ownerId);
+            }
+        }
+
         result.value = result.status ? "ok" : "nieok";
 
         return result;
@@ -205,6 +221,12 @@ public class PostService {
         int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
 
         result.status = manager.addsubcomment(userId, commentId, content);
+
+        if (result.status) {
+            int commentAuthorId = manager.getComment(commentId).getAuthorId();
+            int postId = manager.getComment(commentId).getPostId();
+            manager.addNotification(3, "replied to you!", null, null, null, postId, userId, commentAuthorId);
+        }
 
         result.value = result.status ? "ok" : "nieok";
 

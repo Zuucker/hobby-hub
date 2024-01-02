@@ -54,6 +54,9 @@ public class AuthorizationService {
             int userId = manager.getUserId(username);
 
             imageManager.saveBase64toDisk(defaultAvatar, userId);
+
+            manager.addNotification(4, "You just registered!", null, null, null, null, null, userId);
+
             result.value = "ok";
         }
 

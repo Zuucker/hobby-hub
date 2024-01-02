@@ -38,6 +38,12 @@ public class GroupService {
             result.status = manager.addGroup(name, description, userId);
         }
 
+        if (result.status) {
+            int groupId = manager.getGroupData(name).getId();
+            int groupOwner = manager.getGroupData(name).getOwnerId();
+            result.status = manager.addNotification(1, "You created a group!", groupId, null, null, null, null, groupOwner);
+        }
+
         result.value = result.status ? "ok" : "nieok";
 
         return result;
@@ -56,6 +62,10 @@ public class GroupService {
 
         if (!isSubscribed) {
             result.status = manager.subscribeToGroup(userId, groupId);
+        }
+
+        if (result.status) {
+            result.status = manager.addNotification(1, "You joined a group!", groupId, null, null, null, null, userId);
         }
 
         result.value = result.status ? "ok" : "nieok";

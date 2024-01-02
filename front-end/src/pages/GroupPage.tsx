@@ -120,7 +120,6 @@ function GroupPage() {
             axiosInstance
               .post(Endpoints.hasJoinedGroup, { groupId: grData.id })
               .then((response) => {
-                console.log(response.data.status);
                 setHasJoinedGroup(response.data.status);
               });
           });
@@ -144,7 +143,6 @@ function GroupPage() {
       <div
         className="pointer options"
         onClick={() => {
-          console.log(hasJoinedGroup);
           if (!hasJoinedGroup) {
             joinGroup();
           } else {

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import models.Comment;
 import models.Group;
+import models.Notification;
 import models.Post;
 import models.SearchResult;
 import models.User;
@@ -1212,6 +1213,141 @@ public class DatabaseManager {
             printError(e);
         }
         return null;
+    }
+
+    public List<Notification> getUserNotifications(int userId) {
+        String sql = "SELECT n.*, u.username, g.name, p.up_votes FROM notifications n left join users u on u.id = n.user_id"
+                + " left join groups g on g.id = n.group_id left join posts p on p.id = n.post_id WHERE n.owner_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, userId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Notification> results = new ArrayList();
+
+            while (rs.next()) {
+                Notification notification = new Notification(rs.getInt("id"));
+                notification.setType(rs.getInt("type"));
+                notification.setContent(rs.getString("content"));
+
+                notification.setGroupName(rs.getString("name"));
+                if (rs.wasNull()) {
+                    notification.setGroupName(null);
+                }
+
+                notification.setUserName(rs.getString("username"));
+                if (rs.wasNull()) {
+                    notification.setUserName(null);
+                }
+
+                notification.setLikesAmmount(rs.getInt("up_votes"));
+                if (rs.wasNull()) {
+                    notification.setLikesAmmount(null);
+                }
+
+                notification.setPostId(rs.getInt("post_id"));
+                if (rs.wasNull()) {
+                    notification.setPostId(null);
+                }
+
+                notification.setUserId(rs.getInt("user_id"));
+                if (rs.wasNull()) {
+                    notification.setUserId(null);
+                }
+
+                results.add(notification);
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
+    public boolean addNotification(int type, String content, Integer groupId, String username, Integer likesAmmount, Integer postId, Integer userId, Integer ownerId) {
+        String sql = "";
+
+        if (type == 0) {//likes
+            sql = "INSERT INTO notifications(owner_id, content, type, post_id)  VALUES (?, ?, ?, ?);";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, ownerId);
+                preparedStatement.setString(2, content);
+                preparedStatement.setInt(3, type);
+                preparedStatement.setInt(4, postId);
+                preparedStatement.executeUpdate();
+
+                return true;
+            } catch (SQLException e) {
+                printError(e);
+                return false;
+            }
+        } else if (type == 2) {//mention
+            sql = "INSERT INTO notifications(owner_id, content, type, user_id, post_id)  VALUES (?, ?, ?, ?, ?);";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, ownerId);
+                preparedStatement.setString(2, content);
+                preparedStatement.setInt(3, type);
+                preparedStatement.setInt(4, userId);
+                preparedStatement.setInt(5, postId);
+                preparedStatement.executeUpdate();
+
+                return true;
+            } catch (SQLException e) {
+                printError(e);
+                return false;
+            }
+        } else if (type == 1) {//joined group
+            sql = "INSERT INTO notifications(owner_id, content, type, group_id)  VALUES (?, ?, ?, ?);";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, ownerId);
+                preparedStatement.setString(2, content);
+                preparedStatement.setInt(3, type);
+                preparedStatement.setInt(4, groupId);
+                preparedStatement.executeUpdate();
+
+                return true;
+            } catch (SQLException e) {
+                printError(e);
+                return false;
+            }
+        } else if (type == 3) {//reply
+            sql = "INSERT INTO notifications(owner_id, content, type, post_id, user_id)  VALUES (?, ?, ?, ?, ?);";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, ownerId);
+                preparedStatement.setString(2, content);
+                preparedStatement.setInt(3, type);
+                preparedStatement.setInt(4, postId);
+                preparedStatement.setInt(5, userId);
+                preparedStatement.executeUpdate();
+
+                return true;
+            } catch (SQLException e) {
+                printError(e);
+                return false;
+            }
+        } else if (type == 4) {//register
+            sql = "INSERT INTO notifications(owner_id, content, type)  VALUES (?, ?, ?);";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, ownerId);
+                preparedStatement.setString(2, content);
+                preparedStatement.setInt(3, type);
+                preparedStatement.executeUpdate();
+
+                return true;
+            } catch (SQLException e) {
+                printError(e);
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private void printError(Exception e) {

@@ -5,10 +5,12 @@
 package services;
 
 import database.DatabaseManager;
+import httpRequestJson.HttpRequestJson;
 import imageManager.ImageManager;
 import java.util.List;
 import jwtManager.JWTManager;
 import models.Group;
+import models.Notification;
 import models.Post;
 import models.User;
 import org.json.JSONObject;
@@ -189,6 +191,29 @@ public class UserService {
         result.status = manager.checkIfSubscribed(userId, groupId);
 
         result.value = "ok";
+
+        return result;
+    }
+
+    public ServiceResult getUserNotifications(String jwtToken) {
+
+        ServiceResult result = new ServiceResult();
+        DatabaseManager manager = DatabaseManager.getInstance();
+        JWTManager jwtManager = new JWTManager();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        List<Notification> notifications = manager.getUserNotifications(userId);
+
+        JSONObject newJson = new JSONObject();
+        for (int i = 0;
+                i < notifications.size();
+                i++) {
+            newJson.append("notifications", notifications.get(i).toJson());
+        }
+
+        result.json = newJson;
+        result.status = true;
 
         return result;
     }

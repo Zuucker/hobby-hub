@@ -7,6 +7,22 @@ import { useState } from "react";
 function CommentComponent(props: Comment) {
   const [displayComment, setDisplayComment] = useState<boolean>(true);
 
+  const newContent = props.content.replaceAll(
+    /@[a-zA-Z0-9_]+/g,
+    (match) => `<span class='highlighted'>${match}</span>`
+  );
+
+  setTimeout(() => {
+    const comments = document.getElementsByClassName("content");
+    for (let i = 0; i < comments.length; i++) {
+      const element = comments[i] as Element; // Casting to Element
+      element.innerHTML = element.innerHTML.replaceAll(
+        /@[a-zA-Z0-9_]+/g,
+        (match) => `<span class='highlighted'>${match}</span>`
+      );
+    }
+  }, 100);
+
   return (
     <div className="comment-wrapper d-flex">
       <div

@@ -9,6 +9,16 @@ INSERT INTO users(username, email, password, verified, register_date, bio) VALUE
 INSERT INTO users(username, email, password, verified, register_date, bio) VALUES ('Amelia', "amelia@gmail.com", "password1", true, '2023-11-20', "Amelia's profile");
 INSERT INTO users(username, email, password, verified, register_date, bio) VALUES ('Hans n roses', "ameba@gmail.com", "password1", true, '2023-11-20', "Hans's profile");
 
+INSERT INTO notifications(owner_id, content, type)  VALUES (1, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (2, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (3, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (4, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (5, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (6, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (7, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (8, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (9, "You just registered!", 4);
+INSERT INTO notifications(owner_id, content, type)  VALUES (10, "You just registered!", 4);
 
 INSERT INTO groups(owner_id, name, description) VALUES (1, 'NiceTrees', 'Trees are nice. This is the group for Tree Fanatics.');
 INSERT INTO groups(owner_id, name, description) VALUES (2, 'Cars', 'A passionate community dedicated to celebrating the art, engineering, and exhilaration of automobiles, fostering discussions on latest models, classic gems, and the thrill of the open road.');

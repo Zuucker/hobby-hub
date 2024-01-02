@@ -99,4 +99,14 @@ public class UserController {
 
         return result.toJson();
     }
+
+    @PostMapping("/notifications")
+    public String getUserNotifications(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+
+        ServiceResult result = userService.getUserNotifications(requestJson.getJwtToken());
+
+        return result.toJson();
+    }
 }

@@ -37,6 +37,9 @@ public class HttpRequestJson {
     private String groupsQuery;
     private String usersQuery;
     private String sortBy;
+    private String type;
+    private String likesAmmount;
+    private String userId;
 
     public String getUsername() {
         return this.username;
@@ -144,6 +147,18 @@ public class HttpRequestJson {
 
     public String getSortBy() {
         return this.sortBy;
+    }
+
+    public int getType() {
+        return Integer.parseInt(this.type);
+    }
+
+    public int getLikes() {
+        return Integer.parseInt(this.likesAmmount);
+    }
+
+    public int getUserId() {
+        return Integer.parseInt(this.userId);
     }
 
     public void print() {

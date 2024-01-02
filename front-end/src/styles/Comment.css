@@ -36,3 +36,9 @@
 .comment-wrapper {
   margin-bottom: 15px;
 }
+
+.highlighted {
+  background-color: var(--second-light-background-color);
+  border-radius: 5px;
+  margin: 0px 1px 0px 1px;
+}

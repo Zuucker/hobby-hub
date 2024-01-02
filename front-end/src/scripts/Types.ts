@@ -9,18 +9,21 @@ export type SearchResult = {
 };
 
 export type Notification = {
-  type: NotificationType;
-  url: string;
+  id: number;
+  content: string;
   groupName?: string;
   username?: string;
+  postId?: number;
+  type: NotificationType;
   likesAmmount?: number;
 };
 
 export enum NotificationType {
-  ammount_of_likes,
-  group_join,
-  user_mention,
-  comment_reply,
+  ammount_of_likes = 0,
+  group_join = 1,
+  user_mention = 2,
+  comment_reply = 3,
+  registered = 4,
 }
 
 export enum SearchResultsType {
@@ -88,6 +91,8 @@ export enum Endpoints {
   getUserPosts = "user/posts",
   getUserFeed = "user/feed",
   hasJoinedGroup = "user/hasJoinedGroup",
+  getUserNotifications = "user/notifications",
+  addNotification = "user/addNotification",
 
   addGroup = "group/add",
   subscribeToGroup = "group/subscribe",

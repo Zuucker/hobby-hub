@@ -58,37 +58,13 @@ function Navbar() {
         if (data.profilePic) setProfilePicture("../" + data.profilePic);
       });
 
-      //NOTIFICATIONS
-      // axiosInstance.post(Endpoints.getNotifications).then((response) => {
-      //   const data = response.data.data;
-      // });
+      axiosInstance.post(Endpoints.getUserNotifications).then((response) => {
+        const data = response.data.data.notifications;
+        const newNotifications: Notification[] = [];
+
+        if (data) setNotifications(data);
+      });
     }
-
-    const notification: Notification = {
-      type: NotificationType.comment_reply,
-      url: "/post/1",
-      groupName: "groupname",
-      username: "",
-      likesAmmount: 20,
-    };
-
-    setNotifications([
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-      notification,
-    ]);
   }, []);
 
   return (

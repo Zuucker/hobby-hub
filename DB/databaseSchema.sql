@@ -85,9 +85,14 @@ CREATE TABLE `verifications` (
 
 CREATE TABLE `notifications` (
   `id` INTEGER UNIQUE PRIMARY KEY,
-  `user_id` INTEGER NOT NULL,
   `content` STRING NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE
+  `owner_id` integer NOT NULL,
+  `user_id` INTEGER,
+  `group_id` INTEGER,
+  `post_id` INTEGER,
+  `type` INTEGER NOT NULL,
+  `read` BOOL DEFAULT false,
+  FOREIGN KEY (owner_id) REFERENCES `users`(id) ON DELETE CASCADE
 );
 
 PRAGMA foreign_keys = ON;
