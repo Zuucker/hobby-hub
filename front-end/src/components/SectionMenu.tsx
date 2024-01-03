@@ -88,6 +88,12 @@ function SectionMenu(props: SectionMenuProps) {
     setGroupSearchQuery(e.target.value);
   };
 
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      searchGroups();
+    }
+  };
+
   return (
     <div className="section-menu-container col">
       {props.isLoggedIn && (
@@ -96,6 +102,7 @@ function SectionMenu(props: SectionMenuProps) {
           placeholder="Search groups"
           value={groupSearchQuery}
           onChange={handleChange}
+          onKeyDown={handlePressedKey}
           InputProps={{
             endAdornment: <GroupSearchIcon searchFunction={searchGroups} />,
           }}
@@ -111,7 +118,7 @@ function SectionMenu(props: SectionMenuProps) {
           <SearchResultComponnent {...g} variant="small" key={uuidv4()} />
         ))}
       </div>
-      <div className=" d-flex justify-content-center">
+      <div className="d-flex justify-content-center">
         <div className="group-button-container">
           <a href={"/search/" + groupSearchQuery}>
             <button className="col-12 btn-purple">See more groups</button>

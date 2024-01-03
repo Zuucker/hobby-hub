@@ -117,6 +117,12 @@ function GroupCreationPage() {
     }
   };
 
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      validate();
+    }
+  };
+
   return (
     <EmptyPage>
       <div className="register-container d-flex justify-content-center">
@@ -127,11 +133,13 @@ function GroupCreationPage() {
             InputProps={checkmarkIcon()}
             onChange={handleChange}
             className="col-12"
+            onKeyDown={handlePressedKey}
           />
           <TextField
             placeholder="Description"
             onChange={handleChange}
             className="col-12"
+            onKeyDown={handlePressedKey}
           />
           <span
             className={

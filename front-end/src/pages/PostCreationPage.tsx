@@ -23,15 +23,25 @@ function PostCreationPage() {
   );
 
   useEffect(() => {
-    axiosInstance.post(Endpoints.getUserGroups).then((response) => {
-      const responseData = response.data.data.groups;
-      setGroups(responseData);
-      if (responseData.length > 0) {
-        setChoosenGroupId(responseData[0].id);
-      } else {
-        console.log("pls first join some groups");
-      }
-    });
+    axiosInstance
+      .post(Endpoints.getUserDataFromJwt)
+      .then((response) => {
+        const responseGroups = response.data.data;
+        return responseGroups.id;
+      })
+      .then((id: number) => {
+        axiosInstance
+          .post(Endpoints.getUserGroups, { userId: id })
+          .then((response) => {
+            const responseData = response.data.data.groups;
+            setGroups(responseData);
+            if (responseData.length > 0) {
+              setChoosenGroupId(responseData[0].id);
+            } else {
+              console.log("pls first join some groups");
+            }
+          });
+      });
   }, []);
 
   useEffect(() => {
@@ -59,23 +69,28 @@ function PostCreationPage() {
   };
 
   const addPost = () => {
-    axiosInstance
-      .post(Endpoints.addPost, {
-        postAuthorId: 1,
-        groupId: choosenGroupId,
-        postTitle: postTitle,
-        postType: postType,
-        postLink: "",
-        videoContent: videoContent,
-        imageContent: imageContent,
-        textContent: textContent,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          window.location.href = "/group/" + choosenGroup?.name;
-        }
-      });
+    if (
+      (videoContent && postType === "video") ||
+      (imageContent && postType === "image") ||
+      (textContent && postType === "text")
+    )
+      axiosInstance
+        .post(Endpoints.addPost, {
+          postAuthorId: 1,
+          groupId: choosenGroupId,
+          postTitle: postTitle,
+          postType: postType,
+          postLink: "",
+          videoContent: videoContent,
+          imageContent: imageContent,
+          textContent: textContent,
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            window.location.href = "/group/" + choosenGroup?.name;
+          }
+        });
   };
 
   const resizeVideo = () => {
@@ -83,6 +98,12 @@ function PostCreationPage() {
     const parent = videoContainer.parentNode as HTMLElement;
     const parentwidth = parent.getBoundingClientRect().width;
     videoContainer.width = parentwidth;
+  };
+
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      addPost();
+    }
   };
 
   return (
@@ -138,7 +159,7 @@ function PostCreationPage() {
             </div>
           </div>
           <TextField
-            placeholder={"group description"}
+            placeholder={"Group description"}
             value={
               choosenGroup && choosenGroup.description
                 ? choosenGroup.description
@@ -150,8 +171,9 @@ function PostCreationPage() {
             disabled
           />
           <TextField
-            placeholder="title"
+            placeholder="Title"
             value={postTitle}
+            onKeyDown={handlePressedKey}
             onChange={(e: any) => {
               if (e.target.value.length < 80) setPostTitle(e.target.value);
             }}

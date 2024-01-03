@@ -106,6 +106,12 @@ function PostToolBar(props: PostToolbarProps) {
       });
   };
 
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      addComment();
+    }
+  };
+
   return (
     <div className="post-toolbar col d-flex justify-content-between">
       <div className="d-flex">
@@ -131,6 +137,7 @@ function PostToolBar(props: PostToolbarProps) {
           size="small"
           placeholder="Comment..."
           value={comment}
+          onKeyDown={handlePressedKey}
           onChange={(e) => {
             setComment(e.target.value);
           }}

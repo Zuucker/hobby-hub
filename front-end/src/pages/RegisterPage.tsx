@@ -150,6 +150,12 @@ function RegisterPage() {
     }
   };
 
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      validate();
+    }
+  };
+
   return (
     <EmptyPage>
       <div className="register-container d-flex justify-content-center">
@@ -177,6 +183,7 @@ function RegisterPage() {
             onChange={handleChange}
             type="password"
             className="col-12"
+            onKeyDown={handlePressedKey}
           />
           <span
             className={

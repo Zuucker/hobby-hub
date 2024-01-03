@@ -15,8 +15,6 @@ import axiosInstance from "../scripts/AxiosInstance";
 import { TextField } from "@mui/material";
 import SearchMenuComponent from "../components/SearchMenuIcons";
 
-const URLParse = require("url-parse");
-
 function SearchPage() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>(
@@ -120,6 +118,12 @@ function SearchPage() {
     });
   };
 
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      search();
+    }
+  };
+
   return (
     <EmptyPage>
       <div className="main-container container-fluid">
@@ -132,6 +136,7 @@ function SearchPage() {
               value={searchQuery}
               placeholder="Search here for more results"
               fullWidth
+              onKeyDown={handlePressedKey}
               onChange={(e: any) => {
                 setSearchQuery(e.target.value);
               }}

@@ -153,6 +153,12 @@ function SearchBar() {
     });
   };
 
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      search();
+    }
+  };
+
   return (
     <div className="search-bar-container">
       <Popup
@@ -184,6 +190,7 @@ function SearchBar() {
         placeholder="Search new stuff! :)"
         fullWidth
         onChange={handleChange}
+        onKeyDown={handlePressedKey}
         InputProps={{
           endAdornment: (
             <SearchMenuComponent

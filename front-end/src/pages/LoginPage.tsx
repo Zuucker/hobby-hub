@@ -49,6 +49,12 @@ function LoginPage() {
     }
   };
 
+  const handlePressedKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      sendLoginRequest();
+    }
+  };
+
   return (
     <EmptyPage>
       <div className="login-container d-flex justify-content-center">
@@ -65,6 +71,7 @@ function LoginPage() {
             onChange={handleChange}
             type="password"
             className="col-12"
+            onKeyDown={handlePressedKey}
           />
 
           <span

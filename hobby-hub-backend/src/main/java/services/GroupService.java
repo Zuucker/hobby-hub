@@ -40,6 +40,11 @@ public class GroupService {
 
         if (result.status) {
             int groupId = manager.getGroupData(name).getId();
+            result.status = manager.subscribeToGroup(userId, groupId);
+        }
+
+        if (result.status) {
+            int groupId = manager.getGroupData(name).getId();
             int groupOwner = manager.getGroupData(name).getOwnerId();
             result.status = manager.addNotification(1, "You created a group!", groupId, null, null, null, null, groupOwner);
         }
