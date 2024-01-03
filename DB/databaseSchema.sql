@@ -95,4 +95,11 @@ CREATE TABLE `notifications` (
   FOREIGN KEY (owner_id) REFERENCES `users`(id) ON DELETE CASCADE
 );
 
+CREATE TABLE `blocked_users` (
+  `blocker_id` INTEGER NOT NULL,
+  `blocked_id` INTEGER NOT NULL,
+  FOREIGN KEY (blocker_id) REFERENCES `users`(id) ON DELETE CASCADE,
+  FOREIGN KEY (blocked_id) REFERENCES `users`(id) ON DELETE CASCADE
+);
+
 PRAGMA foreign_keys = ON;

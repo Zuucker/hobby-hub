@@ -35,6 +35,7 @@ function GroupContainer(props: PostContainerProps) {
                         value={gr.description}
                         disabled
                         size="small"
+                        multiline
                       />
                     </div>
                   </div>

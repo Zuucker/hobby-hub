@@ -7,11 +7,6 @@ import { useState } from "react";
 function CommentComponent(props: Comment) {
   const [displayComment, setDisplayComment] = useState<boolean>(true);
 
-  const newContent = props.content.replaceAll(
-    /@[a-zA-Z0-9_]+/g,
-    (match) => `<span class='highlighted'>${match}</span>`
-  );
-
   setTimeout(() => {
     const comments = document.getElementsByClassName("content");
     for (let i = 0; i < comments.length; i++) {
@@ -39,6 +34,7 @@ function CommentComponent(props: Comment) {
             interacted={props.interacted}
             id={props.id}
             upvoted={props.upvoted}
+            authorId={props.authorId}
           />
           <div className="sub-comment" style={{ marginLeft: "20px" }}>
             {props.subcomments &&

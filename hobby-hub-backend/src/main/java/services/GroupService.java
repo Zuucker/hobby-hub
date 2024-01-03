@@ -155,12 +155,15 @@ public class GroupService {
         return result;
     }
 
-    public ServiceResult getGroupPosts(int groupId) {
+    public ServiceResult getGroupPosts(int groupId, String jwtToken) {
 
         ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
 
-        List<Post> posts = manager.getGroupPosts(groupId);
+        JWTManager jwtManager = new JWTManager();
+        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
+
+        List<Post> posts = manager.getGroupPosts(groupId, userId);
 
         JSONObject newJson = new JSONObject();
         for (int i = 0;

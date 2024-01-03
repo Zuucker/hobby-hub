@@ -22,6 +22,7 @@ import models.Notification;
 import models.Post;
 import models.SearchResult;
 import models.User;
+import org.javatuples.Pair;
 import sqlFileParser.SqlFileParser;
 
 /**
@@ -762,15 +763,17 @@ public class DatabaseManager {
         return false;
     }
 
-    public List<Post> getGroupPosts(int id) {
+    public List<Post> getGroupPosts(int id, int userId) {
         String sql = "SELECT p.*, u.username AS 'author', g.name AS 'group',"
                 + " CASE WHEN l.user_id IS NOT NULL THEN TRUE ELSE FALSE END as up_voted,"
                 + " CASE WHEN d.user_id IS NOT NULL THEN TRUE ELSE FALSE END as down_voted FROM 'posts' p JOIN 'users' u"
                 + " ON p.author_id = u.id JOIN 'groups' g ON g.id = p.group_id left join liked_posts as l on l.post_id = p.id"
-                + " left join disliked_posts d on d.post_id = p.id WHERE group_id = ? ORDER BY date";
+                + " left join disliked_posts d on d.post_id = p.id WHERE group_id = ? AND p.author_id"
+                + " NOT IN(SELECT blocked_id FROM blocked_users WHERE blocker_id = ?) ORDER BY date";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, userId);
             ResultSet rs = preparedStatement.executeQuery();
             List<Post> results = new ArrayList();
 
@@ -842,12 +845,14 @@ public class DatabaseManager {
                 + " LEFT JOIN liked_posts AS l ON l.post_id = p.id LEFT JOIN disliked_posts d ON d.post_id = p.id WHERE group_id "
                 + " IN (SELECT g.id FROM groups g WHERE g.id "
                 + " IN (SELECT group_id FROM group_subscriptions WHERE user_id = ?)"
+                + " AND p.author_id NOT IN(SELECT blocked_id FROM blocked_users WHERE blocker_id = ?)"
                 + " OR owner_id = ? ORDER BY name)"
                 + " ORDER BY date";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             preparedStatement.setInt(2, id);
+            preparedStatement.setInt(3, id);
             ResultSet rs = preparedStatement.executeQuery();
             List<Post> results = new ArrayList();
 
@@ -1087,12 +1092,14 @@ public class DatabaseManager {
 
     public List<Comment> getPostcomments(int postId, int userId) {
         String sql = "SELECT c.*, CASE WHEN l.user_id IS NOT NULL AND l.user_id = ? AND l.comment_id IS NOT NULL THEN TRUE ELSE FALSE END"
-                + " as interacted, l.upvoted, u.username from comments c left join liked_comments l on c.id = l.comment_id"
-                + " AND c.author_id = l.user_id join users u on u.id = c.author_id where c.post_id = ?";
+                + " AS interacted, l.upvoted, u.username FROM comments c LEFT JOIN liked_comments l ON c.id = l.comment_id"
+                + " AND c.author_id = l.user_id JOIN users u ON u.id = c.author_id WHERE c.post_id = ?"
+                + " AND c.author_id NOT IN(SELECT blocked_id FROM blocked_users WHERE blocker_id = ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, postId);
+            preparedStatement.setInt(3, userId);
             ResultSet rs = preparedStatement.executeQuery();
             List<Comment> results = new ArrayList();
 
@@ -1120,11 +1127,13 @@ public class DatabaseManager {
     public List<Comment> getSubcomments(int commentId, int userId) {
         String sql = "SELECT c.*, u.username, CASE WHEN l.user_id IS NOT NULL AND l.user_id = ? AND l.comment_id IS NOT NULL "
                 + "THEN TRUE ELSE FALSE END AS interacted, l.upvoted FROM comments c join users u on u.id = c.author_id "
-                + "left join liked_comments l on c.id = l.comment_id WHERE c.comment_id = ?";
+                + "left join liked_comments l on c.id = l.comment_id WHERE c.comment_id = ?"
+                + "AND c.author_id NOT IN(SELECT blocked_id FROM blocked_users WHERE blocker_id = ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, commentId);
+            preparedStatement.setInt(3, userId);
             ResultSet rs = preparedStatement.executeQuery();
             List<Comment> results = new ArrayList();
 
@@ -1348,6 +1357,75 @@ public class DatabaseManager {
         }
 
         return false;
+    }
+
+    public boolean blockUser(int blockingUserId, int blockedUserId) {
+        String sql = "INSERT INTO blocked_users(blocker_id, blocked_id) VALUES(?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, blockingUserId);
+            preparedStatement.setInt(2, blockedUserId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean unBlockUser(int blockingUserId, int blockedUserId) {
+        String sql = "DELETE FROM blocked_users WHERE blocker_id = ? AND blocked_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, blockingUserId);
+            preparedStatement.setInt(2, blockedUserId);
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return false;
+    }
+
+    public boolean hasBlocked(int blockingUserId, int blockedUserId) {
+        String sql = "SELECT COUNT(*) > 0 AS 'result' FROM blocked_users WHERE blocker_id = ? AND blocked_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, blockingUserId);
+            preparedStatement.setInt(2, blockedUserId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            boolean result = resultSet.getBoolean("result");
+            resultSet.close();
+
+            return result;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return false;
+    }
+
+    public List<Pair<String, String>> getBlockedUsers(int userId) {
+        String sql = "SELECT * FROM blocked_users b JOIN users u ON b.blocked_id = u.id WHERE b.blocker_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Pair<String, String>> results = new ArrayList();
+
+            while (rs.next()) {
+                results.add(new Pair(rs.getString("username"), rs.getInt("id")));
+            }
+
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
     }
 
     private void printError(Exception e) {

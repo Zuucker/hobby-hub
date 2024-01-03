@@ -21,7 +21,7 @@ function Navbar() {
   const [profilePicture, setProfilePicture] =
     useState<string>("profile_pic.jpg");
 
-  const [isLoggedIn, setIsLoggedIm] = useState<boolean>(
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     readCookie("jwtToken") ? true : false
   );
 

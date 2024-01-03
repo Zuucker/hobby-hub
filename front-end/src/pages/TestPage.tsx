@@ -218,6 +218,17 @@ const TestPage = () => {
   //     console.log(e.message);
   //   });
 
+  axiosInstance
+    .post(Endpoints.blockUser, {
+      userId: 4,
+    })
+    .then((response) => {
+      console.log("block user", response.data);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
   return (
     <div>
       test page

@@ -67,7 +67,7 @@ public class UserController {
 
         UserService userService = new UserService();
 
-        ServiceResult result = userService.getUserGroups(requestJson.getJwtToken());
+        ServiceResult result = userService.getUserGroups(requestJson.getUserId());
 
         return result.toJson();
     }
@@ -86,7 +86,7 @@ public class UserController {
     public String getUserPosts(@RequestBody HttpRequestJson requestJson) {
 
         UserService userService = new UserService();
-        ServiceResult result = userService.getUserPosts(requestJson.getJwtToken());
+        ServiceResult result = userService.getUserPosts(requestJson.getUserId());
 
         return result.toJson();
     }
@@ -106,6 +106,36 @@ public class UserController {
         UserService userService = new UserService();
 
         ServiceResult result = userService.getUserNotifications(requestJson.getJwtToken());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/block")
+    public String blockUser(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+
+        ServiceResult result = userService.blockUser(requestJson.getJwtToken(), requestJson.getUserId());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/unblock")
+    public String unBlockUser(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+
+        ServiceResult result = userService.unBlockUser(requestJson.getJwtToken(), requestJson.getUserId());
+
+        return result.toJson();
+    }
+
+    @PostMapping("/blocked")
+    public String getBlockedUsers(@RequestBody HttpRequestJson requestJson) {
+
+        UserService userService = new UserService();
+
+        ServiceResult result = userService.getBlockedUsers(requestJson.getUserId());
 
         return result.toJson();
     }

@@ -84,7 +84,7 @@ public class GroupController {
     public String getGroupPosts(@RequestBody HttpRequestJson requestJson) {
 
         GroupService groupService = new GroupService();
-        ServiceResult result = groupService.getGroupPosts(requestJson.getGroupId());
+        ServiceResult result = groupService.getGroupPosts(requestJson.getGroupId(), requestJson.getJwtToken());
 
         return result.toJson();
     }

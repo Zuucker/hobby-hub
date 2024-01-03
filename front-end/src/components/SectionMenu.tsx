@@ -18,23 +18,33 @@ function SectionMenu(props: SectionMenuProps) {
 
   useEffect(() => {
     if (props.isLoggedIn) {
-      axiosInstance.post(Endpoints.getUserGroups).then((response) => {
-        const responseGroups = response.data.data.groups;
+      axiosInstance
+        .post(Endpoints.getUserDataFromJwt)
+        .then((response) => {
+          const responseGroups = response.data.data;
+          return responseGroups.id;
+        })
+        .then((id: number) => {
+          axiosInstance
+            .post(Endpoints.getUserGroups, { userId: id })
+            .then((response) => {
+              const responseGroups = response.data.data.groups;
 
-        if (!responseGroups) return;
+              if (!responseGroups) return;
 
-        const grs: SearchResult[] = [];
-        responseGroups.forEach((gr: any) => {
-          const group: SearchResult = {
-            groupName: gr.name.substring(0, 15),
-            url: gr.name,
-            type: SearchResultsType.group,
-          };
-          grs.push(group);
+              const grs: SearchResult[] = [];
+              responseGroups.forEach((gr: any) => {
+                const group: SearchResult = {
+                  groupName: gr.name.substring(0, 15),
+                  url: gr.name,
+                  type: SearchResultsType.group,
+                };
+                grs.push(group);
+              });
+
+              setGroups(grs);
+            });
         });
-
-        setGroups(grs);
-      });
     } else {
       axiosInstance.post(Endpoints.getTopGroups).then((response) => {
         const responseGroups = response.data.data.groups;

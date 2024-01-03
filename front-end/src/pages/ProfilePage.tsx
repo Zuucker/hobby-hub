@@ -3,12 +3,13 @@ import EmptyPage from "../components/EmptyPageComponnent";
 import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
-import { Endpoints, GroupData, Post } from "../scripts/Types";
+import { Endpoints, GroupData, Post, User } from "../scripts/Types";
 import CancelIcon from "../icons/CancelIcon.svg";
 import EditIcon from "../icons/EditIcon.svg";
 import SaveIcon from "../icons/checkMark.svg";
 import PostContainer from "../components/PostContainer";
 import GroupContainer from "../components/GroupContainer";
+import BlockedUsersContainer from "../components/BlockedUsersContainer";
 
 type ProfileData = {
   username: string;
@@ -18,15 +19,17 @@ type ProfileData = {
   profilePic: string;
   bio: string;
   age: number;
+  id: number;
 };
 
 function ProfilePage() {
-  const [displayPosts, setDisplayPosts] = useState<boolean>(true);
+  const [displayPosts, setDisplayPosts] = useState<number>(0);
   const [isForeignProfile, setIsForeignProfile] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [groups, setGroups] = useState<GroupData[]>([]);
+  const [blockedUsers, setBlockedUsers] = useState<User[]>([]);
 
   const [userData, setUserData] = useState<ProfileData>({
     username: "",
@@ -36,6 +39,7 @@ function ProfilePage() {
     profilePic: "",
     bio: "",
     age: 0,
+    id: -1,
   });
 
   const [inputData, setInputData] = useState<ProfileData>({
@@ -46,6 +50,7 @@ function ProfilePage() {
     profilePic: "",
     bio: "",
     age: 0,
+    id: -1,
   });
 
   useEffect(() => {
@@ -71,50 +76,65 @@ function ProfilePage() {
 
         setUserData(recievedData);
         setInputData(recievedData);
+        return recievedData.id;
+      })
+      .then((id: number) => {
+        axiosInstance
+          .post(Endpoints.getUserPosts, { userId: id })
+          .then((response) => {
+            const postsData: Post[] = [];
+            const responseData = response.data.data.posts;
+            if (responseData && responseData.length > 0) {
+              responseData.forEach((p: Post) => {
+                postsData.push({
+                  id: p.id,
+                  authorId: p.authorId,
+                  author: p.author,
+                  groupId: p.groupId,
+                  group: p.group,
+                  title: p.title,
+                  link: "../media/posts/image/" + p.id + ".jpg",
+                  type: p.type,
+                  upVotes: p.upVotes,
+                  downVotes: p.downVotes,
+                  isUpVoted: p.isUpVoted,
+                  isDownVoted: p.isDownVoted,
+                });
+              });
+
+              setPosts(postsData);
+            }
+          });
+
+        axiosInstance
+          .post(Endpoints.getUserGroups, { userId: id })
+          .then((response) => {
+            const groupData: GroupData[] = [];
+            const responseData = response.data.data.groups;
+            if (responseData && responseData.length > 0) {
+              responseData.forEach((g: any) => {
+                groupData.push({
+                  id: g.id,
+                  name: g.name,
+                  description: g.description,
+                  ownerId: g.ownerId,
+                  ownerName: g.owner,
+                });
+              });
+            }
+
+            setGroups(groupData);
+          });
+
+        axiosInstance
+          .post(Endpoints.blockedUsers, { userId: id })
+          .then((response) => {
+            const responseData = response.data.data.blockedUsers;
+            if (responseData && responseData.length > 0) {
+              setBlockedUsers(responseData);
+            }
+          });
       });
-
-    axiosInstance.post(Endpoints.getUserPosts).then((response) => {
-      const postsData: Post[] = [];
-      const responseData = response.data.data.posts;
-      if (responseData && responseData.length > 0) {
-        responseData.forEach((p: Post) => {
-          postsData.push({
-            id: p.id,
-            authorId: p.authorId,
-            author: p.author,
-            groupId: p.groupId,
-            group: p.group,
-            title: p.title,
-            link: "../media/posts/image/" + p.id + ".jpg",
-            type: p.type,
-            upVotes: p.upVotes,
-            downVotes: p.downVotes,
-            isUpVoted: p.isUpVoted,
-            isDownVoted: p.isDownVoted,
-          });
-        });
-
-        setPosts(postsData);
-      }
-    });
-
-    axiosInstance.post(Endpoints.getUserGroups).then((response) => {
-      const groupData: GroupData[] = [];
-      const responseData = response.data.data.groups;
-      if (responseData && responseData.length > 0) {
-        responseData.forEach((g: any) => {
-          groupData.push({
-            id: g.id,
-            name: g.name,
-            description: g.description,
-            ownerId: g.ownerId,
-            ownerName: g.owner,
-          });
-        });
-      }
-
-      setGroups(groupData);
-    });
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -283,38 +303,51 @@ function ProfilePage() {
         )}
 
         <div className="tab-profile d-flex col">
-          <div className="col-6 d-flex justify-content-center">
+          <div className="col d-flex justify-content-center">
             <div
               className={
-                displayPosts
+                displayPosts === 0
                   ? "btn-purple d-flex justify-content-center align-items-center"
                   : "btn-purple btn-purple-outline d-flex justify-content-center align-items-center"
               }
               onClick={() => {
-                setDisplayPosts(true);
+                setDisplayPosts(0);
               }}>
               <div className="group-content row">Posts</div>
             </div>
           </div>
-          <div className="col-6 d-flex justify-content-center">
+          <div className="col d-flex justify-content-center">
             <div
               className={
-                !displayPosts
+                displayPosts === 1
                   ? "btn-purple d-flex justify-content-center align-items-center"
                   : "btn-purple btn-purple-outline d-flex justify-content-center align-items-center"
               }
               onClick={() => {
-                setDisplayPosts(false);
+                setDisplayPosts(1);
               }}>
               Groups
             </div>
           </div>
+          {isForeignProfile && (
+            <div className="col d-flex justify-content-center">
+              <div
+                className={
+                  displayPosts === 2
+                    ? "btn-purple d-flex justify-content-center align-items-center"
+                    : "btn-purple btn-purple-outline d-flex justify-content-center align-items-center"
+                }
+                onClick={() => {
+                  setDisplayPosts(2);
+                }}>
+                <div className="group-content row">Blocked Users</div>
+              </div>
+            </div>
+          )}
         </div>
-        {displayPosts ? (
-          <PostContainer posts={posts} />
-        ) : (
-          <GroupContainer groups={groups} />
-        )}
+        {displayPosts === 0 && <PostContainer posts={posts} />}
+        {displayPosts === 1 && <GroupContainer groups={groups} />}
+        {displayPosts === 2 && <BlockedUsersContainer users={blockedUsers} />}
       </div>
     </EmptyPage>
   );

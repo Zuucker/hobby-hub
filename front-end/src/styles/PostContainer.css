@@ -1,5 +1,9 @@
 .post-container {
   margin: 10px;
+
+  & .group-container > .group-toolbar {
+    background-color: var(--second-light-background-color) !important;
+  }
 }
 
 .post {
@@ -68,4 +72,19 @@
   & > div > img.dots.pointer {
     width: 6px;
   }
+}
+
+.post-options {
+  background-color: var(--second-light-background-color);
+  border-radius: 10px;
+  border: 1px solid var(--black);
+
+  & .btn-purple {
+    height: 35px;
+    margin: 10px;
+  }
+}
+
+.popup-overlay {
+  background-color: var(--overlay) !important;
 }

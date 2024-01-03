@@ -161,6 +161,7 @@ function GroupPage() {
         <div className="group-toolbar options">
           <Popup
             open={isEditingGroup}
+            position={"right center"}
             onClose={() => {
               setIsEditingGroup(false);
             }}>

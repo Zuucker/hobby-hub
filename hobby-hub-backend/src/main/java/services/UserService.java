@@ -5,14 +5,15 @@
 package services;
 
 import database.DatabaseManager;
-import httpRequestJson.HttpRequestJson;
 import imageManager.ImageManager;
+import java.util.ArrayList;
 import java.util.List;
 import jwtManager.JWTManager;
 import models.Group;
 import models.Notification;
 import models.Post;
 import models.User;
+import org.javatuples.Pair;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import serviceResult.ServiceResult;
@@ -111,12 +112,9 @@ public class UserService {
         return result;
     }
 
-    public ServiceResult getUserGroups(String token) {
+    public ServiceResult getUserGroups(int userId) {
 
         ServiceResult result = new ServiceResult();
-        JWTManager jwtManager = new JWTManager();
-
-        int userId = Integer.parseInt(jwtManager.getSubject(token));
 
         DatabaseManager manager = DatabaseManager.getInstance();
 
@@ -135,12 +133,11 @@ public class UserService {
         return result;
     }
 
-    public ServiceResult getUserPosts(String jwtToken) {
+    public ServiceResult getUserPosts(int userId) {
 
         ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
         JWTManager jwtManager = new JWTManager();
-        int userId = Integer.parseInt(jwtManager.getSubject(jwtToken));
 
         List<Post> posts = manager.getUserPosts(userId);
 
@@ -210,6 +207,71 @@ public class UserService {
                 i < notifications.size();
                 i++) {
             newJson.append("notifications", notifications.get(i).toJson());
+        }
+
+        result.json = newJson;
+        result.status = true;
+
+        return result;
+    }
+
+    public ServiceResult blockUser(String token, int blockedUserId) {
+
+        ServiceResult result = new ServiceResult();
+        JWTManager jwtManager = new JWTManager();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(token));
+
+        if (userId != blockedUserId && !manager.hasBlocked(userId, blockedUserId)) {
+
+            result.status = manager.blockUser(userId, blockedUserId);
+            result.value = "ok";
+        } else {
+            result.status = true;
+            result.value = "nie ok";
+        }
+
+        return result;
+    }
+
+    public ServiceResult unBlockUser(String token, int blockedUserId) {
+
+        ServiceResult result = new ServiceResult();
+        JWTManager jwtManager = new JWTManager();
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        int userId = Integer.parseInt(jwtManager.getSubject(token));
+
+        if (userId != blockedUserId && manager.hasBlocked(userId, blockedUserId)) {
+
+            result.status = manager.unBlockUser(userId, blockedUserId);
+            result.value = "ok";
+        } else {
+            result.status = true;
+            result.value = "nie ok";
+        }
+
+        return result;
+    }
+
+    public ServiceResult getBlockedUsers(int userId) {
+
+        ServiceResult result = new ServiceResult();
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        List<Pair<String, String>> users = manager.getBlockedUsers(userId);
+
+        JSONObject newJson = new JSONObject();
+        for (int i = 0;
+                i < users.size();
+                i++) {
+            JSONObject json = new JSONObject();
+            json.put("username", users.get(i).getValue0());
+            json.put("userId", users.get(i).getValue1());
+
+            newJson.append("blockedUsers", json);
         }
 
         result.json = newJson;

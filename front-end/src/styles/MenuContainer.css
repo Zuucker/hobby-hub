@@ -2,7 +2,6 @@
   position: fixed;
   padding: 0px;
   top: 4rem;
-  z-index: 10;
 
   .section-menu {
     margin-right: auto;
@@ -16,5 +15,6 @@
     margin-left: auto;
     background-color: var(--light-background-color);
     box-shadow: 0 0px 8px var(--black);
+    height: fit-content;
   }
 }

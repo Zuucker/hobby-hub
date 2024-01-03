@@ -93,6 +93,7 @@ function PostComponent(props: Post) {
         id={props.id}
         isUpVoted={props.isUpVoted}
         isDownVoted={props.isDownVoted}
+        authorId={props.authorId}
       />
     </div>
   );

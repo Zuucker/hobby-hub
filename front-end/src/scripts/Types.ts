@@ -77,6 +77,11 @@ export enum SearchTypeEnum {
   GP,
 }
 
+export type User = {
+  username: string;
+  userId: number;
+};
+
 export enum Endpoints {
   registerUser = "auth/register",
   loginUser = "auth/login",
@@ -85,6 +90,7 @@ export enum Endpoints {
 
   getUserData = "user/data",
   getUserDataFromJwt = "user/data2",
+  getUserData2 = "user/data2",
   editUser = "user/edit",
   getUsernameFromJwt = "user/getUsernameFromJwt",
   getUserGroups = "user/getUserGroups",
@@ -93,6 +99,9 @@ export enum Endpoints {
   hasJoinedGroup = "user/hasJoinedGroup",
   getUserNotifications = "user/notifications",
   addNotification = "user/addNotification",
+  blockUser = "user/block",
+  unBlockUser = "user/unblock",
+  blockedUsers = "user/blocked",
 
   addGroup = "group/add",
   subscribeToGroup = "group/subscribe",

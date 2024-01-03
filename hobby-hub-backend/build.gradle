@@ -24,6 +24,7 @@ dependencies {
         implementation 'javax.xml.bind:jaxb-api:2.3.1'
         implementation 'javax.mail:javax.mail-api:1.6.2'
         implementation 'com.sun.mail:javax.mail:1.6.2'
+        implementation 'org.javatuples:javatuples:1.2'
 }
 
 tasks.named('test') {

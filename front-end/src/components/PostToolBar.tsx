@@ -8,6 +8,7 @@ import Dots from "../icons/Dots.svg";
 import { useEffect, useState } from "react";
 import axiosInstance from "../scripts/AxiosInstance";
 import { Endpoints } from "../scripts/Types";
+import Popup from "reactjs-popup";
 
 type PostToolbarProps = {
   upVotes: number;
@@ -15,6 +16,7 @@ type PostToolbarProps = {
   id: number;
   isUpVoted: boolean;
   isDownVoted: boolean;
+  authorId: number;
 };
 
 function PostToolBar(props: PostToolbarProps) {
@@ -23,6 +25,7 @@ function PostToolBar(props: PostToolbarProps) {
   const [upVoted, setUpVoted] = useState<boolean>(props.isUpVoted);
   const [downVoted, setDownVoted] = useState<boolean>(props.isDownVoted);
   const [comment, setComment] = useState<string>("");
+  const [showPostOptions, setShowPostOptions] = useState<boolean>(false);
 
   useEffect(() => {
     setUpVotes(props.upVotes);
@@ -91,6 +94,18 @@ function PostToolBar(props: PostToolbarProps) {
     }
   };
 
+  const blockUser = () => {
+    axiosInstance
+      .post(Endpoints.blockUser, {
+        userId: props.authorId,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          window.location.reload();
+        }
+      });
+  };
+
   return (
     <div className="post-toolbar col d-flex justify-content-between">
       <div className="d-flex">
@@ -136,10 +151,25 @@ function PostToolBar(props: PostToolbarProps) {
           src={Dots}
           className="dots pointer"
           onClick={() => {
-            console.log("clicked options");
+            setShowPostOptions(true);
           }}
           alt="Comment options"
         />
+        <Popup
+          open={showPostOptions}
+          position={"right center"}
+          onClose={() => {
+            setShowPostOptions(false);
+          }}>
+          <div className="post-options d-collumn justify-content-center align-items-center">
+            <div className="col">Are you sure You want to block this user?</div>
+            <div className="col d-flex justify-content-center">
+              <button className="col-4 btn-purple" onClick={blockUser}>
+                Block
+              </button>
+            </div>
+          </div>
+        </Popup>
       </div>
     </div>
   );

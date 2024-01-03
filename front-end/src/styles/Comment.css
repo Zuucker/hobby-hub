@@ -22,7 +22,9 @@
       width: 400px;
     }
     & > .comment-toolbar-options {
-      width: 6px;
+      & img {
+        height: 70%;
+      }
     }
   }
 }
