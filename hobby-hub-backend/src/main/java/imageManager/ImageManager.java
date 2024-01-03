@@ -16,8 +16,8 @@ import java.util.Base64;
  */
 public class ImageManager {
 
-    private final String savePath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\avatars\\";
-    private final String mediaPath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\";
+    private final String savePath = "..\\front-end\\public\\media\\avatars\\";
+    private final String mediaPath = "..\\front-end\\public\\media\\";
     private final String shortPath = "media/avatars/";
 
     public ImageManager() {

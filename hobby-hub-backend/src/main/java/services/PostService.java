@@ -50,7 +50,7 @@ public class PostService {
 
             switch (postType) {
                 case "text" -> {
-                    String filePath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\posts\\text\\";
+                    String filePath = "..\\front-end\\public\\media\\posts\\text\\";
 
                     try {
                         FileWriter fileWriter = new FileWriter(filePath + result.value + ".txt");
@@ -72,7 +72,7 @@ public class PostService {
                 }
 
                 case "video" -> {
-                    String filePath = "D:\\Repos\\hobby-hub\\front-end\\public\\media\\posts\\video\\";
+                    String filePath = "..\\front-end\\public\\media\\posts\\video\\";
 
                     String[] parts = json.getVideoContent().split(",");
                     if (parts.length != 2) {
