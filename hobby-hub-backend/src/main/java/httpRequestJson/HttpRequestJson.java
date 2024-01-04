@@ -40,6 +40,7 @@ public class HttpRequestJson {
     private String type;
     private String likesAmmount;
     private String userId;
+    private String url;
 
     public String getUsername() {
         return this.username;
@@ -159,6 +160,10 @@ public class HttpRequestJson {
 
     public int getUserId() {
         return Integer.parseInt(this.userId);
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 
     public void print() {

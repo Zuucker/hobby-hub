@@ -35,6 +35,11 @@
     margin: 10px 15px 5px 15px;
   }
 
+  & > a > img {
+    width: -webkit-fill-available;
+    margin: 10px 15px 5px 15px;
+  }
+
   & > video {
     width: -webkit-fill-available;
     margin: 10px 15px 5px 15px;
@@ -87,4 +92,9 @@
 
 .popup-overlay {
   background-color: var(--overlay) !important;
+}
+
+.embedded {
+  aspect-ratio: 1.778;
+  padding: 0px;
 }

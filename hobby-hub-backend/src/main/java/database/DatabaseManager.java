@@ -32,7 +32,7 @@ import sqlFileParser.SqlFileParser;
 public class DatabaseManager {
 
     private static DatabaseManager databaseManagerInstance;
-    private static String databaseUrl = "jdbc:sqlite:/Repos/hobby-hub/DB/database.db";
+    private static String databaseUrl = "jdbc:sqlite:..\\DB\\database.db";
     private static Connection connection = null;
 
     private DatabaseManager() {
@@ -569,6 +569,25 @@ public class DatabaseManager {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+
+            status = true;
+        } catch (SQLException e) {
+            printError(e);
+        }
+
+        return status;
+    }
+
+    public boolean removeGroupNotification(int id, int groupId) {
+
+        boolean status = false;
+
+        String sql = "DELETE FROM notifications WHERE owner_id = ? AND group_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, groupId);
             preparedStatement.executeUpdate();
 
             status = true;

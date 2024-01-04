@@ -118,4 +118,13 @@ public class PostController {
 
         return result.toJson();
     }
+
+    @PostMapping("/scrap")
+    public String scrapData(@RequestBody HttpRequestJson requestJson) {
+
+        PostService postService = new PostService();
+        ServiceResult result = postService.scrapData(requestJson.getUrl());
+
+        return result.toJson();
+    }
 }

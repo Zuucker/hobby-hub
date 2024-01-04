@@ -72,14 +72,17 @@ function PostCreationPage() {
     if (
       (videoContent && postType === "video") ||
       (imageContent && postType === "image") ||
-      (textContent && postType === "text")
-    )
+      (textContent && postType === "text") ||
+      (textContent && postType === "link")
+    ) {
+      const newPostType = postType === "link" ? "text" : postType;
+
       axiosInstance
         .post(Endpoints.addPost, {
           postAuthorId: 1,
           groupId: choosenGroupId,
           postTitle: postTitle,
-          postType: postType,
+          postType: newPostType,
           postLink: "",
           videoContent: videoContent,
           imageContent: imageContent,
@@ -91,6 +94,7 @@ function PostCreationPage() {
             window.location.href = "/group/" + choosenGroup?.name;
           }
         });
+    }
   };
 
   const resizeVideo = () => {
@@ -153,6 +157,7 @@ function PostCreationPage() {
                     <MenuItem value={"image"}>Image</MenuItem>
                     <MenuItem value={"text"}>Text</MenuItem>
                     <MenuItem value={"video"}>Video</MenuItem>
+                    <MenuItem value={"link"}>Link</MenuItem>
                   </Select>
                 </FormControl>
               </div>
@@ -183,6 +188,17 @@ function PostCreationPage() {
           {postType === "text" && (
             <TextField
               placeholder="Text"
+              value={textContent}
+              onChange={(e: any) => {
+                setTextContent(e.target.value);
+              }}
+              className="col-12"
+            />
+          )}
+
+          {postType === "link" && (
+            <TextField
+              placeholder="Link"
               value={textContent}
               onChange={(e: any) => {
                 setTextContent(e.target.value);
@@ -226,7 +242,7 @@ function PostCreationPage() {
             </div>
           )}
 
-          {postType !== "text" && (
+          {postType !== "text" && postType !== "link" && (
             <div className="button-container col d-flex justify-content-center">
               <button className="btn-purple" onClick={chooseFile}>
                 {imageContent !== "" ? "Change post" : "Upload"}

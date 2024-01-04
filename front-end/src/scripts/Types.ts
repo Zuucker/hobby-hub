@@ -121,6 +121,7 @@ export enum Endpoints {
   interactWithComment = "post/interactWithCommentPoint",
   getPostComments = "post/comments",
   getPostData = "post/data",
+  scrap = "post/scrap",
 
   search = "search/data",
 }

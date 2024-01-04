@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import jwtManager.JWTManager;
 import models.Comment;
@@ -24,6 +23,11 @@ import serviceResult.ServiceResult;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.javatuples.Pair;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -350,6 +354,53 @@ public class PostService {
             result.json = newJson;
         }
 
+        result.status = true;
+
+        return result;
+    }
+
+    public ServiceResult scrapData(String url) {
+
+        ServiceResult result = new ServiceResult();
+        JSONObject json = new JSONObject();
+
+        try {
+            Document document = Jsoup.connect(url).get();
+
+            Elements imagesElements = document.select("img");
+            List<Pair<String, Integer>> images = new ArrayList<>();
+
+            for (Element image : imagesElements) {
+                String imageUrl = image.absUrl("src");
+
+                try {
+                    int width = Integer.parseInt(image.attr("width"));
+                    int height = Integer.parseInt(image.attr("width"));
+                    images.add(new Pair(imageUrl, height * width));
+                } catch (NumberFormatException e) {
+
+                }
+            }
+            Pair<String, Integer> finalImage = null;
+
+            int biggestSize = 0;
+            for (Pair<String, Integer> image : images) {
+
+                if (image.getValue1() > biggestSize) {
+                    biggestSize = image.getValue1();
+                    finalImage = image;
+                }
+            }
+
+            if (finalImage != null) {
+                json.put("url", finalImage.getValue0());
+                json.put("size", finalImage.getValue1());
+            }
+
+            result.json = json;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         result.status = true;
 
         return result;

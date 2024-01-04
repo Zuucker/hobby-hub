@@ -25,6 +25,7 @@ dependencies {
         implementation 'javax.mail:javax.mail-api:1.6.2'
         implementation 'com.sun.mail:javax.mail:1.6.2'
         implementation 'org.javatuples:javatuples:1.2'
+        implementation 'org.jsoup:jsoup:1.14.3'
 }
 
 tasks.named('test') {

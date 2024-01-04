@@ -149,6 +149,8 @@ public class GroupService {
 
         Group group = manager.getGroupData(id);
 
+        result.status = manager.removeGroupNotification(userId, group.getId());
+
         if (userId == group.getOwnerId()) {
             result.status = manager.removeGroup(id);
         } else {
