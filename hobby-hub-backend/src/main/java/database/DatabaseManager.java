@@ -140,6 +140,23 @@ public class DatabaseManager {
         return null;
     }
 
+    public List<String> getEmails() {
+        String sql = "SELECT email FROM users";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            List<String> results = new ArrayList();
+
+            while (resultSet.next()) {
+                results.add(resultSet.getString("email"));
+            }
+            return results;
+        } catch (SQLException e) {
+            printError(e);
+        }
+        return null;
+    }
+
     public boolean addUser(String username, String email, String password) {
         String sql = "INSERT INTO users(username, email, password, register_date, bio) VALUES(?, ?, ?, ?, ?)";
         LocalDate currentDate = LocalDate.now();

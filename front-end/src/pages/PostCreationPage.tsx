@@ -245,7 +245,7 @@ function PostCreationPage() {
           {postType !== "text" && postType !== "link" && (
             <div className="button-container col d-flex justify-content-center">
               <button className="btn-purple" onClick={chooseFile}>
-                {imageContent !== "" ? "Change post" : "Upload"}
+                {imageContent !== "" || videoContent ? "Change post" : "Upload"}
               </button>
             </div>
           )}

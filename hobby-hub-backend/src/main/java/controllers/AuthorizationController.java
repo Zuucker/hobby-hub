@@ -35,6 +35,18 @@ public class AuthorizationController {
         return result.toJson();
     }
 
+    @PostMapping("/emailAvailability")
+    public String checkEmailAvailability(@RequestBody HttpRequestJson requestJson) {
+
+        AuthorizationService authService = new AuthorizationService();
+        ServiceResult result = new ServiceResult();
+
+        result.status = authService.isEmailFree(requestJson.getEmail());
+        result.value = "ok";
+
+        return result.toJson();
+    }
+
     @PostMapping("/register")
     public String registerUser(@RequestBody HttpRequestJson requestJson) {
 

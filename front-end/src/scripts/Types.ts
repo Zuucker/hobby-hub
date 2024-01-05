@@ -86,6 +86,7 @@ export enum Endpoints {
   registerUser = "auth/register",
   loginUser = "auth/login",
   checkUsernameAvailability = "auth/usernameAvailability",
+  checkEmailAvailability = "auth/emailAvailability",
   verifyUser = "auth/verify",
 
   getUserData = "user/data",

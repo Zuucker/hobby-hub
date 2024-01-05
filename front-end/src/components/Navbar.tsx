@@ -17,7 +17,7 @@ function Navbar() {
   const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const [username, setUsername] = useState<string>("Sad Cat");
+  const [username, setUsername] = useState<string>("Not logged in");
   const [profilePicture, setProfilePicture] =
     useState<string>("profile_pic.jpg");
 

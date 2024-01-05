@@ -114,6 +114,7 @@ function SearchPage() {
         setSearchResults(data);
       } else if (response.status === 200) {
         setShouldDisplayEmptyResults(true);
+        setSearchResults([]);
       }
     });
   };

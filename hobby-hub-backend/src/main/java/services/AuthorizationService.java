@@ -21,7 +21,6 @@ public class AuthorizationService {
 
     public boolean isUsernameFree(String username) {
 
-        ServiceResult result = new ServiceResult();
         DatabaseManager manager = DatabaseManager.getInstance();
 
         List<String> usernames = manager.getUsernames();
@@ -30,6 +29,24 @@ public class AuthorizationService {
 
         for (int i = 0; i < usernames.size(); i++) {
             if (usernames.get(i).equals(username)) {
+                isFree = false;
+                break;
+            }
+        }
+
+        return isFree;
+    }
+
+    public boolean isEmailFree(String email) {
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+        List<String> emails = manager.getEmails();
+
+        boolean isFree = true;
+
+        for (int i = 0; i < emails.size(); i++) {
+            if (emails.get(i).equals(email)) {
                 isFree = false;
                 break;
             }

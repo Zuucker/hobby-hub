@@ -11,12 +11,12 @@ import { Endpoints } from "../scripts/Types";
 
 YupPassword(yup);
 
-const checkmarkIcon = () => {
+const checkmarkIcon = (arg: string) => {
   return {
     endAdornment: (
       <InputAdornment position="start">
         <img
-          id="usernameCheckmark"
+          id={arg + "Checkmark"}
           className="checkmark"
           src={CheckMark}
           alt="checkmark"></img>
@@ -74,6 +74,7 @@ type RegisterData = {
 function RegisterPage() {
   const [message, setMessage] = useState<string>("");
   const [isUsernameFree, setIsUsernameFree] = useState<boolean>(false);
+  const [isEmailFree, setIsEmailFree] = useState<boolean>(false);
   const [inputData, setInputData] = useState<RegisterData>({
     username: "",
     email: "",
@@ -101,6 +102,35 @@ function RegisterPage() {
   }, [inputData, inputData.username]);
 
   useEffect(() => {
+    if (inputData.email !== "") {
+      axiosInstance
+        .post(Endpoints.checkEmailAvailability, inputData)
+        .then((response) => {
+          const isEmailOk =
+            response.data.status && inputData.email.includes("@");
+          setIsEmailFree(isEmailOk);
+        })
+        .catch(() => {
+          setMessage("Service unavailable. Try again later");
+        });
+    } else {
+      const emailCheckmark = document.getElementById(
+        "emailCheckmark"
+      ) as HTMLElement;
+      emailCheckmark.style.visibility = "hidden";
+      setIsEmailFree(false);
+    }
+  }, [inputData, inputData.email]);
+
+  useEffect(() => {
+    const emailCheckmark = document.getElementById(
+      "emailCheckmark"
+    ) as HTMLElement;
+    emailCheckmark.style.visibility =
+      isEmailFree && inputData.email.length > 3 ? "visible" : "hidden";
+  }, [isEmailFree, inputData.email.length]);
+
+  useEffect(() => {
     const usernameCheckmark = document.getElementById(
       "usernameCheckmark"
     ) as HTMLElement;
@@ -112,14 +142,22 @@ function RegisterPage() {
     userSchema
       .validate(inputData)
       .then(() => {
-        axiosInstance
-          .post(Endpoints.registerUser, inputData)
-          .then((response) => {
-            setMessage(
-              response.data.status ? "Registered!" : "Try again later"
-            );
-            if (response.data.status) window.location.href = "/login";
-          });
+        if (isEmailFree) {
+          if (isUsernameFree) {
+            axiosInstance
+              .post(Endpoints.registerUser, inputData)
+              .then((response) => {
+                setMessage(
+                  response.data.status ? "Registered!" : "Try again later"
+                );
+                if (response.data.status) window.location.href = "/login";
+              });
+          } else {
+            setMessage("Username already in use");
+          }
+        } else {
+          setMessage("Email already in use");
+        }
       })
       .catch((e) => {
         const message = errorMessageTranslator(e.message);
@@ -163,12 +201,13 @@ function RegisterPage() {
           <span className="d-flex justify-content-center">Register</span>
           <TextField
             placeholder="Username"
-            InputProps={checkmarkIcon()}
+            InputProps={checkmarkIcon("username")}
             onChange={handleChange}
             className="col-12"
           />
           <TextField
             placeholder="Email"
+            InputProps={checkmarkIcon("email")}
             onChange={handleChange}
             className="col-12"
           />

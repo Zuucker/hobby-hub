@@ -178,7 +178,17 @@ function ProfilePage() {
   };
 
   const sendData = () => {
-    axiosInstance.post(Endpoints.editUser, inputData).then((response) => {});
+    const avatar = document.getElementById("avatar") as HTMLImageElement;
+    const canvas = document.createElement("canvas");
+    canvas.width = avatar?.width;
+    canvas.height = avatar?.height;
+
+    const context = canvas.getContext("2d");
+    context?.drawImage(avatar, 0, 0, avatar?.width, avatar?.height);
+    const base64Data = canvas.toDataURL("image/png");
+
+    const newInputData = { ...inputData, profilePic: base64Data };
+    axiosInstance.post(Endpoints.editUser, newInputData).then((response) => {});
   };
 
   return (
@@ -190,6 +200,7 @@ function ProfilePage() {
             <img
               src={inputData.profilePic}
               alt="avatar"
+              id="avatar"
               className={isEditing ? "blurred" : ""}
             />
             {isEditing && (

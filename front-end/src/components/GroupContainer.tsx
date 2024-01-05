@@ -12,7 +12,6 @@ function GroupContainer(props: PostContainerProps) {
     <div className="col">
       <div className="post-container d-collumn align-items-center">
         {props.groups &&
-          props.groups.length &&
           props.groups.map((gr) => (
             <div key={uuidv4()}>
               <a href={"http://localhost:3000/group/" + gr.name}>
@@ -47,7 +46,7 @@ function GroupContainer(props: PostContainerProps) {
           !props.groups.length ||
           props.groups.length === 0) && (
           <div className="d-flex justify-content-center align-items-center">
-            <div>There are no post here yet!</div>
+            <div>You haven't joined any groups yet!</div>
           </div>
         )}
       </div>
