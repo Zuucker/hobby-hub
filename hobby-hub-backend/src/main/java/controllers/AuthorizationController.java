@@ -61,7 +61,7 @@ public class AuthorizationController {
 
             ServiceResult verificationResult = authService.getUserVerificationCode(requestJson.getUsername());
             String code = verificationResult.value;
-            String verificationUrl = "localhost:3000/verify/" + code;
+            String verificationUrl = "http://localhost:3000/verify/" + code;
 
             EmailSender sender = new EmailSender();
             sender.sendEmail(requestJson.getEmail(), "Hobby Hub registration!", "You just registered! \n<p>" + "<a href='"

@@ -7,7 +7,7 @@ INSERT INTO users(username, email, password, verified, register_date, bio) VALUE
 INSERT INTO users(username, email, password, verified, register_date, bio) VALUES ('Gustav', "gustav@gmail.com", "password1", true, '2023-11-20', "Gustav's profile");
 INSERT INTO users(username, email, password, verified, register_date, bio) VALUES ('Ewa', "ewa@gmail.com", "password1", true, '2023-11-20', "Ewa's profile");
 INSERT INTO users(username, email, password, verified, register_date, bio) VALUES ('Amelia', "amelia@gmail.com", "password1", true, '2023-11-20', "Amelia's profile");
-INSERT INTO users(username, email, password, verified, register_date, bio) VALUES ('Hans n roses', "ameba@gmail.com", "password1", true, '2023-11-20', "Hans's profile");
+INSERT INTO users(username, email, password, verified, register_date, bio) VALUES ('Hans', "hans@gmail.com", "password1", true, '2023-11-20', "Hans's profile");
 
 INSERT INTO notifications(owner_id, content, type)  VALUES (1, "You just registered!", 4);
 INSERT INTO notifications(owner_id, content, type)  VALUES (2, "You just registered!", 4);
@@ -65,7 +65,7 @@ INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) 
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (7, 4, 'MTS - Ether', 'video', 134,54, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (8, 8, 'Path of pain is ez', 'image', 420,69, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (8, 3, 'Inter Europol Competition won this years Le Mans', 'image', 421,64, '2023-11-20');
-INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (9, 9, 'Angry catto', 'image', 432,64, '2023-11-20');
+INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (9, 9, 'Angry cat', 'image', 432,64, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (9, 2, '1972 Mustang Mach 1', 'image', 6631,445, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (10, 10, 'Gumiklyjzy', 'image', 2137,644, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (10, 1, 'Sequoia', 'image', 6431,3, '2023-11-20');
