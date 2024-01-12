@@ -65,7 +65,7 @@ public class AuthorizationController {
 
             EmailSender sender = new EmailSender();
             sender.sendEmail(requestJson.getEmail(), "Hobby Hub registration!", "You just registered! \n<p>" + "<a href='"
-                    + verificationUrl + "'>Verify Link</a></p>" + "\n<p>" + verificationUrl + "</p> Click to verify!");
+                    + verificationUrl + "'>Verify Link</a></p>");
         }
 
         return result.toJson();

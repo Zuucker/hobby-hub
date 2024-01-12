@@ -51,7 +51,7 @@ INSERT INTO group_subscriptions(user_id, group_id) VALUES (1, 7);
 
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (1, 1, 'Cool looking tree', 'image', 23, 2, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (1, 10, 'Kotlet', 'image', 33, 2, '2023-11-20');
-INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (2, 2, 'Audi Sport Quattro S1 E2', 'image', 223, 12, '2023-11-20');
+INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (2, 2, 'Audi Sport Quattro S1 E2', 'image', 99, 12, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (2, 9, 'Void cat', 'image', 43, 8, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (3, 3, "Volkswagen's Pikes Peak player", 'image', 216, 23, '2023-11-20');
 INSERT INTO posts(author_id, group_id, title, type, up_votes, down_votes, date) VALUES (3, 8, "Minecraft house I've made", 'image', 13,68, '2023-11-20');
